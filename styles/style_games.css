@@ -1,0 +1,214 @@
+﻿body {
+background-image:url('../images/Start_look_Css.jpg');
+font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+	
+}
+
+#canvasino {	
+	margin: auto;
+	margin-top: 0px;	
+	width: 960px;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+}
+
+#header {
+	height: 120px;
+	background-color: white;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+
+	
+}
+
+#header h1 {
+	text-align: center;
+	padding-top: 30px;
+	font-style: italic;
+	font-size: 40pt;
+}
+
+#main {
+	height: 623px;
+	position: relative;	
+	background-image:url('../images/canvasino_end.png');
+}
+
+#main a {
+	color: black;
+}
+
+#menu {
+	background-color: transparent;
+	width: 110px;
+	height: 37px;
+	position: absolute;
+	left: 45px;
+	top: 35px;
+	filter:alpha(opacity=50); /* for IE*/
+	opacity: 0.5;
+	-webkit-border-radius: 30px 0px 30px 0px;
+	-moz-border-radius: 30px 0px 30px 0px;
+	border-radius: 30px 0px 30px 0px;
+
+}
+
+#menu:hover {
+	background-image:url('../images/hover_Back.png');	
+	}
+#menu:active {
+	background-image:url('../images/click_Back.png');
+}
+
+#controls {
+	opacity: 0.5;
+	width: 135px;
+	height: 121px;
+	border: 1px transparent solid;
+	position: absolute;
+	left: 20px;
+	top: 203px;
+}
+
+
+#controls #left {
+	background-color: transparent;
+	position: absolute;
+	width: 42px;
+	height: 42px;
+	left: 2px;
+	top: 39px;
+	
+}
+
+#controls #left:hover {
+	background-image:url('../images/hover_kreuz_left.png');
+	cursor: pointer;
+}
+
+#controls #left:active {
+	background-image:url('../images/click_kreuz_left.png');
+	cursor: pointer;
+}
+
+
+#controls #top {
+	background-color: transparent;
+	position: absolute;
+	width: 45px;
+	height: 40px;
+	left: 43px;
+	top: 0px;
+}
+
+#controls #top:hover {
+	background-image:url('../images/hover_kreuz_top.png');
+	cursor: pointer;
+}
+
+#controls #top:active {
+	background-image:url('../images/click_kreuz_top.png');
+	cursor: pointer;
+}
+
+
+#controls #right {
+	background-color: transparent;
+	position: absolute;
+	width: 49px;
+	height: 41px;
+	left: 85px;
+	top: 39px;	
+}
+
+#controls #right:hover {
+	background-image:url('../images/hover_kreuz_right.png');
+	cursor: pointer;
+}
+
+#controls #right:active {
+	background-image:url('../images/click_kreuz_right.png');
+	cursor: pointer;
+}
+
+#controls #bottom {
+	background-color: transparent;
+	position: absolute;
+	width: 46px;
+	height: 43px;
+	left: 42px;
+	top: 80px;	
+}
+
+#controls #bottom:hover {
+	background-image:url('../images/hover_kreuz_down.png');
+	cursor: pointer;
+}
+
+#controls #bottom:active {
+	background-image:url('../images/click_kreuz_down.png');
+	cursor: pointer;
+}
+
+canvas {
+	background-color: white;
+	filter:alpha(opacity=20); /* for IE*/
+	opacity: 0.2;
+	
+	width:600px;
+	height:450px;
+	position:absolute;
+	left: 180px;
+	top: 105px;
+}
+
+#buttonA {
+	background-color: transparent;
+	width: 65px;
+	height: 69px;
+	position: absolute;
+	right: 93px;
+	top: 249px;
+	
+}
+
+#buttonA:hover {
+	background-image:url('../images/hover_A.png');
+	cursor: pointer;
+}
+
+#buttonA:active {
+	background-image:url('../images/click_A.png');
+	cursor: pointer;
+}
+
+#buttonB {
+	background-color: transparent;
+	width: 64px;
+	height: 68px;
+	position: absolute;
+	right: 18px;
+	top: 196px;	
+}
+
+#buttonB:hover {
+	background-image:url('../images/hover_B.png');
+	cursor: pointer;
+}
+
+#buttonB:active {
+	background-image:url('../images/click_B.png');
+	cursor: pointer;
+}
+
+
+#footer {
+	height: 40px;
+	background-color: white;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+}
+
