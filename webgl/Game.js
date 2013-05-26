@@ -1,22 +1,20 @@
-function Game() {
-    this.init = function() {
-//reset gl
-//set Rubik / Machine
-//set Cubes create/translate/rotate/texturize
-//Steuerung initialisieren
-    };
-
-    this.start = function() {
-
-//
-    };
-
+/*
+ * Interface für eigentliches Spiel
+ * (Für Erweiterbarkeit
+ *      
+ *      
+ */
+function Game($gl, $shaderProgram) {
+    this.perspectiveMatrix;
+   
+    
     this.drawScene = function() {
-
+        
     };
 
+    this.keyPressed = function(key) {
 
-
+    };
 }
 
 

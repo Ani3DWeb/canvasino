@@ -97,7 +97,7 @@ function Cube($gl, $shaderProgram, width) {
     };
 
     this.draw = function() {
-        if (visible) {
+        if (this.visible) {
             this.propagateMatrixUniforms();
             $gl.bindBuffer($gl.ARRAY_BUFFER, this.triangleVertexPositionBuffer);
             $gl.vertexAttribPointer($shaderProgram.vertexPositionAttribute, this.triangleVertexPositionBuffer.itemSize, $gl.FLOAT, false, 0, 0);

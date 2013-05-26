@@ -1,0 +1,40 @@
+<Html>
+    <Head>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+        <script type="text/javascript" src="Libs/sylvester.js"></script>
+        <script type="text/javascript" src="Libs/glUtils.js"></script>
+        <script type="text/javascript" src="Cube.js"></script>
+        <script type="text/javascript" src="RubikCube.js"></script>
+        <script type="text/javascript" src="RubikGame.js"></script>
+        <script type="text/javascript" src="App.js"></script>
+        <Script id="shader-fs" type="x-shader/x-fragment">
+            precision mediump float;
+            varying vec4 varColor;
+
+            void main(void) 
+            {
+            gl_FragColor = varColor;
+            }
+        </Script>
+
+        <Script id="shader-vs" type="x-shader/x-vertex">
+            precision mediump float;
+            attribute vec4 vPosition;
+            attribute vec4 vColor;
+            uniform mat4 uMVMatrix;
+            varying vec4 varColor;
+
+            void main(void) 
+            {
+            gl_Position = uMVMatrix * vPosition;
+            varColor = vColor;
+            }
+        </Script>
+    </Head>
+
+    <Body onload="main();">
+        Demo </br>
+        <Canvas style="float:left;margin:2em;" id="webGLCanvas" width="500" height="500">
+        </Canvas>
+    </Body>
+</Html>
