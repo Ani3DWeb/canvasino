@@ -1,10 +1,13 @@
 function SlotMachine($gl) {
     //TODO:
-    var wheel[3].cube[8];
+    var wheel=[];
+    
+    [3].cube[8];
     for (var w; w <= 3; w++) {
+        wheel[w]=[]
         for (var c; c <= 8; c++) {
             //todo:
-            wheel[w].cube[c] = Cube(0.25).translate();
+            wheel[w][c] = Cube(0.25).translate();
         }
     }
 

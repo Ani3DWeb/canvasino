@@ -1,0 +1,192 @@
+<Html>
+    <Head>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+        <script type="text/javascript" src="Libs/sylvester.js"></script>
+        <script type="text/javascript" src="Libs/glUtils.js"></script>
+        <script type="text/javascript" src="Cube.js"></script>
+        <Script id="shader-fs" type="x-shader/x-fragment">
+            precision mediump float;
+            varying vec4 varColor;
+
+            void main(void) 
+            {
+            gl_FragColor = varColor;
+            }
+        </Script>
+
+        <Script id="shader-vs" type="x-shader/x-vertex">
+            precision mediump float;
+            attribute vec4 vPosition;
+            attribute vec4 vColor;
+            uniform mat4 uMVMatrix;
+            varying vec4 varColor;
+
+            void main(void) 
+            {
+            gl_Position = uMVMatrix * vPosition;
+            varColor = vColor;
+            }
+        </Script>
+
+        <Script type="text/javascript">
+            var perspectiveMatrix;
+            function getShader(gl, id)
+            {
+                var shader;
+
+                var shaderScript = document.getElementById(id);
+                if (!shaderScript)
+                    return null;
+
+
+                var str = "";
+                var k = shaderScript.firstChild;
+                while (k) {
+                    if (k.nodeType == 3)
+                        str += k.textContent;
+                    k = k.nextSibling;
+                }
+
+                if (shaderScript.type == "x-shader/x-fragment")
+                {
+                    shader = gl.createShader(gl.FRAGMENT_SHADER);
+                } else if (shaderScript.type == "x-shader/x-vertex") {
+                    shader = gl.createShader(gl.VERTEX_SHADER);
+                } else {
+                    return null;
+                }
+
+                gl.shaderSource(shader, str);
+                gl.compileShader(shader);
+
+                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
+                {
+                    alert(gl.getShaderInfoLog(shader));
+                    return null;
+                }
+
+                return shader;
+            }
+
+            var shaderProgram;
+
+            function initShaders()
+            {
+                var fragmentShader = getShader(gl, "shader-fs");
+                var vertexShader = getShader(gl, "shader-vs");
+
+                shaderProgram = gl.createProgram();
+                gl.attachShader(shaderProgram, vertexShader);
+                gl.attachShader(shaderProgram, fragmentShader);
+
+                gl.linkProgram(shaderProgram);
+
+                if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS))
+                {
+                    alert("Could not initialise shaders");
+                }
+
+                gl.useProgram(shaderProgram);
+                shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "vPosition");
+                shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "vColor");
+                gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+                gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
+
+                shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+
+            }
+
+            var gl;
+
+            function initGL(canvas)
+            {
+                try {
+                    gl = canvas.getContext("experimental-webgl");
+                    gl.viewport(0, 0, canvas.width, canvas.height);
+                    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+
+                    gl.clearDepth(1.0);
+                    gl.enable(gl.DEPTH_TEST);
+                    gl.depthFunc(gl.LEQUAL);
+                } catch (e) {
+                }
+                if (!gl)
+                {
+                    alert("Could not initialise WebGL, sorry :-(");
+                }
+            }
+
+
+            var angle = 0;
+            var cube1;
+            var cube2;
+            var cube3;
+            var cube4;
+            function drawScene()
+            {
+
+                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+                gl.enable(gl.DEPTH_TEST);
+                gl.depthFunc(gl.LEQUAL);
+
+                perspectiveMatrix = makePerspective(45, 640.0 / 480.0, 0.1, 100.0);
+                var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
+                gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
+
+                angle = angle + 0.05;
+                if (angle > 360)
+                    angle = angle - 360;
+
+
+                cube1.draw();
+                cube2.draw();
+                cube2.rotate(-angle, [0.5, 0.5, 0.0]);
+                cube3.rotate(angle, [0.0, 1.0, 0.0]);
+                cube3.draw();
+                cube4.draw();
+            }
+
+            function initCube()
+            {
+                cube1 = new Cube(gl, shaderProgram, 0.5);
+                cube1.translate([0.5, -0.5, 0]);
+                cube2 = new Cube(gl, shaderProgram, 0.5);
+                cube2.translate([-0.5, -0.5, 0]);
+                cube3 = new Cube(gl, shaderProgram, 0.5);
+                cube3.translate([0.5, 0.5, 0]);
+                cube4 = new Cube(gl, shaderProgram, 0.5);
+                cube4.translate([-0.5, 0.5, 0]);
+            }
+
+            function main()
+            {
+                var canvas = document.getElementById("webGLCanvas");
+                initGL(canvas);
+                initShaders();
+                initCube();
+
+                setInterval(drawScene, 50);
+            }
+        </Script>
+    </Head>
+
+    <Body onload="main();">
+        Demo </br>
+        <Canvas style="float:left;margin:2em;" id="webGLCanvas" width="500" height="500">
+        </Canvas></br>
+        Cube<br>
+        <a href="#" onclick="cube1.save()">Save State</a> 
+        <a href="#" onclick="cube1.revert()">Revert State</a>
+        <br>bewegen:<br>
+        <a href="#" onclick="cube1.translate([-0.2, 0, 0])">-</a> x <a href="#" onclick="cube1.translate([0.2, 0, 0])">+</a><br>
+        <a href="#" onclick="cube1.translate([0, -0.2, 0])">-</a> y <a href="#" onclick="cube1.translate([0, 0.2, 0])">+</a><br>
+        <a href="#" onclick="cube1.translate([0, 0, -0.2])">-</a> z <a href="#" onclick="cube1.translate([0, 0, 0.2])">+</a><br>
+
+        <br>drehen:<br>
+        <a href="#" onclick="cube1.rotate(-10, [0, 1, 0])">-</a> x <a href="#" onclick="cube1.rotate(10, [0, 1, 0])">+</a><br>
+        <a href="#" onclick="cube1.rotate(-10, [1, 0, 0])">-</a> y <a href="#" onclick="cube1.rotate(10, [1, 0, 0])">+</a><br>
+        <a href="#" onclick="cube1.rotate(-10, [0, 0, 1])">-</a> z <a href="#" onclick="cube1.rotate(10, [0, 0, 1])">+</a><br>
+
+        Ende	
+    </Body>
+</Html>

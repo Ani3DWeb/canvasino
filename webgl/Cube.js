@@ -1,8 +1,30 @@
-function Cube($gl, width) {
-	var colorPositions = []; // top, front, left, back, right, down
-
+/*
+ * Erzeugt einen Würfel
+ * Parameter: WebGL-Instanz, Anzuwendendes Shader-Programm, Kantenlänge
+ * 
+ * Beispiel:
+ * 
+ * cube1 = new Cube(gl, shaderProgram, 0.5);
+ * cube1.translate([0.5, -0.5, 0]);
+ * 
+ * Damit der Cube auch gezeichnet wird, muss in der drawScene()-Methode
+ * 
+ * cube1.draw();
+ * 
+ * aufgerufen werden.
+ * 
+ * um den Cube temporär zu verstecken:
+ * 
+ * cube1.visible=false;
+ * 
+ * 
+ */
+function Cube($gl, $shaderProgram, width) {
+    this.colorPositions = []; // top, front, left, back, right, down
+    this.mvMatrix = Matrix.I(4);
+    this.visible = true;
     width /= 2;
-    var triangleVerticesIndicesArray = [
+    this.triangleVerticesIndicesArray = [
         4, 5, 1, 4, 1, 0, // T
         0, 1, 2, 0, 2, 3, // F
         4, 0, 3, 4, 3, 7, // L 
@@ -10,7 +32,7 @@ function Cube($gl, width) {
         1, 5, 6, 1, 6, 2, // R
         3, 2, 6, 3, 6, 7   // D
     ];
-    var triangleVerticesPostionArray = [
+    this.triangleVerticesPostionArray = [
         width, width, width,
         -width, width, width,
         -width, -width, width,
@@ -20,59 +42,106 @@ function Cube($gl, width) {
         -width, -width, -width,
         width, -width, -width
     ];
-    var triangleVertexPositionBuffer = gl.createBuffer();
-    $gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleVerticesPostionArray), gl.STATIC_DRAW);
-    triangleVertexPositionBuffer.itemSize = 3;
-    triangleVertexPositionBuffer.numItems = 8;
-    var triangleVertexIndexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, triangleVertexIndexBuffer);
 
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(triangleVerticesIndicesArray), gl.STATIC_DRAW);
-    triangleVertexIndexBuffer.itemSize = 1;
-    triangleVertexIndexBuffer.numItems = 36;
-    
-    this.rotate = function(ang, v){
-	var arad = ang * Math.PI / 180.0;
-	//TODO: mvMatrix = Matrix.Rotation(arad, $V([v[0], v[1], v[2]])).ensure4x4();
+    this.triangleVerticesColorArray = [
+        1.0, 0.0, 0.0, 1.0,
+        0.0, 1.0, 0.0, 1.0,
+        1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0,
+        0.0, 0.0, 1.0, 1.0,
+        0.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0
+    ];
+    //Positionen
+    this.triangleVertexPositionBuffer = $gl.createBuffer();
+    $gl.bindBuffer($gl.ARRAY_BUFFER, this.triangleVertexPositionBuffer);
+    $gl.bufferData($gl.ARRAY_BUFFER, new Float32Array(this.triangleVerticesPostionArray), $gl.STATIC_DRAW);
+    this.triangleVertexPositionBuffer.itemSize = 3;
+    this.triangleVertexPositionBuffer.numItems = 8;
+
+    // Farben
+    this.triangleVertexColorBuffer = $gl.createBuffer();
+    $gl.bindBuffer($gl.ARRAY_BUFFER, this.triangleVertexColorBuffer);
+    $gl.bufferData($gl.ARRAY_BUFFER, new Float32Array(this.triangleVerticesColorArray), $gl.STATIC_DRAW);
+    this.triangleVertexColorBuffer.itemSize = 4;
+    this.triangleVertexColorBuffer.numItems = 8;
+
+
+
+    //Indizes
+    this.triangleVertexIndexBuffer = $gl.createBuffer();
+    $gl.bindBuffer($gl.ELEMENT_ARRAY_BUFFER, this.triangleVertexIndexBuffer);
+
+    $gl.bufferData($gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.triangleVerticesIndicesArray), $gl.STATIC_DRAW);
+    this.triangleVertexIndexBuffer.itemSize = 1;
+    this.triangleVertexIndexBuffer.numItems = 36;
+
+    this.rotate = function(ang, v) {
+        var arad = ang * Math.PI / 180.0;
+        var m = Matrix.Rotation(arad, $V([v[0], v[1], v[2]])).ensure4x4();
+        this.mvMatrix = this.mvMatrix.x(m);
     };
-    
-    this.translate = function(x,y,z){
-        
+
+    this.translate = function(v) {
+        var m = Matrix.Translation($V([v[0], v[1], v[2]])).ensure4x4();
+        this.mvMatrix = this.mvMatrix.x(m);
     };
-    
-    this.scale = function(){
-        
+
+    this.scale = function() {
+        //TODO
     };
-    
-    this.texturize = function(){
-        
+
+    this.texturize = function() {
+        //TODO
     };
-    
-    
-    this.propagateMatrixUniforms= function() {
-	$gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, new Float32Array(mvMatrix.flatten()));
+
+    this.draw = function() {
+        if (visible) {
+            this.propagateMatrixUniforms();
+            $gl.bindBuffer($gl.ARRAY_BUFFER, this.triangleVertexPositionBuffer);
+            $gl.vertexAttribPointer($shaderProgram.vertexPositionAttribute, this.triangleVertexPositionBuffer.itemSize, $gl.FLOAT, false, 0, 0);
+
+            $gl.bindBuffer($gl.ARRAY_BUFFER, this.triangleVertexColorBuffer);
+            $gl.vertexAttribPointer($shaderProgram.vertexColorAttribute, this.triangleVertexColorBuffer.itemSize, $gl.FLOAT, false, 0, 0);
+
+            $gl.bindBuffer($gl.ELEMENT_ARRAY_BUFFER, this.triangleVertexIndexBuffer);
+            $gl.drawElements($gl.TRIANGLES, this.triangleVertexIndexBuffer.numItems, $gl.UNSIGNED_SHORT, 0);
+        }
     }
-   var mvMatrixStack = [];
- 
-function mvPushMatrix(m) {
-  if (m) {
-    mvMatrixStack.push(m.dup());
-    mvMatrix = m.dup();
-  } else {
-    mvMatrixStack.push(mvMatrix.dup());
-  }
-}
- 
-function mvPopMatrix() {
-  if (!mvMatrixStack.length) {
-    throw("Can't pop from an empty matrix stack.");
-  }
-   
-  mvMatrix = mvMatrixStack.pop();
-  return mvMatrix;
-}
 
-	this.changeColors =  function(newColorPositions) {
-		colorPositions = newColorPositions;
-	}
+    this.propagateMatrixUniforms = function() {
+        $gl.uniformMatrix4fv($shaderProgram.mvMatrixUniform, false, new Float32Array(this.mvMatrix.flatten()));
+    }
+    this.mvMatrixStack = [];
+
+    this.mvPushMatrix = function(m) {
+        if (m) {
+            this.mvMatrixStack.push(m.dup());
+            this.mvMatrix = m.dup();
+        } else {
+            this.mvMatrixStack.push(this.mvMatrix.dup());
+        }
+    }
+
+    this.mvPopMatrix = function() {
+        if (!this.mvMatrixStack.length) {
+            throw("Can't pop from an empty matrix stack.");
+        }
+
+        this.mvMatrix = this.mvMatrixStack.pop();
+        return this.mvMatrix;
+    }
+
+    this.changeColors = function(newColorPositions) {
+        this.colorPositions = newColorPositions;
+    }
+
+    this.save = function() {
+        this.mvPushMatrix(this.mvMatrix);
+    };
+    this.revert = function() {
+        this.mvMatrix = this.mvPopMatrix();
+    }
+    this.save();
 }

@@ -5,7 +5,7 @@ function RubikCube($gl) {
     for(var x=0; x<3; x++){
 		cubeXYZ[x] = [];
         for(var y=0; y<3; y++){
-			cubeXYZ[y] = [];
+			cubeXYZ[x][y] = [];
             for(var z=0; z<3; z++){
 				cubeXYZ[x][y][z] = Cube(0.25).translate();
             }
@@ -179,11 +179,11 @@ function getCubeChangeAfter90DegreeRotation(axis, angle, x,y,z) {
 	} else if ((angle>0 && (a==2 && b==0)) || (angle<0 && (a==2 && b==2))) {
 		a-=2;
 	} else if ((angle>0 && (a==0 && b==1)) || (angle<0 && (a==1 && b==0))) {
-		a+=1; b+=1
-	} else if ((angle>0 && (a==1 && b==1)) {
+		a+=1; b+=1;
+	} else if (angle>0 && (a==1 && b==1)) {
 		// do nothing
 	} else if ((angle>0 && (a==2 && b==1)) || (angle<0 && (a==1 && b==2))) {
-		a-=1; b-=1
+		a-=1; b-=1;
 	} else if ((angle>0 && (a==0 && b==2)) || (angle<0 && (a==0 && b==0))) {
 		a+=2;
 	} else if ((angle>0 && (a==1 && b==2)) || (angle<0 && (a==0 && b==1))) {
