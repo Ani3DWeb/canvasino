@@ -1,5 +1,7 @@
 ﻿body {
-background-image:url('../images/Start_look_Css.jpg');
+background-color: #005501;
+background-image:url('images/Roulett_Tisch_wide.png');
+background-repeat:no-repeat;
 font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;	
 }
 #menu {	
@@ -33,7 +35,7 @@ font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida San
 }
 
 div#logo {
-	background-image:url('../images/logo.gif');
+	background-image:url('images/logo.gif');
 	width: 173px;
 	height: 93px;
 	position: absolute;
@@ -42,7 +44,7 @@ div#logo {
 }
 
 div#gameboy {
-	background-image:url('../images/gameboy.gif');
+	background-image:url('images/gameboy.gif');
 	width: 414px;
 	height: 278px;
 	position: absolute;
@@ -51,7 +53,7 @@ div#gameboy {
 }
 
 div#game01 {
-	background-image:url('../images/game01.gif');
+	background-image:url('images/game01.gif');
 	width: 195px;
 	height: 117px;
 	position: absolute;
@@ -60,7 +62,7 @@ div#game01 {
 }
 
 div#game02 {
-	background-image:url('../images/game02.gif');
+	background-image:url('images/game02.gif');
 	width: 212px;
 	height: 143px;
 	position: absolute;
