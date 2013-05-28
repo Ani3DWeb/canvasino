@@ -27,7 +27,7 @@ function RubikGame($gl, $shaderProgram) {
 
 
     this.keyPressed = function(key) {
-        //totate Layer von rubik aufrufen
+        //rotate Layer von rubik aufrufen
 
     };
 }
