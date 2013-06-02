@@ -3,10 +3,13 @@
 <head>
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 <title>Canvasino</title>
+<link href="styles/reset.css" rel="stylesheet" type="text/css">
 <link href="styles/style_menu.css" rel="stylesheet" type="text/css">
+<link href="styles/style_games.css" rel="stylesheet" type="text/css">
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
 	<script src="scripts/audio.js"></script>
+	<script src="scripts/loader.js"></script>
 	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 	<link rel="icon" href="images/favicon.ico" type="image/x-icon">
 </head>
@@ -17,21 +20,52 @@
 	<h1>CANVASINO</h1>
 	</div>
 	<div id="main">
-		  <div id="logo"></div>
-		  <div id="gameboy"></div>
-		  <a href="game01.html"><div id="game01"></div></a>
-		  <a href="game02.html"><div id="game02"></div></a>
+		<div id="logo"></div>
+		<div class="screen">
+		  <div class="gameboy"></div>
+		  <div id="game02"></div>
+		  <div id="game01"></div>
+		  
+		  
+		  <div class="canvasino">
+		  
+		  	<div class="back"></div>
+		  
+			    <div id="controls">
+					<div id="left"></div>
+					<div id="top"></div>
+					<div id="right"></div>
+					<div id="bottom"></div>
+				</div>
+		
+		    	
+				<Canvas id="spielautomat_webgl">
+		    	</Canvas>
+		    	
+		    	<div id="buttonA">
+		    	</div>
+		    	
+		    	<div id="buttonB">
+		    	</div>
+		  </div>
+		  
+
+		  
+		</div>
 	</div>
 	<div id="footer">
-	<div id="player">
-	<div class="start button controls">START</div>
-		<div class="play button controls">play</div>
-		<div class="pause button controls">pause</div>
-		<div class="volume controls"></div>
-		<div class="volume-value controls"></div>
-	</div>
+		<div id="player">
+		<div class="start button controls">START</div>
+			<div class="play button controls">play</div>
+			<div class="pause button controls">pause</div>
+			<div class="volume controls"></div>
+			<div class="volume-value controls"></div>
+		</div>
 	</div>
 </div>
 </body>
+
+</html>
+
 
 </html>

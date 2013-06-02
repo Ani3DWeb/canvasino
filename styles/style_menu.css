@@ -1,9 +1,36 @@
 ﻿body {
 background-color: #005501;
-background-image:url('images/Roulett_Tisch_wide.png');
+background-image:url('../images/Roulett_Tisch_wide.png');
 background-repeat:no-repeat;
+background-size: 150% auto;
 font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;	
 }
+
+.back {
+background-color: transparent;
+	width: 150px;
+	height: 71px;
+	position: absolute;
+	z-index: 1000;
+	left: 20px;
+	top: 65px;
+	filter:alpha(opacity=50); /* for IE*/
+	opacity: 0.5;
+	-webkit-border-radius: 30px 0px 30px 0px;
+	-moz-border-radius: 30px 0px 30px 0px;
+	border-radius: 30px 0px 30px 0px;
+}
+
+.back:hover {
+	background-image:url('../images/hover/hover_back.png');
+	cursor: pointer;	
+	}
+.back:active {
+	background-image:url('../images/click/click_back.png');
+	cursor: pointer;
+}
+
+
 #menu {	
 	margin: auto;
 	margin-top: 0px;	
@@ -30,12 +57,16 @@ font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida San
 }
 
 #main {
-	height: 540px;
+	/*height: 540px;*/
 	position: relative;
 }
 
-div#logo {
-	background-image:url('images/logo.gif');
+#intro {
+	height: 540px;
+}
+
+#logo {
+	background-image:url('../images/logo.gif');
 	width: 173px;
 	height: 93px;
 	position: absolute;
@@ -43,29 +74,32 @@ div#logo {
 	left: 38px;
 }
 
-div#gameboy {
-	background-image:url('images/gameboy.gif');
-	width: 414px;
-	height: 278px;
-	position: absolute;
+.screen #gameboy {
+	background-image:url('../images/gameboy.png');
+	width: 557px;
+	height: 307px;
+	position: relative;
 	top: 190px;
-	left: 18px;
+	left: 0px;
 }
 
-div#game01 {
-	background-image:url('images/game01.gif');
-	width: 195px;
-	height: 117px;
+.screen #game01, .screen #game02 {
 	position: absolute;
+	cursor: pointer;
+}
+
+.screen #game01 {
+	background-image:url('../images/game01.gif');
+	width: 195px;
+	height: 117px;	
 	top: 210px;
 	left: 485px;
 }
 
-div#game02 {
-	background-image:url('images/game02.gif');
+.screen #game02 {
+	background-image:url('../images/game02.gif');
 	width: 212px;
 	height: 143px;
-	position: absolute;
 	top: 345px;
 	left: 610px;
 }
@@ -80,7 +114,7 @@ div#game01:hover, div#game02:hover {
 	-webkit-border-radius: 15px;
 	-moz-border-radius: 15px;
 	border-radius: 15px;
-
+	position: relative;
 }
 
 #player {
@@ -89,12 +123,14 @@ div#game01:hover, div#game02:hover {
 	padding-bottom: 5px;
 }
 
+
 .controls { display: inline-block; }
 	.button { 
 		border: 1px solid #333; 
 		background: #000; 
 		color: #fff;
 		padding: 5px;
+		cursor: pointer;
 	}
 	.volume { width: 250px; }
 	.ui-slider-range-min {	

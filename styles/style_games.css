@@ -1,67 +1,9 @@
-﻿body {
-background-color: #005501;
-background-image:url('images/Roulett_Tisch_wide.png');
-background-repeat:no-repeat;
-font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
-	
-}
-
-#canvasino {	
-	margin: auto;
-	margin-top: 0px;	
-	width: 960px;
-	-webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
-	border-radius: 15px;
-}
-
-#header {
-	height: 120px;
-	background-color: white;
-	-webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
-	border-radius: 15px;
-
-	
-}
-
-#header h1 {
-	text-align: center;
-	padding-top: 30px;
-	font-style: italic;
-	font-size: 40pt;
-}
-
-#main {
+﻿
+#main .screen .gameboy {
 	height: 660px;
+	width: 960px;
 	position: relative;	
-	background-image:url('images/canvasino.png');
-}
-
-#main a {
-	color: black;
-}
-
-#menu {
-	background-color: transparent;
-	width: 150px;
-	height: 71px;
-	position: absolute;
-	left: 20px;
-	top: 65px;
-	filter:alpha(opacity=50); /* for IE*/
-	opacity: 0.5;
-	-webkit-border-radius: 30px 0px 30px 0px;
-	-moz-border-radius: 30px 0px 30px 0px;
-	border-radius: 30px 0px 30px 0px;
-
-}
-
-#menu:hover {
-	background-image:url('images/hover/hover_back.png');	
-	}
-#menu:active {
-	background-image:url('images/click/click_back.png');
+	background:url('../images/canvasino_x.png') 0px 0px;
 }
 
 #controls {
@@ -86,12 +28,12 @@ font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida San
 }
 
 #controls #left:hover {
-	background-image:url('images/hover/hover_left.png');
+	background-image:url('../images/hover/hover_left.png');
 	cursor: pointer;
 }
 
 #controls #left:active {
-	background-image:url('images/click/click_left.png');
+	background-image:url('../images/click/click_left.png');
 	cursor: pointer;
 }
 
@@ -106,12 +48,12 @@ font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida San
 }
 
 #controls #top:hover {
-	background-image:url('images/hover/hover_click.png');
+	background-image:url('../images/hover/hover_click.png');
 	cursor: pointer;
 }
 
 #controls #top:active {
-	background-image:url('images/click/click_top.png');
+	background-image:url('../images/click/click_top.png');
 	cursor: pointer;
 }
 
@@ -126,12 +68,12 @@ font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida San
 }
 
 #controls #right:hover {
-	background-image:url('images/hover/hover_right.png');
+	background-image:url('../images/hover/hover_right.png');
 	cursor: pointer;
 }
 
 #controls #right:active {
-	background-image:url('images/click/click_right.png');
+	background-image:url('../images/click/click_right.png');
 	cursor: pointer;
 }
 
@@ -144,13 +86,17 @@ font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida San
 	top: 97px;	
 }
 
+#controls, #buttonA, #buttonB {
+	z-index: 200;
+}
+
 #controls #bottom:hover {
-	background-image:url('images/hover/hover_down.png');
+	background-image:url('../images/hover/hover_down.png');
 	cursor: pointer;
 }
 
 #controls #bottom:active {
-	background-image:url('images/click/click_down.png');
+	background-image:url('../images/click/click_down.png');
 	cursor: pointer;
 }
 
@@ -176,12 +122,12 @@ canvas {
 }
 
 #buttonA:hover {
-	background-image:url('images/hover/hover_A.png');
+	background-image:url('../images/hover/hover_A.png');
 	cursor: pointer;
 }
 
 #buttonA:active {
-	background-image:url('images/click/click_A.png');
+	background-image:url('../images/click/click_A.png');
 	cursor: pointer;
 }
 
@@ -195,21 +141,12 @@ canvas {
 }
 
 #buttonB:hover {
-	background-image:url('images/hover/hover_B.png');
+	background-image:url('../images/hover/hover_B.png');
 	cursor: pointer;
 }
 
 #buttonB:active {
-	background-image:url('images/click/click_B.png');
+	background-image:url('../images/click/click_B.png');
 	cursor: pointer;
-}
-
-
-#footer {
-	height: 40px;
-	background-color: white;
-	-webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
-	border-radius: 15px;
 }
 
