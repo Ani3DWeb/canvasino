@@ -5,14 +5,13 @@
  *      highlightedColumn/Row
  *      
  */
- var perspectiveMatrix;
+var perspectiveMatrix;
 function RubikGame($gl, $shaderProgram) {
  //   this.perspectiveMatrix = makePerspective(45, 640.0 / 480.0, 0.1, 100.0);
+ 	initTextures(getTextureNames());
     this.rubik = new RubikCube($gl, $shaderProgram);
     var self = this;
-	
-	initTextures(getTextureNames());
-   
+  
     this.drawScene = function() {
         //Canvas leeren
         $gl.clear($gl.COLOR_BUFFER_BIT | $gl.DEPTH_BUFFER_BIT);
@@ -20,14 +19,16 @@ function RubikGame($gl, $shaderProgram) {
         $gl.depthFunc($gl.LEQUAL);
 
         //TODO: Perspektive einstellen
-        perspectiveMatrix = makePerspective(45, 640.0 / 480.0, 0.1, 100.0);
+        perspectiveMatrix = makePerspective(45, 500.0 / 500.0, 0.1, 100.0);
 		
-		perspectiveMatrix = perspectiveMatrix.x(Matrix.Translation($V([0.0, 0.0, -8.0])).ensure4x4());
+		PerspectivTranslate([0.0,0.0,-8.0])
+		PerspectivRotate(130,[0.0,1.0,0.0]);
 		
         var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
 
         //Zeichne Rubik
+		self.rubik.rotateLayer('y', 1, 10);
         self.rubik.draw();
     };
 
@@ -48,9 +49,13 @@ function getTextureNames() {
 										 "RubiksCube/images/Flaeche_schwarz.png");
 }
 
-function mvRotate(angle, v) {
+function PerspectivRotate(angle, v) {
   var inRadians = angle * Math.PI / 180.0;  
-  return Matrix.Rotation(inRadians, $V([v[0], v[1], v[2]])).ensure4x4();
+  perspectiveMatrix = perspectiveMatrix.x(Matrix.Rotation(inRadians, $V([v[0], v[1], v[2]])).ensure4x4());
+}
+
+function PerspectivTranslate(v) {
+  perspectiveMatrix = perspectiveMatrix.x(Matrix.Translation($V([v[0], v[1], v[2]])).ensure4x4());
 }
 
 

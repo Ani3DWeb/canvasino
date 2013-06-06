@@ -4,11 +4,9 @@
  * 
  */
  
- var cube;
 function RubikCube($gl, $shaderProgram) {
     var self=this;
 	self.cubeXYZ = [];
-	
     // cubeXYZ init:
     for (var x = 0; x < 3; x++) {
         self.cubeXYZ[x] = [];
@@ -17,6 +15,7 @@ function RubikCube($gl, $shaderProgram) {
             for (var z = 0; z < 3; z++) {
                 //TODO: Cubes an die richtige Anfangsposition, texturieren
                 self.cubeXYZ[x][y][z] = new Cube($gl, $shaderProgram, 0.95);
+				self.cubeXYZ[x][y][z].changeColors(initColors(x,y,z));
 				self.cubeXYZ[x][y][z].translate([x - 1, y - 1, z - 1]);
             }
         }
@@ -53,10 +52,10 @@ function RubikCube($gl, $shaderProgram) {
                     z = b;
                 }
                 var tempCube = self.cubeXYZ[x][y][z];
-                changeCubeColors(tempCube, axis, angle);
+           //     changeCubeColors(tempCube, axis, angle);
                 var tempArray = getCubeChangeAfter90DegreeRotation(axis, angle, x, y, z);
 
-                tempLayer[tempArray[0]][tempArray[1]] = tempCube;
+            //    tempLayer[tempArray[0]][tempArray[1]] = tempCube;
             }
         }
 
@@ -73,12 +72,13 @@ function RubikCube($gl, $shaderProgram) {
                     x = a;
                     z = b;
                 }
-                cubeXYZ[x][y][z] = tempLayer[a][b];
-//				cubeXYZ[x][y][z].rotate();
+				
+              //  self.cubeXYZ[x][y][z] = tempLayer[a][b];
+				self.cubeXYZ[x][y][z].rotate(angle,[x,y,z]);
             }
         }
 
-        checkState();
+   //     checkState();
     };
 
 
@@ -246,9 +246,11 @@ function getCubeChangeAfter90DegreeRotation(axis, angle, x, y, z) {
 
 
 
-function changeCubeColors(cube, axis, angle) {
-    var colorPositions = cube.colorPositions;
+function changeCubeColors(cube1, axis, angle) {
+	var colorPositions = [];
     var newColorPositions = [];
+	
+	colorPositions = cube.colorPositions;
 
     if (axis == "z") {
         if (angle > 0) {
@@ -289,5 +291,38 @@ function changeCubeColors(cube, axis, angle) {
     }
 
     cube.changeColors(newColorPositions);
+}
+function initColors(x,y,z) {
+		var colorPositions = [];
+		// top, front, left, back, right, down				
+		if(y==2)
+			colorPositions[0] = textureArray[0];	 // top pink
+		else
+			colorPositions[0] = textureArray[6];
+		if(z==0)
+			colorPositions[1] = textureArray[1];	 // front gruen
+		else
+			colorPositions[1] = textureArray[6];	
+		if(x==0)
+			colorPositions[2] = textureArray[2];	// left orange
+		else
+			colorPositions[2] = textureArray[6];
+		if(z==2)
+			colorPositions[3] = textureArray[3];		// back blau
+		else
+			colorPositions[3] = textureArray[6];
+		if(x==2)
+			colorPositions[4] = textureArray[4];		// right rot
+		else
+			colorPositions[4] = textureArray[6];
+		if(y==0)
+			colorPositions[5] = textureArray[5];	// down gelb
+		else
+			colorPositions[5] = textureArray[6];	
+
+		return colorPositions;
+}
+function initTexture(textureArray) {
+	this.textureArray = texturArray;
 }
 

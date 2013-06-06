@@ -22,6 +22,7 @@
 function Cube($gl, $shaderProgram, width) {
     this.colorPositions = []; // top, front, left, back, right, down
     this.mvMatrix = Matrix.I(4);
+	this.BigRotationMatrix = Matrix.I(4);
     this.visible = true;
     width /= 2;
     this.triangleVerticesIndicesArray = [
@@ -165,27 +166,27 @@ function Cube($gl, $shaderProgram, width) {
 		  // Specify the texture to map onto the faces.
 		  // top, front, left, back, right, down	
 				  // Draw front face
-					gl.bindTexture(gl.TEXTURE_2D, textureArray[1]);
+					gl.bindTexture(gl.TEXTURE_2D, this.colorPositions[3]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
 
 					// Draw  back face 
-					gl.bindTexture(gl.TEXTURE_2D, textureArray[2]);
+					gl.bindTexture(gl.TEXTURE_2D, this.colorPositions[1]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 12);
 
 					// Draw top face 
-					gl.bindTexture(gl.TEXTURE_2D, textureArray[3]);
+					gl.bindTexture(gl.TEXTURE_2D, this.colorPositions[0]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 24);
 
 					// Draw down face 
-					gl.bindTexture(gl.TEXTURE_2D, textureArray[4]);
+					gl.bindTexture(gl.TEXTURE_2D, this.colorPositions[5]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 36);
 
 					// Draw right face
-					gl.bindTexture(gl.TEXTURE_2D, textureArray[5]);
+					gl.bindTexture(gl.TEXTURE_2D, this.colorPositions[4]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 48);
 
 					// Draw left face 
-					gl.bindTexture(gl.TEXTURE_2D, textureArray[6]);
+					gl.bindTexture(gl.TEXTURE_2D, this.colorPositions[2]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 60);
 					gl.uniform1i(shaderProgram.samplerUniform, 0);			
     };
@@ -228,15 +229,15 @@ function Cube($gl, $shaderProgram, width) {
         return this.mvMatrix;
     }
 
-    this.changeColors = function(newColorPositions) {
+    this.changeColors = function(newColorPositions) {	
         this.colorPositions = newColorPositions;
-    }
-
+    };
+	
     this.save = function() {
         this.mvPushMatrix(this.mvMatrix);
     };
     this.revert = function() {
         this.mvMatrix = this.mvPopMatrix();
-    }
+    };
     this.save();
 }
