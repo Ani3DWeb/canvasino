@@ -67,8 +67,6 @@ function Cube($gl, $shaderProgram, width) {
     this.triangleVertexColorBuffer.itemSize = 4;
     this.triangleVertexColorBuffer.numItems = 8;
 
-
-
     //Indizes
     this.triangleVertexIndexBuffer = $gl.createBuffer();
     $gl.bindBuffer($gl.ELEMENT_ARRAY_BUFFER, this.triangleVertexIndexBuffer);
