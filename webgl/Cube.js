@@ -25,25 +25,52 @@ function Cube($gl, $shaderProgram, width) {
     this.visible = true;
     width /= 2;
     this.triangleVerticesIndicesArray = [
-        4, 5, 1, 4, 1, 0, // T
-        0, 1, 2, 0, 2, 3, // F
-        4, 0, 3, 4, 3, 7, // L 
-        5, 4, 7, 5, 7, 6, // B 
-        1, 5, 6, 1, 6, 2, // R
-        3, 2, 6, 3, 6, 7   // D
+			0,  1,  2,      0,  2,  3,    // front
+			4,  5,  6,      4,  6,  7,    // back
+			8,  9,  10,     8,  10, 11,   // top
+			12, 13, 14,     12, 14, 15,   // bottom
+			16, 17, 18,     16, 18, 19,   // right
+			20, 21, 22,     20, 22, 23    // left
     ];
     this.triangleVerticesPostionArray = [
-        width, width, width,
-        -width, width, width,
-        -width, -width, width,
-        width, -width, width,
-        width, width, -width,
-        -width, width, -width,
-        -width, -width, -width,
-        width, -width, -width
+			// Front face
+			-width, -width,  width,
+			 width, -width,  width,
+			 width,  width,  width,
+			-width,  width,  width,
+			
+			// Back face
+			-width, -width, -width,
+			-width,  width, -width,
+			 width,  width, -width,
+			 width, -width, -width,
+			
+			// Top face
+			-width,  width, -width,
+			-width,  width,  width,
+			 width,  width,  width,
+			 width,  width, -width,
+			
+			// Bottom face
+			-width, -width, -width,
+			 width, -width, -width,
+			 width, -width,  width,
+			-width, -width,  width,
+			
+			// Right face
+			 width, -width, -width,
+			 width,  width, -width,
+			 width,  width,  width,
+			 width, -width,  width,
+			
+			// Left face
+			-width, -width, -width,
+			-width, -width,  width,
+			-width,  width,  width,
+			-width,  width, -width
     ];
 
-    this.triangleVerticesColorArray = [
+  /*  this.triangleVerticesColorArray = [
         1.0, 0.0, 0.0, 1.0,
         0.0, 1.0, 0.0, 1.0,
         1.0, 1.0, 1.0, 1.0,
@@ -52,7 +79,7 @@ function Cube($gl, $shaderProgram, width) {
         0.0, 1.0, 1.0, 1.0,
         1.0, 1.0, 1.0, 1.0,
         1.0, 1.0, 1.0, 1.0
-    ];
+    ];*/
     //Positionen
     this.triangleVertexPositionBuffer = $gl.createBuffer();
     $gl.bindBuffer($gl.ARRAY_BUFFER, this.triangleVertexPositionBuffer);
@@ -60,12 +87,12 @@ function Cube($gl, $shaderProgram, width) {
     this.triangleVertexPositionBuffer.itemSize = 3;
     this.triangleVertexPositionBuffer.numItems = 8;
 
-    // Farben
+  /*  // Farben
     this.triangleVertexColorBuffer = $gl.createBuffer();
     $gl.bindBuffer($gl.ARRAY_BUFFER, this.triangleVertexColorBuffer);
     $gl.bufferData($gl.ARRAY_BUFFER, new Float32Array(this.triangleVerticesColorArray), $gl.STATIC_DRAW);
     this.triangleVertexColorBuffer.itemSize = 4;
-    this.triangleVertexColorBuffer.numItems = 8;
+    this.triangleVertexColorBuffer.numItems = 8;*/
 
     //Indizes
     this.triangleVertexIndexBuffer = $gl.createBuffer();
@@ -91,7 +118,76 @@ function Cube($gl, $shaderProgram, width) {
     };
 
     this.texturize = function() {
-        //TODO
+		  // Map the texture onto the cube's faces.
+		  var textureCoordAttribute;
+		  cubeVerticesTextureCoordBuffer = gl.createBuffer();
+		  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesTextureCoordBuffer);
+		  
+		  var textureCoordinates = [
+			// Front
+			0.0,  0.0,
+			1.0,  0.0,
+			1.0,  1.0,
+			0.0,  1.0,
+			// Back
+			0.0,  0.0,
+			1.0,  0.0,
+			1.0,  1.0,
+			0.0,  1.0,
+			// Top
+			0.0,  0.0,
+			1.0,  0.0,
+			1.0,  1.0,
+			0.0,  1.0,
+			// Bottom
+			0.0,  0.0,
+			1.0,  0.0,
+			1.0,  1.0,
+			0.0,  1.0,
+			// Right
+			0.0,  0.0,
+			1.0,  0.0,
+			1.0,  1.0,
+			0.0,  1.0,
+			// Left
+			0.0,  0.0,
+			1.0,  0.0,
+			1.0,  1.0,
+			0.0,  1.0
+		  ];
+
+		  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates),
+						gl.STATIC_DRAW);
+		  // Set the texture coordinates attribute for the vertices.
+		  
+		  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesTextureCoordBuffer);
+		  gl.vertexAttribPointer(textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
+		  // Specify the texture to map onto the faces.
+		  // top, front, left, back, right, down	
+				  // Draw front face
+					gl.bindTexture(gl.TEXTURE_2D, textureArray[1]);
+					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+
+					// Draw  back face 
+					gl.bindTexture(gl.TEXTURE_2D, textureArray[2]);
+					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 12);
+
+					// Draw top face 
+					gl.bindTexture(gl.TEXTURE_2D, textureArray[3]);
+					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 24);
+
+					// Draw down face 
+					gl.bindTexture(gl.TEXTURE_2D, textureArray[4]);
+					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 36);
+
+					// Draw right face
+					gl.bindTexture(gl.TEXTURE_2D, textureArray[5]);
+					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 48);
+
+					// Draw left face 
+					gl.bindTexture(gl.TEXTURE_2D, textureArray[6]);
+					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 60);
+					gl.uniform1i(shaderProgram.samplerUniform, 0);			
     };
 
     this.draw = function() {
@@ -100,11 +196,12 @@ function Cube($gl, $shaderProgram, width) {
             $gl.bindBuffer($gl.ARRAY_BUFFER, this.triangleVertexPositionBuffer);
             $gl.vertexAttribPointer($shaderProgram.vertexPositionAttribute, this.triangleVertexPositionBuffer.itemSize, $gl.FLOAT, false, 0, 0);
 
-            $gl.bindBuffer($gl.ARRAY_BUFFER, this.triangleVertexColorBuffer);
+        /*    $gl.bindBuffer($gl.ARRAY_BUFFER, this.triangleVertexColorBuffer);
             $gl.vertexAttribPointer($shaderProgram.vertexColorAttribute, this.triangleVertexColorBuffer.itemSize, $gl.FLOAT, false, 0, 0);
-
+*/
             $gl.bindBuffer($gl.ELEMENT_ARRAY_BUFFER, this.triangleVertexIndexBuffer);
             $gl.drawElements($gl.TRIANGLES, this.triangleVertexIndexBuffer.numItems, $gl.UNSIGNED_SHORT, 0);
+			this.texturize();
         }
     }
 

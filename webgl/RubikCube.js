@@ -3,6 +3,8 @@
  * Datenhaltung und Status-Logik (gelöst/wo ist welche Farbe)
  * 
  */
+ 
+ var cube;
 function RubikCube($gl, $shaderProgram) {
     var self=this;
 	self.cubeXYZ = [];
@@ -287,9 +289,5 @@ function changeCubeColors(cube, axis, angle) {
     }
 
     cube.changeColors(newColorPositions);
-
-
-
-
 }
 

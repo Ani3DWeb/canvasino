@@ -56,9 +56,15 @@ function initShaders()
 
                 gl.useProgram(shaderProgram);
                 shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "vPosition");
-                shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "vColor");
+           //     shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "vColor");
+				
+				textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+				gl.enableVertexAttribArray(textureCoordAttribute);
+				
                 gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-                gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
+              //  gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
+				
+				//samplerUniform = gl.getUniformLocation(shaderProgram, "uniSampler");
 
                 shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
 
@@ -133,4 +139,32 @@ function MakeTransform(Object) {
 //Steuerung initialisieren
 function initControl(key) {
 
+}
+
+//
+// initTextures
+//
+var  textureArray = new Array();
+function initTextures(texturenames)
+{
+	for (var i = 0; i<=6 ;i++)
+	{
+		TextureLoader(i,texturenames);
+	}
+}
+
+function TextureLoader(anz,texturenames) {
+ // var anz = textureArray.length;
+  textureArray[anz] = gl.createTexture();
+  textureArray[anz].image = new Image();
+  textureArray[anz].image.onload = function()    
+  {
+		  gl.bindTexture(gl.TEXTURE_2D, textureArray[anz]);		  
+		  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureArray[anz].image);
+		  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+		  gl.generateMipmap(gl.TEXTURE_2D);
+		  gl.bindTexture(gl.TEXTURE_2D, null);
+  }
+  textureArray[anz].image.src = texturenames[anz];
 }
