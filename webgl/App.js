@@ -67,6 +67,7 @@ function initShaders()
 				//samplerUniform = gl.getUniformLocation(shaderProgram, "uniSampler");
 
                 shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+				shaderProgram.rotationMatrixUniform = gl.getUniformLocation(shaderProgram, "uRotation");
 
             }
 

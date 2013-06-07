@@ -22,7 +22,7 @@
 function Cube($gl, $shaderProgram, width) {
     this.colorPositions = []; // top, front, left, back, right, down
     this.mvMatrix = Matrix.I(4);
-	this.BigRotationMatrix = Matrix.I(4);
+	this.CenterRotationMatrix = Matrix.I(4);
     this.visible = true;
     width /= 2;
     this.triangleVerticesIndicesArray = [
@@ -108,7 +108,15 @@ function Cube($gl, $shaderProgram, width) {
         var m = Matrix.Rotation(arad, $V([v[0], v[1], v[2]])).ensure4x4();
         this.mvMatrix = this.mvMatrix.x(m);
     };
-
+	
+	this.rotateCenter = function(ang, v) {
+		this.mvPushMatrixRotation();	
+        var arad = ang * Math.PI / 180.0;
+	    this.CenterRotationMatrix = Matrix.Translation($V([0, 0, 0])).ensure4x4();		
+        var m = Matrix.Rotation(arad, $V([v[0], v[1], v[2]])).ensure4x4();
+		this.CenterRotationMatrix = this.CenterRotationMatrix.x(m); 
+	    this.mvPushMatrixRotation();		
+	}
     this.translate = function(v) {
         var m = Matrix.Translation($V([v[0], v[1], v[2]])).ensure4x4();
         this.mvMatrix = this.mvMatrix.x(m);
@@ -208,6 +216,7 @@ function Cube($gl, $shaderProgram, width) {
 
     this.propagateMatrixUniforms = function() {
         $gl.uniformMatrix4fv($shaderProgram.mvMatrixUniform, false, new Float32Array(this.mvMatrix.flatten()));
+        $gl.uniformMatrix4fv($shaderProgram.rotationMatrixUniform, false, new Float32Array(this.CenterRotationMatrix.flatten()));		
     }
     this.mvMatrixStack = [];
 
@@ -228,6 +237,19 @@ function Cube($gl, $shaderProgram, width) {
         this.mvMatrix = this.mvMatrixStack.pop();
         return this.mvMatrix;
     }
+	
+	 this.mvMatrixStackRotation = [];
+	
+	this.mvPushMatrixRotation = function() {
+			 this.mvMatrixStackRotation.push(this.CenterRotationMatrix);	
+	};
+		
+	this.mvPopMatrixRotation = function() {
+			if (this.mvMatrixStackRotation.length == 0) {
+				throw "Invalid popMatrix!";
+			}
+			return this.CenterRotationMatrix = this.mvMatrixStackRotation.pop();
+	};	
 
     this.changeColors = function(newColorPositions) {	
         this.colorPositions = newColorPositions;

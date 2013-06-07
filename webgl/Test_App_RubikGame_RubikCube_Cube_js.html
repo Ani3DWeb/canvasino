@@ -29,6 +29,7 @@
 			
             uniform mat4 uMVMatrix;
 			uniform mat4 uPMatrix;
+			uniform mat4 uRotation;	  
 			
 			attribute vec2 aTextureCoord;
 			varying highp vec2 vTextureCoord;
@@ -37,7 +38,7 @@
 
             void main(void) 
             {
-				gl_Position = uPMatrix * uMVMatrix * vPosition;
+				gl_Position = uPMatrix * uRotation * uMVMatrix * vPosition;
 				varColor = vColor;
 				vTextureCoord = aTextureCoord;
             }

@@ -52,7 +52,7 @@ function RubikCube($gl, $shaderProgram) {
                     z = b;
                 }
                 var tempCube = self.cubeXYZ[x][y][z];
-           //     changeCubeColors(tempCube, axis, angle);
+             //   changeCubeColors(tempCube, axis, angle);
                 var tempArray = getCubeChangeAfter90DegreeRotation(axis, angle, x, y, z);
 
             //    tempLayer[tempArray[0]][tempArray[1]] = tempCube;
@@ -74,7 +74,13 @@ function RubikCube($gl, $shaderProgram) {
                 }
 				
               //  self.cubeXYZ[x][y][z] = tempLayer[a][b];
-				self.cubeXYZ[x][y][z].rotate(angle,[x,y,z]);
+			  if(axis == "z") {
+				self.cubeXYZ[x][y][z].rotateCenter(angle,[0.0,0.0,1.0]);
+			  } else if (axis == "x") {
+				self.cubeXYZ[x][y][z].rotateCenter(angle,[1.0,0.0,0.0]);
+			  } else if (axis == "y") {
+				self.cubeXYZ[x][y][z].rotateCenter(angle,[0.0,1.0,0.0]);
+			  }
             }
         }
 
@@ -246,7 +252,7 @@ function getCubeChangeAfter90DegreeRotation(axis, angle, x, y, z) {
 
 
 
-function changeCubeColors(cube1, axis, angle) {
+function changeCubeColors(cube, axis, angle) {
 	var colorPositions = [];
     var newColorPositions = [];
 	
