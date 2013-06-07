@@ -4,6 +4,8 @@
 	width: 960px;
 	position: relative;	
 	background:url('../images/canvasino_x.png') 0px 0px;
+	top: 60px;
+	margin-bottom: 60px;
 }
 
 #controls {
