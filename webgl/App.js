@@ -13,7 +13,7 @@ function initGL(canvas)
     try {
         gl = canvas.getContext("experimental-webgl");
         gl.viewport(0, 0, canvas.width, canvas.height);
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        gl.clearColor(1.0, 0.0, 0.0, 1.0);
 
         gl.clearDepth(1.0);
         gl.enable(gl.DEPTH_TEST);
@@ -39,37 +39,37 @@ function main()
 
 
 function initShaders()
-            {
-                var fragmentShader = getShader(gl, "shader-fs");
-                var vertexShader = getShader(gl, "shader-vs");
+{
+		  var fragmentShader = getShader(gl, "shader-fs");
+		  var vertexShader = getShader(gl, "shader-vs");
+		  
+		  // Create the shader program
+		  
+		  shaderProgram = gl.createProgram();
+		  gl.attachShader(shaderProgram, vertexShader);
+		  gl.attachShader(shaderProgram, fragmentShader);
+		  gl.linkProgram(shaderProgram);
+		  
+		  // If creating the shader program failed, alert
+		  
+		  if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+			alert("Unable to initialize the shader program.");
+		  }
+		  
+		  gl.useProgram(shaderProgram);
+		  
+		  vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+		  gl.enableVertexAttribArray(vertexPositionAttribute);
+		  
+		  textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+		  gl.enableVertexAttribArray(textureCoordAttribute);
+		  
+		  mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+		  samplerUniform = gl.getUniformLocation(shaderProgram, "uniSampler");
+		  rotationMatrixUniform = gl.getUniformLocation(shaderProgram, "uRotation");
+		  coordinatesMatrixUniform = gl.getUniformLocation(shaderProgram, "uCoordinates");
 
-                shaderProgram = gl.createProgram();
-                gl.attachShader(shaderProgram, vertexShader);
-                gl.attachShader(shaderProgram, fragmentShader);
-
-                gl.linkProgram(shaderProgram);
-
-                if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS))
-                {
-                    alert("Could not initialise shaders");
-                }
-
-                gl.useProgram(shaderProgram);
-                shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "vPosition");
-           //     shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "vColor");
-				
-				textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
-				gl.enableVertexAttribArray(textureCoordAttribute);
-				
-                gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-              //  gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
-				
-				//samplerUniform = gl.getUniformLocation(shaderProgram, "uniSampler");
-
-                shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
-				shaderProgram.rotationMatrixUniform = gl.getUniformLocation(shaderProgram, "uRotation");
-
-            }
+}
 
 function getShader(gl, id)
 {

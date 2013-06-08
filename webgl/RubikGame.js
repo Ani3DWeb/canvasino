@@ -7,6 +7,8 @@
  */
 var perspectiveMatrix;
 var angle = 0;
+var mvMatrix = Matrix.I(4);
+var angle = 0;
 function RubikGame($gl, $shaderProgram) {
  //   this.perspectiveMatrix = makePerspective(45, 640.0 / 480.0, 0.1, 100.0);
  	initTextures(getTextureNames());

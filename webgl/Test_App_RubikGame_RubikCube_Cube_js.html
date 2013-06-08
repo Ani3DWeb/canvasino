@@ -7,41 +7,36 @@
         <script type="text/javascript" src="RubikCube.js"></script>
         <script type="text/javascript" src="RubikGame.js"></script>
         <script type="text/javascript" src="App.js"></script>
+		
         <Script id="shader-fs" type="x-shader/x-fragment">
-            precision mediump float;
-            varying vec4 varColor;
-			
-			    varying highp vec2 vTextureCoord;
-      
-				uniform sampler2D uSampler;
-
-            void main(void) 
-            {
-           // gl_FragColor = varColor;
-		      gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-            }
+			  varying highp vec2 vTextureCoord;
+			  
+			  uniform sampler2D uSampler;
+			  
+			  void main(void) {
+				highp vec4 texelColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+				
+				gl_FragColor = vec4(texelColor.rgb, texelColor.a);// * vLighting, texelColor.a);
+			   // gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+			  }
         </Script>
 
         <Script id="shader-vs" type="x-shader/x-vertex">
-            precision mediump float;
-            attribute vec4 vPosition;
-            attribute vec4 vColor;
+			  attribute vec3 aVertexPosition;
+			  attribute vec2 aTextureCoord;
 			
-            uniform mat4 uMVMatrix;
-			uniform mat4 uPMatrix;
-			uniform mat4 uRotation;	  
+			  uniform mat4 uMVMatrix;
+			  uniform mat4 uPMatrix;
+			  
+			  uniform mat4 uRotation;	  
+			  uniform mat4 uCoordinates;
+			  
+			  varying highp vec2 vTextureCoord;
 			
-			attribute vec2 aTextureCoord;
-			varying highp vec2 vTextureCoord;
-			
-            varying vec4 varColor;
-
-            void main(void) 
-            {
-				gl_Position = uPMatrix * uRotation * uMVMatrix * vPosition;
-				varColor = vColor;
+			  void main(void) {
+				gl_Position = uPMatrix * uRotation * uCoordinates * vec4(aVertexPosition, 1.0);
 				vTextureCoord = aTextureCoord;
-            }
+			  }
         </Script>
     </Head>
 
