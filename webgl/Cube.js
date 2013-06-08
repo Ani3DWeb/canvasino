@@ -86,7 +86,9 @@ function Cube($gl, $shaderProgram, width) {
     $gl.bindBuffer($gl.ARRAY_BUFFER, this.triangleVertexPositionBuffer);
     $gl.bufferData($gl.ARRAY_BUFFER, new Float32Array(this.triangleVerticesPostionArray), $gl.STATIC_DRAW);
     this.triangleVertexPositionBuffer.itemSize = 3;
-    this.triangleVertexPositionBuffer.numItems = 8;
+    this.triangleVertexPositionBuffer.numItems = 6;
+    $gl.vertexAttribPointer($shaderProgram.vertexPositionAttribute, this.triangleVertexPositionBuffer.itemSize, $gl.FLOAT, false, 0, 0);
+
 
   /*  // Farben
     this.triangleVertexColorBuffer = $gl.createBuffer();
@@ -98,10 +100,9 @@ function Cube($gl, $shaderProgram, width) {
     //Indizes
     this.triangleVertexIndexBuffer = $gl.createBuffer();
     $gl.bindBuffer($gl.ELEMENT_ARRAY_BUFFER, this.triangleVertexIndexBuffer);
-
     $gl.bufferData($gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.triangleVerticesIndicesArray), $gl.STATIC_DRAW);
-    this.triangleVertexIndexBuffer.itemSize = 1;
-    this.triangleVertexIndexBuffer.numItems = 36;
+    this.triangleVertexIndexBuffer.itemSize = 3;
+    this.triangleVertexIndexBuffer.numItems = 12;
 
     this.rotate = function(ang, v) {
         var arad = ang * Math.PI / 180.0;
@@ -201,15 +202,18 @@ function Cube($gl, $shaderProgram, width) {
 
     this.draw = function() {
         if (this.visible) {
-            this.propagateMatrixUniforms();
-            $gl.bindBuffer($gl.ARRAY_BUFFER, this.triangleVertexPositionBuffer);
-            $gl.vertexAttribPointer($shaderProgram.vertexPositionAttribute, this.triangleVertexPositionBuffer.itemSize, $gl.FLOAT, false, 0, 0);
+    //  		$gl.bindBuffer($gl.ARRAY_BUFFER, this.triangleVertexPositionBuffer);
+    //        $gl.vertexAttribPointer($shaderProgram.vertexPositionAttribute, this.triangleVertexPositionBuffer.itemSize, $gl.FLOAT, false, 0, 0);
 
         /*    $gl.bindBuffer($gl.ARRAY_BUFFER, this.triangleVertexColorBuffer);
             $gl.vertexAttribPointer($shaderProgram.vertexColorAttribute, this.triangleVertexColorBuffer.itemSize, $gl.FLOAT, false, 0, 0);
 */
-            $gl.bindBuffer($gl.ELEMENT_ARRAY_BUFFER, this.triangleVertexIndexBuffer);
-            $gl.drawElements($gl.TRIANGLES, this.triangleVertexIndexBuffer.numItems, $gl.UNSIGNED_SHORT, 0);
+   //         $gl.bindBuffer($gl.ELEMENT_ARRAY_BUFFER, this.triangleVertexIndexBuffer);
+	//		$gl.bufferData($gl.ARRAY_BUFFER, new Float32Array(this.triangleVerticesPostionArray), $gl.STATIC_DRAW);
+	
+	
+			this.propagateMatrixUniforms();
+     //       $gl.drawElements($gl.TRIANGLES, this.triangleVertexIndexBuffer.numItems, $gl.UNSIGNED_SHORT, 0);
 			this.texturize();
         }
     }
