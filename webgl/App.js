@@ -148,7 +148,8 @@ function initControl(key) {
 var  textureArray = new Array();
 function initTextures(texturenames)
 {
-	for (var i = 0; i<=6 ;i++)
+	var length = texturenames.length;
+	for (var i = 0; i<=(length-1) ;i++)
 	{
 		TextureLoader(i,texturenames);
 	}
