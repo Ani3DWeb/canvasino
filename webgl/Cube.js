@@ -14,6 +14,8 @@ var Cube = function ($gl,$shaderProgram,width){
  
  this.CubeCoordMatrix = Matrix.I(4) ;
  this.CubeRotationMatrix = Matrix.I(4);
+ 
+ var CubeCoordinaten = Matrix.I(4);
 
 		  width = width / 2;
 		  this.CubeCoordMatrix = Matrix.Translation($V([0, 0, 0])).ensure4x4();
@@ -179,28 +181,28 @@ var Cube = function ($gl,$shaderProgram,width){
 		};
 		this.translate = function(v){
 			  this.mvPushMatrixCoordinate();
-			//  var tmp = this.mvPopMatrix();
+//			  this.CubeCoordinaten = Matrix.Translation($V([v[0], v[1], v[2]])).ensure4x4();	
 			  var m = Matrix.Translation($V([v[0], v[1], v[2]])).ensure4x4();
 			  this.CubeCoordMatrix = this.CubeCoordMatrix.x(m);
 			  this.mvPushMatrixCoordinate();
-		};
-		
-		this.rotateCenter = function(ang,v) {
-			this.mvPushMatrixRotation();
-			this.CubeRotationMatrix = Matrix.Translation($V([0, 0, 0])).ensure4x4();
-			var arad = ang * Math.PI / 180.0;
-			var m = Matrix.Rotation(arad, $V([v[0], v[1], v[2]])).ensure4x4();
-			this.CubeRotationMatrix = this.CubeRotationMatrix.x(m);
-			this.mvPushMatrixRotation();
 		};
 		
 		this.rotate = function(ang,v) {
 			  this.mvPushMatrixCoordinate();
 				var arad = ang * Math.PI / 180.0;
 				var m = Matrix.Rotation(arad, $V([v[0], v[1], v[2]])).ensure4x4();
-			  this.CubeCoordMatrix = this.CubeCoordMatrix.x(m);
+				this.CubeCoordMatrix = this.CubeCoordMatrix.x(m);
 			  this.mvPushMatrixCoordinate();			
 		}
+		
+		this.rotateOrigin = function(ang,v) {
+			this.mvPushMatrixRotation();
+				this.CubeRotationMatrix = Matrix.Translation($V([0, 0, 0])).ensure4x4();
+				var arad = ang * Math.PI / 180.0;
+				var m = Matrix.Rotation(arad, $V([v[0], v[1], v[2]])).ensure4x4();
+				this.CubeRotationMatrix = this.CubeRotationMatrix.x(m);
+			this.mvPushMatrixRotation();
+		};
 		
 		this.scale = function(){
         

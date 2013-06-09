@@ -7,6 +7,7 @@
 function RubikCube($gl, $shaderProgram) {
     var self=this;
 	self.cubeXYZ = [];
+	var cube;
     // cubeXYZ init:
     for (var x = 0; x < 3; x++) {
         self.cubeXYZ[x] = [];
@@ -20,6 +21,8 @@ function RubikCube($gl, $shaderProgram) {
             }
         }
     }
+	
+
 
     //rotateLayer(x,1,90);
     //rotateLayer(z,3,-90);
@@ -75,11 +78,11 @@ function RubikCube($gl, $shaderProgram) {
 				
               //  self.cubeXYZ[x][y][z] = tempLayer[a][b];
 			  if(axis == "z") {
-				self.cubeXYZ[x][y][z].rotateCenter(angle,[0.0,0.0,1.0]);
+				self.cubeXYZ[x][y][z].rotateOrigin(angle,[0.0,0.0,1.0]);
 			  } else if (axis == "x") {
-				self.cubeXYZ[x][y][z].rotateCenter(angle,[1.0,0.0,0.0]);
+				self.cubeXYZ[x][y][z].rotateOrigin(angle,[1.0,0.0,0.0]);
 			  } else if (axis == "y") {
-				self.cubeXYZ[x][y][z].rotateCenter(angle,[0.0,1.0,0.0]);
+				self.cubeXYZ[x][y][z].rotateOrigin(angle,[0.0,1.0,0.0]);
 			  }
             }
         }
@@ -176,7 +179,6 @@ function RubikCube($gl, $shaderProgram) {
     this.control = function() {
 
     }
-
 
     this.draw = function() {
         for (var x = 0; x < 3; x++) {
