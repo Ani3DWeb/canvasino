@@ -5,27 +5,34 @@
         <script type="text/javascript" src="Libs/glUtils.js"></script>
         <script type="text/javascript" src="Cube.js"></script>
         <Script id="shader-fs" type="x-shader/x-fragment">
-            precision mediump float;
-            varying vec4 varColor;
-
-            void main(void) 
-            {
-            gl_FragColor = varColor;
-            }
+			  varying highp vec2 vTextureCoord;
+			  
+			  uniform sampler2D uSampler;
+			  
+			  void main(void) {
+				highp vec4 texelColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+				
+				gl_FragColor = vec4(texelColor.rgb, texelColor.a);// * vLighting, texelColor.a);
+			   // gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+			  }
         </Script>
 
         <Script id="shader-vs" type="x-shader/x-vertex">
-            precision mediump float;
-            attribute vec4 vPosition;
-            attribute vec4 vColor;
-            uniform mat4 uMVMatrix;
-            varying vec4 varColor;
-
-            void main(void) 
-            {
-            gl_Position = uMVMatrix * vPosition;
-            varColor = vColor;
-            }
+			  attribute vec3 aVertexPosition;
+			  attribute vec2 aTextureCoord;
+			
+			  uniform mat4 uMVMatrix;
+			  uniform mat4 uPMatrix;
+			  
+			  uniform mat4 uRotation;	  
+			  uniform mat4 uCoordinates;
+			  
+			  varying highp vec2 vTextureCoord;
+			
+			  void main(void) {
+				gl_Position = uPMatrix * uRotation * uCoordinates * vec4(aVertexPosition, 1.0);
+				vTextureCoord = aTextureCoord;
+			  }
         </Script>
 
         <Script type="text/javascript">
@@ -72,27 +79,34 @@
 
             function initShaders()
             {
-                var fragmentShader = getShader(gl, "shader-fs");
-                var vertexShader = getShader(gl, "shader-vs");
-
-                shaderProgram = gl.createProgram();
-                gl.attachShader(shaderProgram, vertexShader);
-                gl.attachShader(shaderProgram, fragmentShader);
-
-                gl.linkProgram(shaderProgram);
-
-                if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS))
-                {
-                    alert("Could not initialise shaders");
-                }
-
-                gl.useProgram(shaderProgram);
-                shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "vPosition");
-                shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "vColor");
-                gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-                gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
-
-                shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+		  var fragmentShader = getShader(gl, "shader-fs");
+		  var vertexShader = getShader(gl, "shader-vs");
+		  
+		  // Create the shader program
+		  
+		  shaderProgram = gl.createProgram();
+		  gl.attachShader(shaderProgram, vertexShader);
+		  gl.attachShader(shaderProgram, fragmentShader);
+		  gl.linkProgram(shaderProgram);
+		  
+		  // If creating the shader program failed, alert
+		  
+		  if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+			alert("Unable to initialize the shader program.");
+		  }
+		  
+		  gl.useProgram(shaderProgram);
+		  
+		  vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+		  gl.enableVertexAttribArray(vertexPositionAttribute);
+		  
+		  textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+		  gl.enableVertexAttribArray(textureCoordAttribute);
+		  
+		  mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+		  samplerUniform = gl.getUniformLocation(shaderProgram, "uniSampler");
+		  rotationMatrixUniform = gl.getUniformLocation(shaderProgram, "uRotation");
+		  coordinatesMatrixUniform = gl.getUniformLocation(shaderProgram, "uCoordinates");
 
             }
 
@@ -103,7 +117,7 @@
                 try {
                     gl = canvas.getContext("experimental-webgl");
                     gl.viewport(0, 0, canvas.width, canvas.height);
-                    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+                    gl.clearColor(1.0, 0.0, 0.0, 1.0);
 
                     gl.clearDepth(1.0);
                     gl.enable(gl.DEPTH_TEST);
@@ -124,19 +138,20 @@
             var cube4;
             function drawScene()
             {
-
                 gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
                 gl.enable(gl.DEPTH_TEST);
                 gl.depthFunc(gl.LEQUAL);
 
-                perspectiveMatrix = makePerspective(45, 640.0 / 480.0, 0.1, 100.0);
+                perspectiveMatrix = makePerspective(45, 640.0 / 640.0, 0.1, 100.0);
+				
+				PerspectivTranslate([0.0,0.0,-3.0])
+				
                 var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
                 gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
 
                 angle = angle + 0.05;
                 if (angle > 360)
                     angle = angle - 360;
-
 
                 cube1.draw();
                 cube2.draw();
@@ -148,21 +163,84 @@
 
             function initCube()
             {
-                cube1 = new Cube(gl, shaderProgram, 0.5);
-                cube1.translate([0.5, -0.5, 0]);
+			    cube1 = new Cube(gl, shaderProgram, 0.5);
+				cube1.changeColors(initColors());
+				cube1.translate([0.5, -0.5, 0]);
+
                 cube2 = new Cube(gl, shaderProgram, 0.5);
+				cube2.changeColors(initColors());				
                 cube2.translate([-0.5, -0.5, 0]);
+				
                 cube3 = new Cube(gl, shaderProgram, 0.5);
+				cube3.changeColors(initColors());
                 cube3.translate([0.5, 0.5, 0]);
+				
                 cube4 = new Cube(gl, shaderProgram, 0.5);
+				cube4.changeColors(initColors());
                 cube4.translate([-0.5, 0.5, 0]);
             }
+			
+			var  textureArray = new Array();
+			function initTextures(texturenames)
+			{
+				var length = texturenames.length;
+				for (var i = 0; i<=(length-1) ;i++)
+				{
+					TextureLoader(i,texturenames);
+				}
+			}
+
+			function TextureLoader(anz,texturenames) {
+			 // var anz = textureArray.length;
+			  textureArray[anz] = gl.createTexture();
+			  textureArray[anz].image = new Image();
+			  textureArray[anz].image.onload = function()    
+			  {
+					  gl.bindTexture(gl.TEXTURE_2D, textureArray[anz]);		  
+					  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureArray[anz].image);
+					  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+					  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+					  gl.generateMipmap(gl.TEXTURE_2D);
+					  gl.bindTexture(gl.TEXTURE_2D, null);
+			  }
+			  textureArray[anz].image.src = texturenames[anz];
+			}		
+
+			function getTextureNames() {
+					return  Texturenames = new Array("RubiksCube/images/Flaeche_blau.png",
+													 "RubiksCube/images/Flaeche_blau.png",
+													 "RubiksCube/images/Flaeche_orange.png",
+													 "RubiksCube/images/Flaeche_gruen.png",
+													 "RubiksCube/images/Flaeche_rot.png",
+													 "RubiksCube/images/Flaeche_gelb.png",
+													 "RubiksCube/images/Flaeche_schwarz.png");
+			}	
+
+			function initColors() {
+					var colorPositions = [];
+					// top, front, left, back, right, down	
+					for(var i= 0; i<=6;i++)
+					{
+						colorPositions[i] = textureArray[i];	
+					}
+					return colorPositions;
+			}		
+
+			function PerspectivRotate(angle, v) {
+			  var inRadians = angle * Math.PI / 180.0;  
+			  perspectiveMatrix = perspectiveMatrix.x(Matrix.Rotation(inRadians, $V([v[0], v[1], v[2]])).ensure4x4());
+			}
+
+			function PerspectivTranslate(v) {
+			  perspectiveMatrix = perspectiveMatrix.x(Matrix.Translation($V([v[0], v[1], v[2]])).ensure4x4());
+			}			
 
             function main()
             {
                 var canvas = document.getElementById("webGLCanvas");
                 initGL(canvas);
                 initShaders();
+				initTextures(getTextureNames());
                 initCube();
 
                 setInterval(drawScene, 50);

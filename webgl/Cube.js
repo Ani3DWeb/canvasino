@@ -251,5 +251,11 @@ var Cube = function ($gl,$shaderProgram,width){
 			}
 			return this.CubeRotationMatrix = this.mvMatrixStackRotation.pop();
 		};			
-		
+		this.save = function() {
+			this.mvPushMatrixCoordinate(this.CubeCoordMatrix);
+		};
+		this.revert = function() {
+			this.CubeCoordMatrix = this.mvPopMatrixCoordinate();
+		};
+		this.save();		
 }
