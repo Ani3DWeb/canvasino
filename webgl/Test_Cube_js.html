@@ -164,19 +164,19 @@
             function initCube()
             {
 			    cube1 = new Cube(gl, shaderProgram, 0.5);
-				cube1.changeColors(initColors());
+				cube1.changeColors(initColors(0));
 				cube1.translate([0.5, -0.5, 0]);
 
                 cube2 = new Cube(gl, shaderProgram, 0.5);
-				cube2.changeColors(initColors());				
+				cube2.changeColors(initColors(1));				
                 cube2.translate([-0.5, -0.5, 0]);
 				
                 cube3 = new Cube(gl, shaderProgram, 0.5);
-				cube3.changeColors(initColors());
+				cube3.changeColors(initColors(7));
                 cube3.translate([0.5, 0.5, 0]);
 				
                 cube4 = new Cube(gl, shaderProgram, 0.5);
-				cube4.changeColors(initColors());
+				cube4.changeColors(initColors(3));
                 cube4.translate([-0.5, 0.5, 0]);
             }
 			
@@ -207,21 +207,24 @@
 			}		
 
 			function getTextureNames() {
-					return  Texturenames = new Array("RubiksCube/images/Flaeche_blau.png",
-													 "RubiksCube/images/Flaeche_blau.png",
-													 "RubiksCube/images/Flaeche_orange.png",
-													 "RubiksCube/images/Flaeche_gruen.png",
-													 "RubiksCube/images/Flaeche_rot.png",
-													 "RubiksCube/images/Flaeche_gelb.png",
-													 "RubiksCube/images/Flaeche_schwarz.png");
+					return  Texturenames = new Array("Slotmachine/images/1_kirsche.png",
+													 "Slotmachine/images/2_pflaume.png",
+													 "Slotmachine/images/3_zitrone.png",
+													 "Slotmachine/images/4_orange.png",
+													 "Slotmachine/images/5_melone.png",
+													 "Slotmachine/images/6_klee.png",
+													 "Slotmachine/images/7_sieben.png",
+													 "Slotmachine/images/8_diamant.png");
 			}	
 
-			function initColors() {
+			function initColors(number) {
 					var colorPositions = [];
 					// top, front, left, back, right, down	
+					
+					if(number > textureArray.length) { number = textureArray.length;}
 					for(var i= 0; i<=6;i++)
 					{
-						colorPositions[i] = textureArray[i];	
+						colorPositions[i] = textureArray[number];	
 					}
 					return colorPositions;
 			}		

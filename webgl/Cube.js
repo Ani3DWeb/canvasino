@@ -33,10 +33,10 @@ var Cube = function ($gl,$shaderProgram,width){
 		  
 		  var vertices = [
 			// Front face
-			-width, -width,  width,
+			-width, width,  width,
+			 width, width,  width,
 			 width, -width,  width,
-			 width,  width,  width,
-			-width,  width,  width,
+			-width, -width,  width,
 			
 			// Back face
 			-width, -width, -width,
@@ -45,10 +45,10 @@ var Cube = function ($gl,$shaderProgram,width){
 			 width, -width, -width,
 			
 			// Top face
+			-width,  width, width,
 			-width,  width, -width,
-			-width,  width,  width,
-			 width,  width,  width,
-			 width,  width, -width,
+			width,  width,  -width,
+			width,  width, width,
 			
 			// Bottom face
 			-width, -width, -width,
@@ -57,16 +57,16 @@ var Cube = function ($gl,$shaderProgram,width){
 			-width, -width,  width,
 			
 			// Right face
+			 width, width, -width,
 			 width, -width, -width,
-			 width,  width, -width,
-			 width,  width,  width,
 			 width, -width,  width,
+			 width, width,  width,
 			
 			// Left face
-			-width, -width, -width,
+			-width, width, -width,
+			-width, width,  width,
 			-width, -width,  width,
-			-width,  width,  width,
-			-width,  width, -width
+			-width, -width, -width
 		  ];
 		  
 		  // Now pass the list of vertices into WebGL to build the shape. We
@@ -108,36 +108,41 @@ var Cube = function ($gl,$shaderProgram,width){
 		  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesTextureCoordBuffer);
 		  
 		  var textureCoordinates = [
-			// Front
-			0.0,  0.0,
-			1.0,  0.0,
-			1.0,  1.0,
-			0.0,  1.0,
-			// Back
-			0.0,  0.0,
-			1.0,  0.0,
-			1.0,  1.0,
-			0.0,  1.0,
-			// Top
-			0.0,  0.0,
-			1.0,  0.0,
-			1.0,  1.0,
-			0.0,  1.0,
-			// Bottom
-			0.0,  0.0,
-			1.0,  0.0,
-			1.0,  1.0,
-			0.0,  1.0,
-			// Right
-			0.0,  0.0,
-			1.0,  0.0,
-			1.0,  1.0,
-			0.0,  1.0,
-			// Left
-			0.0,  0.0,
-			1.0,  0.0,
-			1.0,  1.0,
-			0.0,  1.0
+          // Front face
+          0.0, 0.0,
+          1.0, 0.0,
+          1.0, 1.0,
+          0.0, 1.0,
+
+          // Back face
+          1.0, 0.0,
+          1.0, 1.0,
+          0.0, 1.0,
+          0.0, 0.0,
+
+          // Top face
+          0.0, 1.0,
+          0.0, 0.0,
+          1.0, 0.0,
+          1.0, 1.0,
+
+          // Bottom face
+          1.0, 1.0,
+          0.0, 1.0,
+          0.0, 0.0,
+          1.0, 0.0,
+
+          // Right face
+          1.0, 0.0,
+          1.0, 1.0,
+          0.0, 1.0,
+          0.0, 0.0,
+
+          // Left face
+          0.0, 0.0,
+          1.0, 0.0,
+          1.0, 1.0,
+          0.0, 1.0,
 		  ];
 
 		  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates),
