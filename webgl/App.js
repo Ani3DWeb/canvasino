@@ -71,16 +71,16 @@ function initShaders()
 		  
 		  gl.useProgram(shaderProgram);
 		  
-		  vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-		  gl.enableVertexAttribArray(vertexPositionAttribute);
+		  shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+		  gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
 		  
-		  textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
-		  gl.enableVertexAttribArray(textureCoordAttribute);
+		  shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+		  gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
 		  
-		  mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
-		  samplerUniform = gl.getUniformLocation(shaderProgram, "uniSampler");
-		  rotationMatrixUniform = gl.getUniformLocation(shaderProgram, "uRotation");
-		  coordinatesMatrixUniform = gl.getUniformLocation(shaderProgram, "uCoordinates");
+		  shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+		  shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uniSampler");
+		  shaderProgram.rotationMatrixUniform = gl.getUniformLocation(shaderProgram, "uRotation");
+		  shaderProgram.coordinatesMatrixUniform = gl.getUniformLocation(shaderProgram, "uCoordinates");
 
 }
 
