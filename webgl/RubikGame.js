@@ -44,13 +44,13 @@ function RubikGame($gl, $shaderProgram) {
 }
 
 function getTextureNames() {
-		return  Texturenames = new Array("../webgl/RubiksCube/images/Flaeche_pink.png",
-										 "../webgl/RubiksCube/images/Flaeche_blau.png",
-										 "../webgl/RubiksCube/images/Flaeche_orange.png",
-										 "../webgl/RubiksCube/images/Flaeche_gruen.png",
-										 "../webgl/RubiksCube/images/Flaeche_rot.png",
-										 "../webgl/RubiksCube/images/Flaeche_gelb.png",
-										 "../webgl/RubiksCube/images/Flaeche_schwarz.png");
+		return  new Array("RubiksCube/images/Flaeche_pink.png",
+										 "RubiksCube/images/Flaeche_blau.png",
+										 "RubiksCube/images/Flaeche_orange.png",
+										 "RubiksCube/images/Flaeche_gruen.png",
+										 "RubiksCube/images/Flaeche_rot.png",
+										 "RubiksCube/images/Flaeche_gelb.png",
+										 "RubiksCube/images/Flaeche_schwarz.png");
 }
 
 function PerspectivRotate(angle, v) {

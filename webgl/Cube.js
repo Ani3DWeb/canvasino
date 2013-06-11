@@ -1,8 +1,9 @@
-var vertexPositionAttribute;
+//var vertexPositionAttribute;
   
 var Cube = function ($gl,$shaderProgram,width){
 
- var textureCoordAttribute;
+ //var textureCoordAttribute;
+//	 textureCoordAttribute
  var cubeVerticesPositionBuffer;
  var cubeVerticesTextureCoordBuffer;
  var cubeVerticesIndexBuffer;
@@ -23,12 +24,12 @@ var Cube = function ($gl,$shaderProgram,width){
 		  this.CubeRotationMatrix = Matrix.Translation($V([0, 0, 0])).ensure4x4();
 		  // Create a buffer for the cube's vertices.
 		  
-		  cubeVerticesBuffer = $gl.createBuffer();
+		  cubeVerticesPositionBuffer = $gl.createBuffer();
 		  
 		  // Select the cubeVerticesBuffer as the one to apply vertex
 		  // operations to from here out.
 		  
-		  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesBuffer);
+		  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesPositionBuffer);
 		  
 		  // Now create an array of vertices for the cube.
 		  

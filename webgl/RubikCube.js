@@ -97,6 +97,7 @@ function RubikCube($gl, $shaderProgram) {
     this.checkState = function() {
 		var tempColor;
 		var wrong = false;
+		var colPos;
 		
 		// Front (z==0) and Back (z==2):
 		var z=0;
