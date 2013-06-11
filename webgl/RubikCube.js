@@ -16,8 +16,8 @@ function RubikCube($gl, $shaderProgram) {
             for (var z = 0; z < 3; z++) {
                 //TODO: Cubes an die richtige Anfangsposition, texturieren
                 self.cubeXYZ[x][y][z] = new Cube($gl, $shaderProgram, 0.95);
-				self.cubeXYZ[x][y][z].changeColors(initColors(x,y,z));
-				self.cubeXYZ[x][y][z].initTexture(initColors(x,y,z));
+				self.cubeXYZ[x][y][z].changeLogicColors(initColors(x,y,z));
+				self.cubeXYZ[x][y][z].initTexture(initCubeTextures(x,y,z));
 				self.cubeXYZ[x][y][z].translate([x - 1, y - 1, z - 1]);
             }
         }
@@ -90,89 +90,87 @@ function RubikCube($gl, $shaderProgram) {
             }
         }
 
-   //     checkState();
+        this.checkState();
     };
 
 
     this.checkState = function() {
-        var tempColor;
-        var wrong = false;
-
-        // Front (z==0) and Back (z==2):
-        var z = 0;
-        do {
-            if (z == 0)
-                colPos = 1; // front
-            else if (z == 2)
-                colPos = 3; // back
-
-            tempColor = self.cubeXYZ[0][0][z].colorPositions[colPos];
-            for (var x = 0; x < 3; x++) {
-                for (var y = 1; y < 3; y++) {
-                    if (self.cubeXYZ[x][y][z].colorPositions[colPos] != tempColor) {
-                        wrong = true;
-                        break;
-                    }
-                }
-                if (wrong)
-                    break;
-            }
-            if (z < 2)
-                z = 2;
-            else
-                break;
-        } while (!wrong);
-
-        // If front- and back-colors are in the right order:
-        if (!wrong) {
-            // Left (x==0) and Right (x==2):
-            x = 0;
-            do {
-                if (x == 0)
-                    colPos = 2; // left
-                else if (x == 2)
-                    colPos = 4; // right
-
-                tempColor = self.cubeXYZ[x][0][0].colorPositions[colPos];
-                for (var y = 0; y < 3; y++) {
-                    for (var z = 1; z < 3; z++) {
-                        if (self.cubeXYZ[x][y][z].colorPositions[colPos] != tempColor) {
-                            wrong = true;
-                            break;
-                        }
-                    }
-                    if (wrong)
-                        break;
-                }
-                if (x < 2)
-                    x = 2;
-                else
-                    break;
-            } while (!wrong);
-
-            // If front-, back-, left- and right-colors are in the right order:
-            if (!wrong) {
-                // Top (y==2):
-                y = 2;
-                colPos = 0; // top
-
-                tempColor = self.cubeXYZ[0][y][0].colorPositions[colPos];
-                for (var x = 0; x < 3; x++) {
-                    for (var z = 1; z < 3; z++) {
-                        if (self.cubeXYZ[x][y][z].colorPositions[colPos] != tempColor) {
-                            wrong = true;
-                            break;
-                        }
-                    }
-                    if (wrong)
-                        break;
-                }
-            }
-        }
-
-        if (!wrong) {
-            // WIN WIN WIN
-        }
+		var tempColor;
+		var wrong = false;
+		
+		// Front (z==0) and Back (z==2):
+		var z=0;
+		do {
+			if(z==0)
+				colPos=1; // front
+			else if(z==2)
+				colPos=3; // back
+			
+			tempColor = self.cubeXYZ[0][0][z].getColors()[colPos];
+			for(var x=0; x<3; x++) {
+				for(var y=1; y<3; y++) {
+					if(self.cubeXYZ[x][y][z].getColors()[colPos] != tempColor) {
+						wrong = true;
+						break;
+					}
+				}
+				if(wrong) break;
+			}			
+			if(z<2)
+				z=2;
+			else
+				break;
+		} while(!wrong);
+		
+		// If front- and back-colors are in the right order:
+		if(!wrong) {
+			// Left (x==0) and Right (x==2):
+			x=0;
+			do {
+				if(x==0)
+					colPos=2; // left
+				else if(x==2)
+					colPos=4; // right
+				
+				tempColor = self.cubeXYZ[x][0][0].getColors()[colPos];
+				for(var y=0; y<3; y++) {
+					for(var z=1; z<3; z++) {
+						if(self.cubeXYZ[x][y][z].getColors()[colPos] != tempColor) {
+							wrong = true;
+							break;
+						}
+					}
+					if(wrong) break;
+				}
+				if(x<2)
+					x=2;
+				else
+					break;
+			} while(!wrong);
+			
+			// If front-, back-, left- and right-colors are in the right order:
+			if(!wrong) {
+				// Top (y==2):
+				y=2;
+				colPos=0; // top
+				
+				tempColor = self.cubeXYZ[0][y][0].getColors()[colPos];
+				for(var x=0; x<3; x++) {
+					for(var z=1; z<3; z++) {
+						if(self.cubeXYZ[x][y][z].getColors()[colPos] != tempColor) {
+							wrong = true;
+							break;
+						}
+					}
+					if(wrong) break;
+				}
+			}
+		}
+		
+		if(!wrong) {
+			// WIN WIN WIN
+			console.log("WIN!!!");
+		}
     };
 
     this.randomize = function() {
@@ -305,10 +303,10 @@ function changeCubeColors(cube,axis,angle) {
 		}	
 	}
 	
-	cube.changeColors(newColorPositions);
+	cube.changeLogicColors(newColorPositions);
 }
 
-function initColors(x,y,z) {
+function initCubeTextures(x,y,z) {
 		var colorPositions = [];
 		// top, front, left, back, right, down				
 		if(y==2)
@@ -338,7 +336,39 @@ function initColors(x,y,z) {
 
 		return colorPositions;
 }
-function initTexture(textureArray) {
-	this.textureArray = texturArray;
+
+function initColors(x,y,z) {
+	var colorPositions = [];
+	
+	if(y==2)
+		colorPositions[0] = "pink";		// top
+	else
+		colorPositions[0] = false;
+	if(z==0)
+		colorPositions[1] = "green";	// front
+	else
+		colorPositions[1] = false;	
+	if(x==0)
+		colorPositions[2] = "orange";	// left
+	else
+		colorPositions[2] = false;
+	if(z==2)
+		colorPositions[3] = "blue";		// back
+	else
+		colorPositions[3] = false;
+	if(x==2)
+		colorPositions[4] = "red";		// right
+	else
+		colorPositions[4] = false;
+	if(y==0)
+		colorPositions[5] = "yellow";	// down
+	else
+		colorPositions[5] = false;
+		
+	return colorPositions;
 }
+
+/* function initTexture(textureArray) {
+	this.textureArray = texturArray;
+} */
 
