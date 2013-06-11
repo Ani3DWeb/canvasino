@@ -7,7 +7,8 @@ var Cube = function ($gl,$shaderProgram,width){
  var cubeVerticesTextureCoordBuffer;
  var cubeVerticesIndexBuffer;
  var cubeVertexIndices;
- var colorPositions = []; 
+ var textureInitPositions = [];
+ var colorLogic = [];
 
  this.mvMatrixStackCoordinate = [];
  this.mvMatrixStackRotation = [];
@@ -154,27 +155,27 @@ var Cube = function ($gl,$shaderProgram,width){
 		  // Specify the texture to map onto the faces.
 		  // top, front, left, back, right, down	
 				  // Draw front face
-					gl.bindTexture(gl.TEXTURE_2D, colorPositions[3]);
+					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[3]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
 
 					// Draw  back face 
-					gl.bindTexture(gl.TEXTURE_2D, colorPositions[1]);
+					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[1]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 12);
 
 					// Draw top face 
-					gl.bindTexture(gl.TEXTURE_2D, colorPositions[0]);
+					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[0]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 24);
 
 					// Draw down face 
-					gl.bindTexture(gl.TEXTURE_2D, colorPositions[5]);
+					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[5]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 36);
 
 					// Draw right face
-					gl.bindTexture(gl.TEXTURE_2D, colorPositions[4]);
+					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[4]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 48);
 
 					// Draw left face 
-					gl.bindTexture(gl.TEXTURE_2D, colorPositions[2]);
+					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[2]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 60);
 					gl.uniform1i(shaderProgram.samplerUniform, 0);				
 		};	
@@ -213,13 +214,17 @@ var Cube = function ($gl,$shaderProgram,width){
         
 		};
 		
-		this.changeColors =  function(newColorPositions) {
-			colorPositions = newColorPositions;
+		this.changeColors =  function(newColorLogic) {
+			colorLogic = newColorLogic;
+		};
+		
+		this.initTexture =  function(newtextureInitPositions) {
+			textureInitPositions = newtextureInitPositions;
 		};
 		
 
 		this.getColors = function() {
-			return colorPositions;
+			return colorLogic;
 		};
 
 		this.propagateMatrixUniforms = function()

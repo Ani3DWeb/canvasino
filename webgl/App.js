@@ -38,10 +38,10 @@ function main()
 	
 		  var randomnumber=Math.floor((Math.random()*4)+1);
 		  
-		  var backgroundimage = document.getElementById("backimage");  
+	/*	  var backgroundimage = document.getElementById("backimage");  
 		  backgroundimage.width = canvas.width;
 		  backgroundimage.height = canvas.height;
-		  backgroundimage.src = "images/Hintergrund/"+randomnumber+".png";
+		  backgroundimage.src = "images/Hintergrund/"+randomnumber+".png";*/
 	
     initGL(canvas);
     initShaders();

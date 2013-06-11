@@ -17,6 +17,7 @@ function RubikCube($gl, $shaderProgram) {
                 //TODO: Cubes an die richtige Anfangsposition, texturieren
                 self.cubeXYZ[x][y][z] = new Cube($gl, $shaderProgram, 0.95);
 				self.cubeXYZ[x][y][z].changeColors(initColors(x,y,z));
+				self.cubeXYZ[x][y][z].initTexture(initColors(x,y,z));
 				self.cubeXYZ[x][y][z].translate([x - 1, y - 1, z - 1]);
             }
         }
@@ -28,6 +29,10 @@ function RubikCube($gl, $shaderProgram) {
     //rotateLayer(z,3,-90);
     this.rotateLayer = function(axis, layerNumber, angle) {
         var tempLayer = [];
+		for(var a=0; a<3; a++) {
+			tempLayer[a] = [];
+		}
+		
         var x;
         var y;
         var z;
@@ -42,7 +47,6 @@ function RubikCube($gl, $shaderProgram) {
 
 
         for (var a = 0; a < 3; a++) {
-            tempLayer[a] = [];
             for (var b = 0; b < 3; b++) {
                 if (axis == "z") {
                     x = a;
@@ -55,10 +59,9 @@ function RubikCube($gl, $shaderProgram) {
                     z = b;
                 }
                 var tempCube = self.cubeXYZ[x][y][z];
-             //   changeCubeColors(tempCube, axis, angle);
+                changeCubeColors(tempCube, axis, angle);
                 var tempArray = getCubeChangeAfter90DegreeRotation(axis, angle, x, y, z);
-
-            //    tempLayer[tempArray[0]][tempArray[1]] = tempCube;
+				tempLayer[tempArray[0]][tempArray[1]] = tempCube;
             }
         }
 
@@ -254,52 +257,57 @@ function getCubeChangeAfter90DegreeRotation(axis, angle, x, y, z) {
 
 
 
-function changeCubeColors(cube, axis, angle) {
-	var colorPositions = [];
-    var newColorPositions = [];
+function changeCubeColors(cube,axis,angle) {
+	var colorPositions = cube.getColors();
+	var newColorPositions = [];
 	
-	colorPositions = cube.colorPositions;
-
-    if (axis == "z") {
-        if (angle > 0) {
-            colorPositions[0] = newColorPositions[4]; // top	>>> right
-            colorPositions[4] = newColorPositions[5]; // right	>>> down
-            colorPositions[5] = newColorPositions[2]; // down 	>>> left
-            colorPositions[2] = newColorPositions[0]; // left 	>>> top
-        } else if (angle < 0) {
-            colorPositions[0] = newColorPositions[2]; // top	>>> left
-            colorPositions[2] = newColorPositions[5]; // left	>>> down
-            colorPositions[5] = newColorPositions[4]; // down 	>>> right
-            colorPositions[4] = newColorPositions[0]; // right 	>>> top
-        }
-    } else if (axis == "x") {
-        if (angle > 0) {
-            colorPositions[0] = newColorPositions[1]; // top	>>> front
-            colorPositions[1] = newColorPositions[5]; // front	>>> down
-            colorPositions[5] = newColorPositions[3]; // down 	>>> back
-            colorPositions[3] = newColorPositions[0]; // back 	>>> top
-        } else if (angle < 0) {
-            colorPositions[0] = newColorPositions[3]; // top	>>> back
-            colorPositions[3] = newColorPositions[5]; // back	>>> down
-            colorPositions[5] = newColorPositions[1]; // down 	>>> front
-            colorPositions[1] = newColorPositions[0]; // front 	>>> top
-        }
-    } else if (axis == "y") {
-        if (angle > 0) {
-            colorPositions[1] = newColorPositions[4]; // front	>>> right
-            colorPositions[4] = newColorPositions[3]; // right	>>> back
-            colorPositions[3] = newColorPositions[2]; // back 	>>> left
-            colorPositions[2] = newColorPositions[1]; // left 	>>> front
-        } else if (angle < 0) {
-            colorPositions[1] = newColorPositions[2]; // front	>>> left
-            colorPositions[2] = newColorPositions[3]; // left	>>> back
-            colorPositions[3] = newColorPositions[4]; // back 	>>> right
-            colorPositions[4] = newColorPositions[1]; // right 	>>> front
-        }
-    }
-
-    cube.changeColors(newColorPositions);
+	if(axis=="z") {	
+		newColorPositions[1] = colorPositions[1]; // front
+		newColorPositions[3] = colorPositions[3]; // back
+		if(angle>0) {
+			newColorPositions[4] = colorPositions[0]; // top	>>> right
+			newColorPositions[5] = colorPositions[4]; // right	>>> down
+			newColorPositions[2] = colorPositions[5]; // down 	>>> left
+			newColorPositions[0] = colorPositions[2]; // left 	>>> top
+		} else if(angle <0) {
+			newColorPositions[2] = colorPositions[0]; // top	>>> left
+			newColorPositions[5] = colorPositions[2]; // left	>>> down
+			newColorPositions[4] = colorPositions[5]; // down 	>>> right
+			newColorPositions[0] = colorPositions[4]; // right 	>>> top
+		}	
+	} else if(axis=="x") {
+		newColorPositions[2] = colorPositions[2]; // left
+		newColorPositions[4] = colorPositions[4]; // right
+		if(angle>0) {
+			newColorPositions[1] = colorPositions[0]; // top	>>> front
+			newColorPositions[5] = colorPositions[1]; // front	>>> down
+			newColorPositions[3] = colorPositions[5]; // down 	>>> back
+			newColorPositions[0] = colorPositions[3]; // back 	>>> top
+		} else if(angle <0) {
+			newColorPositions[3] = colorPositions[0]; // top	>>> back
+			newColorPositions[5] = colorPositions[3]; // back	>>> down
+			newColorPositions[1] = colorPositions[5]; // down 	>>> front
+			newColorPositions[0] = colorPositions[1]; // front 	>>> top
+		}	
+	} else if(axis=="y") {
+		newColorPositions[0] = colorPositions[0]; // top
+		newColorPositions[5] = colorPositions[5]; // down
+		if(angle>0) {
+			newColorPositions[4] = colorPositions[1]; // front	>>> right
+			newColorPositions[3] = colorPositions[4]; // right	>>> back
+			newColorPositions[2] = colorPositions[3]; // back 	>>> left
+			newColorPositions[1] = colorPositions[2]; // left 	>>> front
+		} else if(angle <0) {
+			newColorPositions[2] = colorPositions[1]; // front	>>> left
+			newColorPositions[3] = colorPositions[2]; // left	>>> back
+			newColorPositions[4] = colorPositions[3]; // back 	>>> right
+			newColorPositions[1] = colorPositions[4]; // right 	>>> front
+		}	
+	}
+	
+	cube.changeColors(newColorPositions);
 }
+
 function initColors(x,y,z) {
 		var colorPositions = [];
 		// top, front, left, back, right, down				
