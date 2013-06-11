@@ -98,7 +98,7 @@ var Cube = function ($gl,$shaderProgram,width){
 		  // Now send the element array to GL
 		  
 		  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);	
-		  gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+		  gl.vertexAttribPointer($shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
   
 		//this.setTexture = function(front, back, top, bottom, right, left)
 		this.texturize = function()
@@ -151,7 +151,7 @@ var Cube = function ($gl,$shaderProgram,width){
 		  // Set the texture coordinates attribute for the vertices.
 		  
 		  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesTextureCoordBuffer);
-		  gl.vertexAttribPointer(textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
+		  gl.vertexAttribPointer($shaderProgram.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
 		  // Specify the texture to map onto the faces.
 		  // top, front, left, back, right, down	
 				  // Draw front face
