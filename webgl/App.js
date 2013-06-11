@@ -7,17 +7,22 @@
 var gl;
 var shaderProgram;
 var game;
+var canvasWidth;
+var canvasHeight;
 
 function initGL(canvas)
 {
     try {
         gl = canvas.getContext("experimental-webgl");
         gl.viewport(0, 0, canvas.width, canvas.height);
-        gl.clearColor(1.0, 0.0, 0.0, 1.0);
+        gl.clearColor(0.0, 0.0, 0.0, 0.0);
 
         gl.clearDepth(1.0);
         gl.enable(gl.DEPTH_TEST);
         gl.depthFunc(gl.LEQUAL);
+		
+		canvasWidth = canvas.width;
+		canvasHeight = canvas.height;
     } catch (e) {
     }
     if (!gl)
@@ -30,6 +35,14 @@ function initGL(canvas)
 function main()
 {
     var canvas = document.getElementById("webGLCanvas");
+	
+		  var randomnumber=Math.floor((Math.random()*4)+1);
+		  
+		  var backgroundimage = document.getElementById("backimage");  
+		  backgroundimage.width = canvas.width;
+		  backgroundimage.height = canvas.height;
+		  backgroundimage.src = "images/Hintergrund/"+randomnumber+".png";
+	
     initGL(canvas);
     initShaders();
     initGame();

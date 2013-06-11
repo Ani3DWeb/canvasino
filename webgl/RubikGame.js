@@ -22,7 +22,7 @@ function RubikGame($gl, $shaderProgram) {
         $gl.depthFunc($gl.LEQUAL);
 
         //TODO: Perspektive einstellen
-        perspectiveMatrix = makePerspective(45, 500.0 / 500.0, 0.1, 100.0);
+        perspectiveMatrix = makePerspective(45, canvasWidth / canvasHeight, 0.1, 100.0);
 		
 		PerspectivTranslate([0.0,0.0,-8.0])
 		PerspectivRotate(120,[1.0,0.0,0.0]);
@@ -44,13 +44,13 @@ function RubikGame($gl, $shaderProgram) {
 }
 
 function getTextureNames() {
-		return  Texturenames = new Array("RubiksCube/images/Flaeche_pink.png",
-										 "RubiksCube/images/Flaeche_blau.png",
-										 "RubiksCube/images/Flaeche_orange.png",
-										 "RubiksCube/images/Flaeche_gruen.png",
-										 "RubiksCube/images/Flaeche_rot.png",
-										 "RubiksCube/images/Flaeche_gelb.png",
-										 "RubiksCube/images/Flaeche_schwarz.png");
+		return  Texturenames = new Array("webgl/RubiksCube/images/Flaeche_pink.png",
+										 "webgl/RubiksCube/images/Flaeche_blau.png",
+										 "webgl/RubiksCube/images/Flaeche_orange.png",
+										 "webgl/RubiksCube/images/Flaeche_gruen.png",
+										 "webgl/RubiksCube/images/Flaeche_rot.png",
+										 "webgl/RubiksCube/images/Flaeche_gelb.png",
+										 "webgl/RubiksCube/images/Flaeche_schwarz.png");
 }
 
 function PerspectivRotate(angle, v) {
