@@ -214,7 +214,7 @@ var Cube = function ($gl,$shaderProgram,width){
         
 		};
 		
-		this.changeColors =  function(newColorLogic) {
+		this.changeLogicColors =  function(newColorLogic) {
 			colorLogic = newColorLogic;
 		};
 		
