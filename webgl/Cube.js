@@ -1,9 +1,6 @@
-//var vertexPositionAttribute;
   
 var Cube = function ($gl,$shaderProgram,width){
 
- //var textureCoordAttribute;
-//	 textureCoordAttribute
  var cubeVerticesPositionBuffer;
  var cubeVerticesTextureCoordBuffer;
  var cubeVerticesIndexBuffer;
