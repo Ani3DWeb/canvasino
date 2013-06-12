@@ -8,6 +8,7 @@ var wheel;
 var lastCubeUpdateTime = 0;
 var randomFront;
 var randomCircular;
+var countReady=0;
 
 function SlotMachine($gl) {
     //TODO:
@@ -51,35 +52,11 @@ function SlotMachine($gl) {
     //rotateLayer(x,1,90);
     //rotateLayer(z,3,-90);
     this.rotateWheel = function(wheelNumber) {
-	
 		var currentTime = (new Date).getTime();
 		console.log(randomCircular[wheelNumber] + " " + grad[wheelNumber][randomFront[wheelNumber]]);
 		if (grad[wheelNumber][randomFront[wheelNumber]]>randomCircular[wheelNumber]*360)
 		{
-			if (lastCubeUpdateTime) {
-				var delta = 0;
-				for (var c=0; c <= 8; c++) {
-					
-					
-					circle[wheelNumber][c] -= delta / 1000.0;
-					grad[wheelNumber][c] = -(360/(2 * Math.PI))*circle[wheelNumber][c];
-					cubeRotation[wheelNumber][c] = grad[wheelNumber][c];
-					cubeYOffset[wheelNumber][c] = yIncValue* Math.sin(circle[wheelNumber][c]);
-					cubeZOffset[wheelNumber][c] = zIncValue* Math.cos(circle[wheelNumber][c]);
-					
-					//wheel[wheelNumber][c].save();
-					wheel[wheelNumber][c].translate([cubeXOffset[wheelNumber][c], cubeYOffset[wheelNumber][c], cubeZOffset[wheelNumber][c]]);	
-					wheel[wheelNumber][c].rotate(cubeRotation[wheelNumber][c], [1, 0, 0]);
-					wheel[wheelNumber][c].draw();
-					
-					wheel[wheelNumber][c].revert();
-					wheel[wheelNumber][c].revert();
-					wheel[wheelNumber][c].revert();
-					wheel[wheelNumber][c].revert();
-					//console.log(cubeXOffset[wheelNumber][c] + " " +cubeYOffset[wheelNumber][c] +" " + cubeZOffset[wheelNumber][c]);
-				}
-			   //buhlscher randomGen
-			}
+			$SlotMachine.stopRotation(wheelNumber);
 		}
 		else{
 			if (lastCubeUpdateTime) {
@@ -104,7 +81,6 @@ function SlotMachine($gl) {
 					wheel[wheelNumber][c].revert();
 					//console.log(cubeXOffset[wheelNumber][c] + " " +cubeYOffset[wheelNumber][c] +" " + cubeZOffset[wheelNumber][c]);
 				}
-			   //buhlscher randomGen
 			}
 		}
 			//console.log("ich bin da und drehe");
@@ -114,20 +90,37 @@ function SlotMachine($gl) {
     };
 
 	this.stopRotation = function(wheelNumber){
-		
-		for (var c=0; c <= 8; c++) {
-			wheel[wheelNumber][c].translate([cubeXOffset[wheelNumber][c], cubeYOffset[wheelNumber][c], cubeZOffset[wheelNumber][c]]);	
-			wheel[wheelNumber][c].rotate(cubeRotation[wheelNumber][c], [1, 0, 0]);
-			wheel[wheelNumber][c].draw();
-			wheel[wheelNumber][c].revert();
-			wheel[wheelNumber][c].revert();
-			wheel[wheelNumber][c].revert();
-			wheel[wheelNumber][c].revert();
-			//console.log(cubeXOffset[wheelNumber][c] + " " +cubeYOffset[wheelNumber][c] +" " + cubeZOffset[wheelNumber][c]);
-		}
+		countReady++;
+		if (lastCubeUpdateTime) {
+				var delta = 0;
+				for (var c=0; c <= 8; c++) {
+					
+					
+					circle[wheelNumber][c] -= delta / 1000.0;
+					grad[wheelNumber][c] = -(360/(2 * Math.PI))*circle[wheelNumber][c];
+					cubeRotation[wheelNumber][c] = grad[wheelNumber][c];
+					cubeYOffset[wheelNumber][c] = yIncValue* Math.sin(circle[wheelNumber][c]);
+					cubeZOffset[wheelNumber][c] = zIncValue* Math.cos(circle[wheelNumber][c]);
+					
+					//wheel[wheelNumber][c].save();
+					wheel[wheelNumber][c].translate([cubeXOffset[wheelNumber][c], cubeYOffset[wheelNumber][c], cubeZOffset[wheelNumber][c]]);	
+					wheel[wheelNumber][c].rotate(cubeRotation[wheelNumber][c], [1, 0, 0]);
+					wheel[wheelNumber][c].draw();
+					
+					wheel[wheelNumber][c].revert();
+					wheel[wheelNumber][c].revert();
+					wheel[wheelNumber][c].revert();
+					wheel[wheelNumber][c].revert();
+					//console.log(cubeXOffset[wheelNumber][c] + " " +cubeYOffset[wheelNumber][c] +" " + cubeZOffset[wheelNumber][c]);
+				}
+			   //buhlscher randomGen
+			}
+		if (countReady==3)
+			$SlotMachine.checkState();
 	};
 	
 	this.start = function(){
+	
 		if ((grad[0][randomFront[0]]>randomCircular[0]*360
 			&& grad[1][randomFront[1]]>randomCircular[1]*360
 			&& grad[2][randomFront[2]]>randomCircular[2]*360)
@@ -136,19 +129,23 @@ function SlotMachine($gl) {
 			&&randomCircular[1]==0
 			&&randomCircular[2]==0
 			){
-				for (var i = 0; i<3;i++){
-				randomFront[i] = Math.round(Math.random()*8);
-				randomCircular[i] += Math.round(Math.random()*2)
+				$SlotMachine.randomize();
 			}
-		}
-	};
+		};
 	
     this.checkState = function() {
-
+		
+		if (randomFront[0]==randomFront[1]
+			&&randomFront[1]==randomFront[2])
+			console.log("Winner");
+		
     };
 
     this.randomize = function() {
-
+		for (var i = 0; i<3;i++){
+				randomFront[i] = Math.round(Math.random()*8);
+				randomCircular[i] += Math.round(Math.random()*2)
+		}
     };
 
     this.control = function() {

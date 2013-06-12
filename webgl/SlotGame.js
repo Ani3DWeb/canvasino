@@ -50,6 +50,7 @@ function SlotGame($gl, $shaderProgram) {
 		$SlotMachine.rotateWheel(0);
 		$SlotMachine.rotateWheel(1);
 		$SlotMachine.rotateWheel(2);
+		countReady=0;
 
     };
 }
