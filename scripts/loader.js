@@ -1,3 +1,4 @@
+var gamenumber;
 $(document).ready( function() {
 	var game = {	
 		animation: function(direction) {
@@ -37,6 +38,7 @@ $(document).ready( function() {
 					if( y++ == rows-1 ) {	
 						clearTimeout(timeout);
 						$('.canvasino').show();
+						main();
 					}
 				}
 			}
@@ -74,7 +76,9 @@ $(document).ready( function() {
 				
 		init: function() {
 			$('.canvasino, .back').hide();
-			$('#game01, #game02').click(function() {				
+			$('#game01, #game02').click(function() {		
+			$(this).addClass('onFocus');
+				gamenumber = $(this).attr('game');
 				game.showIt();
 			});
 			$('.back').click(function() {

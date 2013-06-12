@@ -17,7 +17,7 @@ function RubikCube($gl, $shaderProgram) {
                 //TODO: Cubes an die richtige Anfangsposition, texturieren
                 self.cubeXYZ[x][y][z] = new Cube($gl, $shaderProgram, 0.95);
 				self.cubeXYZ[x][y][z].changeLogicColors(initColors(x,y,z));
-				self.cubeXYZ[x][y][z].initTexture(initCubeTextures(x,y,z));
+				self.cubeXYZ[x][y][z].initTexture(initRubiksCubeTextures(x,y,z));
 				self.cubeXYZ[x][y][z].translate([x - 1, y - 1, z - 1]);
             }
         }
@@ -97,6 +97,7 @@ function RubikCube($gl, $shaderProgram) {
     this.checkState = function() {
 		var tempColor;
 		var wrong = false;
+		var colPos;
 		
 		// Front (z==0) and Back (z==2):
 		var z=0;
@@ -306,7 +307,7 @@ function changeCubeColors(cube,axis,angle) {
 	cube.changeLogicColors(newColorPositions);
 }
 
-function initCubeTextures(x,y,z) {
+function initRubiksCubeTextures(x,y,z) {
 		var colorPositions = [];
 		// top, front, left, back, right, down				
 		if(y==2)

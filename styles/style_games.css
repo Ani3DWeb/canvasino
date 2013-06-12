@@ -101,14 +101,20 @@
 	background-image:url('../images/click/click_down.png');
 	cursor: pointer;
 }
-
+#backimage {
+//	background-image:url('../images/Start_look_Css.jpg');
+	position:absolute;
+	left: 180px;
+	top: 150px;
+    z-index: -1;	
+}
 canvas {
-	background-color: white;
-	filter:alpha(opacity=20); /* for IE*/
-	opacity: 0.2;
+//	background-color: white;
+//	filter:alpha(opacity=20); /* for IE*/
+//	opacity: 0.2;
 	
-	width:600px;
-	height:450px;
+//	width:600px;
+//	height:450px;
 	position:absolute;
 	left: 180px;
 	top: 150px;
