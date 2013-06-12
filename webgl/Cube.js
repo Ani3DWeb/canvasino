@@ -175,7 +175,7 @@ var Cube = function ($gl,$shaderProgram,width){
 					// Draw left face 
 					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[2]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 60);
-					gl.uniform1i(shaderProgram.samplerUniform, 0);				
+					gl.uniform1i($shaderProgram.samplerUniform, 0);				
 		};	
 		
 		this.draw = function(){
