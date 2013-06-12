@@ -88,7 +88,7 @@ function SlotMachine($gl) {
 					
 					
 					circle[wheelNumber][c] -= delta / 1000.0;
-					grad[wheelNumber][c] = -(360/(2 * Math.PI))*circle[wheelNumber][c];
+					grad[wheelNumber][c] = -(360/(2 * Math.PI))*circle[wheelNumber][c];					
 					cubeRotation[wheelNumber][c] = grad[wheelNumber][c];
 					cubeYOffset[wheelNumber][c] = yIncValue* Math.sin(circle[wheelNumber][c]);
 					cubeZOffset[wheelNumber][c] = zIncValue* Math.cos(circle[wheelNumber][c]);
@@ -128,10 +128,19 @@ function SlotMachine($gl) {
 	};
 	
 	this.start = function(){
-		for (var i = 0; i<3;i++){
-			randomFront[i] += Math.round(Math.random()*8);
-			randomCircular[i] += Math.round(Math.random()*2)
+		if ((grad[0][randomFront[0]]>randomCircular[0]*360
+			&& grad[1][randomFront[1]]>randomCircular[1]*360
+			&& grad[2][randomFront[2]]>randomCircular[2]*360)
+			||
+			randomCircular[0]==0
+			&&randomCircular[1]==0
+			&&randomCircular[2]==0
+			){
+				for (var i = 0; i<3;i++){
+				randomFront[i] = Math.round(Math.random()*8);
+				randomCircular[i] += Math.round(Math.random()*2)
 			}
+		}
 	};
 	
     this.checkState = function() {
