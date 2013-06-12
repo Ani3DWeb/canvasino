@@ -1,0 +1,50 @@
+<Html>
+    <Head>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+        <script type="text/javascript" src="Libs/sylvester.js"></script>
+        <script type="text/javascript" src="Libs/glUtils.js"></script>
+        <script type="text/javascript" src="Cube.js"></script>
+        <script type="text/javascript" src="SlotGame.js"></script>	
+		<script type="text/javascript" src="SlotMachine.js"></script>	
+		<script type="text/javascript" src="App_Slotmachine.js"></script>			
+        <Script id="shader-fs" type="x-shader/x-fragment">
+			  varying highp vec2 vTextureCoord;
+			  
+			  uniform sampler2D uSampler;
+			  
+			  void main(void) {
+				highp vec4 texelColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+				
+				gl_FragColor = vec4(texelColor.rgb, texelColor.a);// * vLighting, texelColor.a);
+			   // gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+			  }
+        </Script>
+
+        <Script id="shader-vs" type="x-shader/x-vertex">
+			  attribute vec3 aVertexPosition;
+			  attribute vec2 aTextureCoord;
+			
+			  uniform mat4 uMVMatrix;
+			  uniform mat4 uPMatrix;
+			  
+			  uniform mat4 uRotation;	  
+			  uniform mat4 uCoordinates;
+			  
+			  varying highp vec2 vTextureCoord;
+			
+			  void main(void) {
+				gl_Position = uPMatrix * uRotation * uCoordinates * vec4(aVertexPosition, 1.0);
+				vTextureCoord = aTextureCoord;
+			  }
+        </Script>
+    </Head>
+
+    <Body onload="main();">
+        Demo </br>
+        <Canvas style="float:left;margin:2em;" id="webGLCanvas" width="500" height="500">
+        </Canvas></br>
+        Cube<br>
+
+        Ende	
+    </Body>
+</Html>
