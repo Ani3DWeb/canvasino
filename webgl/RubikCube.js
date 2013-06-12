@@ -7,7 +7,8 @@
 function RubikCube($gl, $shaderProgram) {
     var self=this;
 	self.cubeXYZ = [];
-	var cube;
+//	var cube;
+
     // cubeXYZ init:
     for (var x = 0; x < 3; x++) {
         self.cubeXYZ[x] = [];
@@ -28,42 +29,44 @@ function RubikCube($gl, $shaderProgram) {
     //rotateLayer(x,1,90);
     //rotateLayer(z,3,-90);
     this.rotateLayer = function(axis, layerNumber, angle) {
-        var tempLayer = [];
-		for(var a=0; a<3; a++) {
-			tempLayer[a] = [];
-		}
+        
+			var x;
+			var y;
+			var z;
+
+			if (axis == "z")
+				z = layerNumber;
+			else if (axis == "x")
+				x = layerNumber;
+			else if (axis == "y")
+				y = layerNumber;
 		
-        var x;
-        var y;
-        var z;
+		//	Logik erst ausführen nach 90 Grad-Drehung	
+		if(angle==90 || angle==(-90)) {	
+			var tempLayer = [];
+			for(var a=0; a<3; a++) {
+				tempLayer[a] = [];
+			}
 
-        if (axis == "z")
-            z = layerNumber;
-        else if (axis == "x")
-            x = layerNumber;
-        else if (axis == "y")
-            y = layerNumber;
-
-
-
-        for (var a = 0; a < 3; a++) {
-            for (var b = 0; b < 3; b++) {
-                if (axis == "z") {
-                    x = a;
-                    y = b;
-                } else if (axis == "x") {
-                    z = a;
-                    y = b;
-                } else if (axis == "y") {
-                    x = a;
-                    z = b;
-                }
-                var tempCube = self.cubeXYZ[x][y][z];
-                changeCubeColors(tempCube, axis, angle);
-                var tempArray = getCubeChangeAfter90DegreeRotation(axis, angle, x, y, z);
-				tempLayer[tempArray[0]][tempArray[1]] = tempCube;
-            }
-        }
+			for (var a = 0; a < 3; a++) {
+				for (var b = 0; b < 3; b++) {
+					if (axis == "z") {
+						x = a;
+						y = b;
+					} else if (axis == "x") {
+						z = a;
+						y = b;
+					} else if (axis == "y") {
+						x = a;
+						z = b;
+					}
+					var tempCube = self.cubeXYZ[x][y][z];
+					changeCubeColors(tempCube, axis, angle); // change cube's logic-colors
+					var tempArray = getCubeChangeAfter90DegreeRotation(axis, angle, x, y, z);
+					tempLayer[tempArray[0]][tempArray[1]] = tempCube;
+				}
+			}
+		}
 
         //Move cubes from tempLayer to CubeXYZ:
         for (a = 0; a < 3; a++) {
@@ -79,7 +82,6 @@ function RubikCube($gl, $shaderProgram) {
                     z = b;
                 }
 				
-              //  self.cubeXYZ[x][y][z] = tempLayer[a][b];
 			  if(axis == "z") {
 				self.cubeXYZ[x][y][z].rotateOrigin(angle,[0.0,0.0,1.0]);
 			  } else if (axis == "x") {
@@ -87,10 +89,14 @@ function RubikCube($gl, $shaderProgram) {
 			  } else if (axis == "y") {
 				self.cubeXYZ[x][y][z].rotateOrigin(angle,[0.0,1.0,0.0]);
 			  }
+			  
+			  if(angle==90 || angle==(-90))
+				self.cubeXYZ[x][y][z] = tempLayer[a][b];
             }
         }
 
-        this.checkState();
+		if(angle==90 || angle==(-90))
+			this.checkState();
     };
 
 
@@ -206,29 +212,25 @@ function getCubeChangeAfter90DegreeRotation(axis, angle, x, y, z) {
     }
 
     // Change a and b to new coordinates:
-    if ((angle > 0 && (a == 0 && b == 0)) || (angle < 0 && (a == 2 && b == 0))) {
-        b += 2;
-    } else if ((angle > 0 && (a == 1 && b == 0)) || (angle < 0 && (a == 2 && b == 1))) {
-        a -= 1;
-        b += 1
-    } else if ((angle > 0 && (a == 2 && b == 0)) || (angle < 0 && (a == 2 && b == 2))) {
-        a -= 2;
-    } else if ((angle > 0 && (a == 0 && b == 1)) || (angle < 0 && (a == 1 && b == 0))) {
-        a += 1;
-        b += 1;
-    } else if (angle > 0 && (a == 1 && b == 1)) {
-        // do nothing
-    } else if ((angle > 0 && (a == 2 && b == 1)) || (angle < 0 && (a == 1 && b == 2))) {
-        a -= 1;
-        b -= 1;
-    } else if ((angle > 0 && (a == 0 && b == 2)) || (angle < 0 && (a == 0 && b == 0))) {
-        a += 2;
-    } else if ((angle > 0 && (a == 1 && b == 2)) || (angle < 0 && (a == 0 && b == 1))) {
-        a += 1;
-        b -= 1;
-    } else if ((angle > 0 && (a == 0 && b == 2)) || (angle < 0 && (a == 0 && b == 2))) {
-        b -= 2;
-    }
+    if 		  ((angle>0 && (a==0 && b==0)) || (angle<0 && (a==2 && b==0))) {
+		b+=2;
+	} else if ((angle>0 && (a==1 && b==0)) || (angle<0 && (a==2 && b==1))) {
+		a-=1; b+=1
+	} else if ((angle>0 && (a==2 && b==0)) || (angle<0 && (a==2 && b==2))) {
+		a-=2;
+	} else if ((angle>0 && (a==0 && b==1)) || (angle<0 && (a==1 && b==0))) {
+		a+=1; b+=1
+	} else if ((angle>0 && (a==1 && b==1))) {
+		// do nothing
+	} else if ((angle>0 && (a==2 && b==1)) || (angle<0 && (a==1 && b==2))) {
+		a-=1; b-=1
+	} else if ((angle>0 && (a==0 && b==2)) || (angle<0 && (a==0 && b==0))) {
+		a+=2;
+	} else if ((angle>0 && (a==1 && b==2)) || (angle<0 && (a==0 && b==1))) {
+		a+=1; b-=1;
+	} else if ((angle>0 && (a==2 && b==2)) || (angle<0 && (a==0 && b==2))) {
+		b-=2;
+	}
 
     /*	var arrayXYZ = [];
      if(axis == "z") {

@@ -31,8 +31,10 @@ function RubikGame($gl, $shaderProgram) {
         gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
 
         //Zeichne Rubik
-		self.rubik.rotateLayer('x', 0, angle +=5);
-        self.rubik.draw();
+		if(angle < 90) {
+			self.rubik.rotateLayer('x', 0, angle +=5);
+		}
+		self.rubik.draw();
 
     };
 

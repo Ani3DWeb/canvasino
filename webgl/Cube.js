@@ -6,7 +6,7 @@ var Cube = function ($gl,$shaderProgram,width){
  var cubeVerticesIndexBuffer;
  var cubeVertexIndices;
  var textureInitPositions = [];
- var colorLogic = [];
+ this.colorLogic = [];
 
  this.mvMatrixStackCoordinate = [];
  this.mvMatrixStackRotation = [];
