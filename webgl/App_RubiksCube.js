@@ -124,12 +124,7 @@ function getShader(gl, id)
 
 
 function initGame() {
-	if(gamenumber==1) {
-			game = new SlotGame(gl, shaderProgram);
-	} else if(gamenumber ==2) {
-			game = new RubikGame(gl, shaderProgram);
-	}
-   // game = new RubikGame(gl, shaderProgram);
+    game = new RubikGame(gl, shaderProgram);
 }
 
 function MakePerspective(FOV, AspectRatio, Closest, Farest) {

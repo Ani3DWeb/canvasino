@@ -61,14 +61,14 @@ function SlotGame($gl, $shaderProgram) {
     //};
 function getTextureNames() {
 		var Texturenames ;
-		return  Texturenames = new Array("../webgl/Slotmachine/images/1_kirsche.png",
-										 "../webgl/Slotmachine/images/2_pflaume.png",
-										 "../webgl/Slotmachine/images/3_zitrone.png",
-										 "../webgl/Slotmachine/images/4_orange.png",
-										 "../webgl/Slotmachine/images/5_melone.png",
-										 "../webgl/Slotmachine/images/6_klee.png",
-										 "../webgl/Slotmachine/images/7_sieben.png",
-										 "../webgl/Slotmachine/images/8_diamant.png");
+		return  Texturenames = new Array("Slotmachine/images/1_kirsche.png",
+										 "Slotmachine/images/2_pflaume.png",
+										 "Slotmachine/images/3_zitrone.png",
+										 "Slotmachine/images/4_orange.png",
+										 "Slotmachine/images/5_melone.png",
+										 "Slotmachine/images/6_klee.png",
+										 "Slotmachine/images/7_sieben.png",
+										 "Slotmachine/images/8_diamant.png");
 }
 
 

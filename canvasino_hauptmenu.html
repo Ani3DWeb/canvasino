@@ -19,6 +19,8 @@
         <script type="text/javascript" src="webgl/Cube.js"></script>
         <script type="text/javascript" src="webgl/RubikCube.js"></script>
         <script type="text/javascript" src="webgl/RubikGame.js"></script>
+        <script type="text/javascript" src="webgl/SlotMachine.js"></script>
+        <script type="text/javascript" src="webgl/SlotGame.js"></script>		
         <script type="text/javascript" src="webgl/App.js"></script>	
 		
         <Script id="shader-fs" type="x-shader/x-fragment">
@@ -53,14 +55,14 @@
         </Script>		
 </head>
 
-<body onLoad="main();" >
+<body>
 <div id="menu">
 	<div id="main">
 		<div id="logo"></div>
 		<div class="screen">
 		  
-		  <div id="game02"></div>
-		  <div id="game01"></div>
+		  <div id="game02" game="2" ></div>
+		  <div id="game01" game="1"></div>
 		  
 		  <div class="gameboy">
 			  <div class="canvasino">

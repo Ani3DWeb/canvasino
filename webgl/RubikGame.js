@@ -11,7 +11,7 @@ var mvMatrix = Matrix.I(4);
 var angle = 0;
 function RubikGame($gl, $shaderProgram) {
  //   this.perspectiveMatrix = makePerspective(45, 640.0 / 480.0, 0.1, 100.0);
- 	initTextures(getTextureNames());
+ 	initTextures(getCubeTextureNames());
     this.rubik = new RubikCube($gl, $shaderProgram);
     var self = this;
   
@@ -43,7 +43,7 @@ function RubikGame($gl, $shaderProgram) {
     };
 }
 
-function getTextureNames() {
+function getCubeTextureNames() {
 		return  new Array("RubiksCube/images/Flaeche_pink.png",
 										 "RubiksCube/images/Flaeche_blau.png",
 										 "RubiksCube/images/Flaeche_orange.png",
