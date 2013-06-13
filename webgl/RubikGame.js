@@ -44,7 +44,7 @@ function RubikGame($gl, $shaderProgram) {
 		{
 			if(angle < 90) {
 			angle +=5;
-				self.rubik.rotateLayer('y', 0, 5);
+				self.rubik.rotateLayer('x', 0, 5);
 			} else {
 				tmp = 0;
 				angle = 0;
