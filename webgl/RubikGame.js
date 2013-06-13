@@ -8,7 +8,7 @@
 var perspectiveMatrix;
 var angle = 0;
 var mvMatrix = Matrix.I(4);
-var angle = 0;
+var tmp = 0;
 function RubikGame($gl, $shaderProgram) {
  //   this.perspectiveMatrix = makePerspective(45, 640.0 / 480.0, 0.1, 100.0);
  	initTextures(getCubeTextureNames());
@@ -25,15 +25,32 @@ function RubikGame($gl, $shaderProgram) {
         perspectiveMatrix = makePerspective(45, canvasWidth / canvasHeight, 0.1, 100.0);
 		
 		PerspectivTranslate([0.0,0.0,-8.0])
-		PerspectivRotate(120,[1.0,0.0,0.0]);
+		PerspectivRotate(20,[1.0,0.0,0.0]);
 		
         var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
 
         //Zeichne Rubik
-		if(angle < 90) {
-			self.rubik.rotateLayer('x', 0, angle +=5);
+		if(tmp == 0)
+		{
+			if(angle < 90) {
+			angle +=5;
+				self.rubik.rotateLayer('x', 2, 5);
+			} else {
+				tmp = 1;
+				angle = 0;
+			}
+		} else if (tmp == 1)
+		{
+			if(angle < 90) {
+			angle +=5;
+				self.rubik.rotateLayer('y', 0, 5);
+			} else {
+				tmp = 0;
+				angle = 0;
+			}			
 		}
+		
 		self.rubik.draw();
 
     };
