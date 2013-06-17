@@ -13,6 +13,7 @@ var Cube = function ($gl,$shaderProgram,width){
  
  this.CubeCoordMatrix = Matrix.I(4) ;
  this.CubeRotationMatrix = Matrix.I(4);
+ var cubenumber = 0;
  
  var CubeCoordinaten = Matrix.I(4);
 
@@ -152,29 +153,31 @@ var Cube = function ($gl,$shaderProgram,width){
 		  gl.vertexAttribPointer($shaderProgram.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
 		  // Specify the texture to map onto the faces.
 		  // top, front, left, back, right, down	
-				  // Draw front face
-					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[3]);
-					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
-
-					// Draw  back face 
-					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[1]);
-					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 12);
 
 					// Draw top face 
 					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[0]);
-					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 24);
+					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 24);		  
+		  
+				  // Draw front face
+					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[1]);
+					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);					
 
-					// Draw down face 
-					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[5]);
-					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 36);
+					// Draw left face 
+					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[2]);
+					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 60);
+
+					// Draw  back face 
+					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[3]);
+					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 12);					
 
 					// Draw right face
 					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[4]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 48);
 
-					// Draw left face 
-					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[2]);
-					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 60);
+					// Draw down face 
+					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[5]);
+					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 36);
+
 					gl.uniform1i($shaderProgram.samplerUniform, 0);				
 		};	
 		
@@ -211,7 +214,7 @@ var Cube = function ($gl,$shaderProgram,width){
         
 		};
 		
-		this.changeLogicColors =  function(newColorLogic) {
+		this.changeLogicColors =  function(newColorLogic) {	
 			colorLogic = newColorLogic;
 		};
 		
@@ -223,7 +226,12 @@ var Cube = function ($gl,$shaderProgram,width){
 		this.getColors = function() {
 			return colorLogic;
 		};
-
+		this.setCubeNumber = function(num) {
+			cubenumber = num
+		};
+		this.getCubeNumber = function() {
+			return cubenumber;
+		};		
 		this.propagateMatrixUniforms = function()
 		{
 			  var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
