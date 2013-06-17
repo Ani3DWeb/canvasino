@@ -158,28 +158,28 @@ function initCubeTextures(w,c) {
 		var colorPositions = [];		
 		switch (c){
 			case 1:
-				colorPositions[3] = textureArray[0];
+				colorPositions[1] = textureArray[0];
 				break;
 			case 2:
-				colorPositions[3] = textureArray[1];
+				colorPositions[1] = textureArray[1];
 				break;	
 			case 3:
-				colorPositions[3] = textureArray[2];
+				colorPositions[1] = textureArray[2];
 				break;	
 			case 4:
-				colorPositions[3] = textureArray[3];
+				colorPositions[1] = textureArray[3];
 				break;	
 			case 5:
-				colorPositions[3] = textureArray[4];
+				colorPositions[1] = textureArray[4];
 				break;	
 			case 6:
-				colorPositions[3] = textureArray[5];
+				colorPositions[1] = textureArray[5];
 				break;	
 			case 7:
-				colorPositions[3] = textureArray[6];
+				colorPositions[1] = textureArray[6];
 				break;	
 			case 8:
-				colorPositions[3] = textureArray[7];
+				colorPositions[1] = textureArray[7];
 				break;	
 		}
 		
