@@ -21,7 +21,7 @@ function RubikCube($gl, $shaderProgram) {
 					//TODO: Cubes an die richtige Anfangsposition, texturieren
 					self.cubeXYZ[x][y][z] = new Cube($gl, $shaderProgram, 0.95);
 					self.cubeXYZ[x][y][z].setCubeNumber(this.cubeNumber);				
-					self.cubeXYZ[x][y][z].changeLogicColors(initColors(x,y,z));
+					//self.cubeXYZ[x][y][z].changeLogicColors(initColors(x,y,z));
 					//self.cubeXYZ[x][y][z].initTexture(initRubiksCubeTextures(x,y,z));
 					self.cubeXYZ[x][y][z].initTexture(NewRubiksCubeTextures(x,y,z,ColorModel));
 					self.cubeXYZ[x][y][z].translate([x - 1, y - 1, z - 1]);
@@ -43,7 +43,6 @@ function RubikCube($gl, $shaderProgram) {
 				}
 			}
 		}
-	//	self.cubeXYZ[0][1][1].initTexture(NewRubiksCubeTextures(0,1,1,ColorModel));		
 	}
     //rotateLayer(x,1,90);
     //rotateLayer(z,3,-90);
@@ -62,7 +61,7 @@ function RubikCube($gl, $shaderProgram) {
 				y = layerNumber;
 		
 		//	Logik erst ausführen nach 90 Grad-Drehung	
-		if(angle==90 || angle==(-90)) {	
+	/*	if(angle==90 || angle==(-90)) {	
 			var tempLayer = [];
 			for(var a=0; a<3; a++) {
 				tempLayer[a] = [];
@@ -86,7 +85,7 @@ function RubikCube($gl, $shaderProgram) {
 					tempLayer[tempArray[0]][tempArray[1]] = tempCube;
 				}
 			}
-		}
+		}*/
 
         //Move cubes from tempLayer to CubeXYZ:
         for (a = 0; a < 3; a++) {
@@ -110,13 +109,13 @@ function RubikCube($gl, $shaderProgram) {
 				self.cubeXYZ[x][y][z].rotateOrigin(ang*direction,[0.0,1.0,0.0]);
 			  }
 			  
-			  if(angle==90 || angle==(-90))
-				self.cubeXYZ[x][y][z] = tempLayer[a][b];
+		/*	  if(angle==90 || angle==(-90))
+				self.cubeXYZ[x][y][z] = tempLayer[a][b];*/
             }
         }
 
 		if(angle==90 || angle==(-90)) {
-			this.checkState();
+		//	this.checkState();
 			angle = 0;
 			ColorModel.update(axis,layerNumber,direction);
 			this.NewCubeSetting(layerNumber);			
