@@ -3,33 +3,53 @@
  * Datenhaltung und Status-Logik (gelöst/wo ist welche Farbe)
  * 
  */
- 
+
 function RubikCube($gl, $shaderProgram) {
+    this.cubeNumber = 0;
     var self=this;
-	self.cubeXYZ = [];
+	self.cubeXYZ = [];	
+	var ColorModel = new RubikColorModel($gl, $shaderProgram);
 //	var cube;
-
+    self.colorCache = [];
     // cubeXYZ init:
-    for (var x = 0; x < 3; x++) {
-        self.cubeXYZ[x] = [];
-        for (var y = 0; y < 3; y++) {
-            self.cubeXYZ[x][y] = [];
-            for (var z = 0; z < 3; z++) {
-                //TODO: Cubes an die richtige Anfangsposition, texturieren
-                self.cubeXYZ[x][y][z] = new Cube($gl, $shaderProgram, 0.95);
-				self.cubeXYZ[x][y][z].changeLogicColors(initColors(x,y,z));
-				self.cubeXYZ[x][y][z].initTexture(initRubiksCubeTextures(x,y,z));
-				self.cubeXYZ[x][y][z].translate([x - 1, y - 1, z - 1]);
-            }
-        }
-    }
+	this.initCube = function (){
+		for (var x = 0; x < 3; x++) {
+			self.cubeXYZ[x] = [];
+			for (var y = 0; y < 3; y++) {
+				self.cubeXYZ[x][y] = [];
+				for (var z = 0; z < 3; z++) {
+					//TODO: Cubes an die richtige Anfangsposition, texturieren
+					self.cubeXYZ[x][y][z] = new Cube($gl, $shaderProgram, 0.95);
+					self.cubeXYZ[x][y][z].setCubeNumber(this.cubeNumber);				
+					self.cubeXYZ[x][y][z].changeLogicColors(initColors(x,y,z));
+					//self.cubeXYZ[x][y][z].initTexture(initRubiksCubeTextures(x,y,z));
+					self.cubeXYZ[x][y][z].initTexture(NewRubiksCubeTextures(x,y,z,ColorModel));
+					self.cubeXYZ[x][y][z].translate([x - 1, y - 1, z - 1]);
+					this.cubeNumber++;
+				}
+			}
+		}
+	};
 	
-
-
+	this.initCube();	 
+	this.NewCubeSetting = function(layerNumber) {
+	    this.initCube();
+		console.log("paint new");
+		for (var x = 0; x < 3; x++) {
+			for (var y = 0; y < 3; y++) {
+				for (var z = 0; z < 3; z++) {
+					self.cubeXYZ[x][y][z].changeLogicColors(NewRubiksCubeTextures(x,y,z,ColorModel));				
+					self.cubeXYZ[x][y][z].initTexture(NewRubiksCubeTextures(x,y,z,ColorModel));					
+				}
+			}
+		}
+	//	self.cubeXYZ[0][1][1].initTexture(NewRubiksCubeTextures(0,1,1,ColorModel));		
+	}
     //rotateLayer(x,1,90);
     //rotateLayer(z,3,-90);
-    this.rotateLayer = function(axis, layerNumber, angle) {
-        
+	var angle = 0;
+    this.rotateLayer = function(axis, layerNumber, ang, direction) {
+        angle += ang;
 			var x;
 			var y;
 			var z;
@@ -83,11 +103,11 @@ function RubikCube($gl, $shaderProgram) {
                 }
 				
 			  if(axis == "z") {
-				self.cubeXYZ[x][y][z].rotateOrigin(angle,[0.0,0.0,1.0]);
+				self.cubeXYZ[x][y][z].rotateOrigin(ang*direction,[0.0,0.0,1.0]);
 			  } else if (axis == "x") {
-				self.cubeXYZ[x][y][z].rotateOrigin(angle,[1.0,0.0,0.0]);
+				self.cubeXYZ[x][y][z].rotateOrigin(ang*direction,[1.0,0.0,0.0]);
 			  } else if (axis == "y") {
-				self.cubeXYZ[x][y][z].rotateOrigin(angle,[0.0,1.0,0.0]);
+				self.cubeXYZ[x][y][z].rotateOrigin(ang*direction,[0.0,1.0,0.0]);
 			  }
 			  
 			  if(angle==90 || angle==(-90))
@@ -95,8 +115,12 @@ function RubikCube($gl, $shaderProgram) {
             }
         }
 
-		if(angle==90 || angle==(-90))
+		if(angle==90 || angle==(-90)) {
 			this.checkState();
+			angle = 0;
+			ColorModel.update(axis,layerNumber,direction);
+			this.NewCubeSetting(layerNumber);			
+		}
     };
 
 
@@ -316,7 +340,7 @@ function initRubiksCubeTextures(x,y,z) {
 			colorPositions[0] = textureArray[0];	 // top pink
 		else
 			colorPositions[0] = textureArray[6];
-		if(z==0)
+		if(z==2)
 			colorPositions[1] = textureArray[1];	 // front gruen
 		else
 			colorPositions[1] = textureArray[6];	
@@ -324,8 +348,8 @@ function initRubiksCubeTextures(x,y,z) {
 			colorPositions[2] = textureArray[2];	// left orange
 		else
 			colorPositions[2] = textureArray[6];
-		if(z==2)
-			colorPositions[3] = textureArray[3];		// back blau
+		if(z==0)
+			colorPositions[3] = textureArray[3];		// back b
 		else
 			colorPositions[3] = textureArray[6];
 		if(x==2)
@@ -367,11 +391,10 @@ function initColors(x,y,z) {
 		colorPositions[5] = "yellow";	// down
 	else
 		colorPositions[5] = false;
-		
 	return colorPositions;
 }
 
-/* function initTexture(textureArray) {
-	this.textureArray = texturArray;
-} */
+function NewRubiksCubeTextures(x, y, z,model) {
+		return model.getColors(x,y,z);
+}
 

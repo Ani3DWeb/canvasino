@@ -9,6 +9,7 @@ var perspectiveMatrix;
 var angle = 0;
 var mvMatrix = Matrix.I(4);
 var tmp = 0;
+var rot = 0;
 function RubikGame($gl, $shaderProgram) {
  //   this.perspectiveMatrix = makePerspective(45, 640.0 / 480.0, 0.1, 100.0);
  	initTextures(getCubeTextureNames());
@@ -25,7 +26,8 @@ function RubikGame($gl, $shaderProgram) {
         perspectiveMatrix = makePerspective(45, canvasWidth / canvasHeight, 0.1, 100.0);
 		
 		PerspectivTranslate([0.0,0.0,-8.0])
-		PerspectivRotate(20,[1.0,0.0,0.0]);
+		PerspectivRotate(rot++,[1.0,1.0,0.0]);
+		//PerspectivRotate(30,[1.0,0.0,0.0]);
 		
         var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
@@ -35,7 +37,7 @@ function RubikGame($gl, $shaderProgram) {
 		{
 			if(angle < 90) {
 			angle +=5;
-				self.rubik.rotateLayer('x', 2, 5);
+				self.rubik.rotateLayer('z', 2, 5,-1);
 			} else {
 				tmp = 1;
 				angle = 0;
@@ -44,12 +46,21 @@ function RubikGame($gl, $shaderProgram) {
 		{
 			if(angle < 90) {
 			angle +=5;
-				self.rubik.rotateLayer('x', 0, 5);
+				self.rubik.rotateLayer('x', 2, 5,1);
 			} else {
-				tmp = 0;
+				tmp = 2;
 				angle = 0;
 			}			
-		}
+		} else if (tmp == 2)
+		{
+			if(angle < 90) {
+			angle +=5;
+				self.rubik.rotateLayer('y', 0, 5,-1);
+			} else {
+				tmp = 3;
+				angle = 0;
+			}			
+		} 		
 		
 		self.rubik.draw();
 
@@ -63,13 +74,13 @@ function RubikGame($gl, $shaderProgram) {
 }
 
 function getCubeTextureNames() {
-		return  new Array("RubiksCube/images/Flaeche_pink.png",
-										 "RubiksCube/images/Flaeche_blau.png",
-										 "RubiksCube/images/Flaeche_orange.png",
-										 "RubiksCube/images/Flaeche_gruen.png",
-										 "RubiksCube/images/Flaeche_rot.png",
-										 "RubiksCube/images/Flaeche_gelb.png",
-										 "RubiksCube/images/Flaeche_schwarz.png");
+		return  new Array("RubiksCube/images/Flaeche_weiss.png",
+						  "RubiksCube/images/Flaeche_gruen.png",
+						  "RubiksCube/images/Flaeche_orange.png",
+						  "RubiksCube/images/Flaeche_blau.png",
+						  "RubiksCube/images/Flaeche_rot.png",
+						  "RubiksCube/images/Flaeche_gelb.png",
+						  "RubiksCube/images/Flaeche_schwarz.png");
 }
 
 function PerspectivRotate(angle, v) {
