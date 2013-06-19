@@ -5,6 +5,7 @@ var Cube = function ($gl,$shaderProgram,width){
  var cubeVerticesTextureCoordBuffer;
  var cubeVerticesIndexBuffer;
  var cubeVertexIndices;
+ var cubeVerticesNormalBuffer
  var textureInitPositions = [];
  this.colorLogic = [];
 
@@ -74,6 +75,7 @@ var Cube = function ($gl,$shaderProgram,width){
 		  // then use it to fill the current vertex buffer.
 		  
 		  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+		  gl.vertexAttribPointer($shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
 		  // Build the element array buffer; this specifies the indices
 		  // into the vertex array for each face's vertices.
@@ -98,6 +100,51 @@ var Cube = function ($gl,$shaderProgram,width){
 		  
 		  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);	
 		  gl.vertexAttribPointer($shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+		  
+		  cubeVerticesNormalBuffer = gl.createBuffer();
+		  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesNormalBuffer);
+		  
+		  var vertexNormals = [
+				// Front
+				 0.0,  0.0,  1.0,
+				 0.0,  0.0,  1.0,
+				 0.0,  0.0,  1.0,
+				 0.0,  0.0,  1.0,
+				
+				// Back
+				 0.0,  0.0, -1.0,
+				 0.0,  0.0, -1.0,
+				 0.0,  0.0, -1.0,
+				 0.0,  0.0, -1.0,
+				
+				// Top
+				 0.0,  1.0,  0.0,
+				 0.0,  1.0,  0.0,
+				 0.0,  1.0,  0.0,
+				 0.0,  1.0,  0.0,
+				
+				// Bottom
+				 0.0, -1.0,  0.0,
+				 0.0, -1.0,  0.0,
+				 0.0, -1.0,  0.0,
+				 0.0, -1.0,  0.0,
+				
+				// Right
+				 1.0,  0.0,  0.0,
+				 1.0,  0.0,  0.0,
+				 1.0,  0.0,  0.0,
+				 1.0,  0.0,  0.0,
+				
+				// Left
+				-1.0,  0.0,  0.0,
+				-1.0,  0.0,  0.0,
+				-1.0,  0.0,  0.0,
+				-1.0,  0.0,  0.0
+			  ];
+			  
+			  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexNormals), gl.STATIC_DRAW);
+			  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesNormalBuffer);
+			  gl.vertexAttribPointer($shaderProgram.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);		  
   
 		//this.setTexture = function(front, back, top, bottom, right, left)
 		this.texturize = function()
@@ -183,8 +230,8 @@ var Cube = function ($gl,$shaderProgram,width){
 		
 		this.draw = function(){
 		 // Draw the cube push object into shaders 
-		  this.propagateMatrixUniforms();	
-		  this.texturize();
+			this.propagateMatrixUniforms();
+			this.texturize();
 		};
 		this.translate = function(v){
 			  this.mvPushMatrixCoordinate();
@@ -234,17 +281,23 @@ var Cube = function ($gl,$shaderProgram,width){
 		};		
 		this.propagateMatrixUniforms = function()
 		{
-			  var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
+			  var pUniform = gl.getUniformLocation($shaderProgram, "uPMatrix");
 			  gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
 			  
-			  var coordinatesMatrixUniform = gl.getUniformLocation(shaderProgram, "uCoordinates");
+			  var coordinatesMatrixUniform = gl.getUniformLocation($shaderProgram, "uCoordinates");
 			  gl.uniformMatrix4fv(coordinatesMatrixUniform, false, new Float32Array(this.CubeCoordMatrix.flatten()));
 			  
-			/*  var mvUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
-			  gl.uniformMatrix4fv(mvUniform, false, new Float32Array(mvMatrix.flatten()));*/
+			  var mvUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+			  gl.uniformMatrix4fv(mvUniform, false, new Float32Array(mvMatrix.flatten()));
 			  
-			  var rotationMatrixUniform = gl.getUniformLocation(shaderProgram, "uRotation");
+			  var rotationMatrixUniform = gl.getUniformLocation($shaderProgram, "uRotation");
 			  gl.uniformMatrix4fv(rotationMatrixUniform, false, new Float32Array(this.CubeRotationMatrix.flatten()));
+			  
+			var normalMatrix = mvMatrix.inverse();
+			//normalMatrix = mvMatrix.inverse();
+			normalMatrix = normalMatrix.transpose();
+			var nUniform = $gl.getUniformLocation($shaderProgram, "uNormalMatrix");
+			gl.uniformMatrix4fv(nUniform, false, new Float32Array(normalMatrix.flatten()));
 			  
 		};
 		

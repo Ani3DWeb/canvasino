@@ -9,30 +9,37 @@ var perspectiveMatrix;
 var angle = 0;
 var mvMatrix = Matrix.I(4);
 var tmp = 0;
-var rot = 0;
 var rotationAngle = 5;
+var XRotation = 0, YRotation = 0;
+
 function RubikGame($gl, $shaderProgram) {
  //   this.perspectiveMatrix = makePerspective(45, 640.0 / 480.0, 0.1, 100.0);
  	initTextures(getCubeTextureNames());
     this.rubik = new RubikCube($gl, $shaderProgram);
     var self = this;
+	
+		canvas.onmousedown = handleMouseDown;
+		document.onmouseup = handleMouseUp;
+		document.onmousemove = handleMouseMove;
   
     this.drawScene = function() {
         //Canvas leeren
         $gl.clear($gl.COLOR_BUFFER_BIT | $gl.DEPTH_BUFFER_BIT);
         $gl.enable($gl.DEPTH_TEST);
         $gl.depthFunc($gl.LEQUAL);
-
+	    setupLight();
         //TODO: Perspektive einstellen
         perspectiveMatrix = makePerspective(45, canvasWidth / canvasHeight, 0.1, 100.0);
 		
+	
 		PerspectivTranslate([0.0,0.0,-8.0])
-		PerspectivRotate(rot++,[1.0,1.0,0.0]);
-		//PerspectivRotate(30,[1.0,0.0,0.0]);
+		if((XRotation >0) & (YRotation > 0)) {
+			PerspectivRotate(XRotation,[1.0,0.0,0.0]);
+			PerspectivRotate(YRotation,[0.0,1.0,0.0]);
+		}
 		
         var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
-
         //Zeichne Rubik
 		if(tmp == 0)
 		{
@@ -126,6 +133,38 @@ function PerspectivRotate(angle, v) {
 
 function PerspectivTranslate(v) {
   perspectiveMatrix = perspectiveMatrix.x(Matrix.Translation($V([v[0], v[1], v[2]])).ensure4x4());
+}
+
+	var mouseDown = false;
+	var lastMouseX = null;
+	var lastMouseY = null;
+	
+	function handleMouseDown(event) {
+		mouseDown = true;
+		lastMouseX = event.clientX;
+		lastMouseY = event.clientY;
+	}
+
+	function handleMouseUp(event) {
+		mouseDown = false;
+	}	
+
+function handleMouseMove(event) {
+		if (!mouseDown) {
+			return;
+		}		
+		var newX = event.clientX;
+		var newY = event.clientY;
+		
+	    XRotation += 1.6;
+		
+		if(XRotation > 360) {XRotation = 0;}
+
+		var deltaY = newY - lastMouseY;
+		
+		YRotation -= 0.8 ;
+		
+		if(YRotation < 0) {YRotation = 360;}
 }
 
 
