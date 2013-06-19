@@ -88,8 +88,8 @@ function RubikCube($gl, $shaderProgram) {
 		}*/
 
         //Move cubes from tempLayer to CubeXYZ:
-        for (a = 0; a < 3; a++) {
-            for (b = 0; b < 3; b++) {
+        for (var a = 0; a < 3; a++) {
+            for (var b = 0; b < 3; b++) {
                 if (axis == "z") {
                     x = a;
                     y = b;
