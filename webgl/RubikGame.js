@@ -13,7 +13,7 @@ var rotationAngle = 5;
 var XRotation = 0, YRotation = 0;
 
 function RubikGame($gl, $shaderProgram) {
- //   this.perspectiveMatrix = makePerspective(45, 640.0 / 480.0, 0.1, 100.0);
+
  	initTextures(getCubeTextureNames());
     this.rubik = new RubikCube($gl, $shaderProgram);
     var self = this;
@@ -167,6 +167,21 @@ function handleMouseMove(event) {
 		if(YRotation < 0) {YRotation = 360;}
 }
 
+ function setupLight()
+ {
+        gl.uniform1f(shaderProgram.materialShininessUniform, 10.0);
+
+        gl.uniform1i(shaderProgram.showSpecularHighlightsUniform, 1);
+
+        gl.uniform3f(shaderProgram.ambientColorUniform, 1.0, 1.0, 1.0);
+        gl.uniform3f(shaderProgram.pointLightingSpecularColorUniform,
+        1.8, 1.8, 1.8);
+        gl.uniform3f(shaderProgram.pointLightingDiffuseColorUniform,
+        1.8, 1.0, 1.0);
+    
+        gl.uniform3f(shaderProgram.pointLightingLocationUniform,
+        0, 0, 20);
+}
 
 
 

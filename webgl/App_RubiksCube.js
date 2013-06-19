@@ -41,10 +41,10 @@ function main()
 	
 		  var randomnumber=Math.floor((Math.random()*4)+1);
 		  
-	/*	  var backgroundimage = document.getElementById("backimage");  
+		  var backgroundimage = document.getElementById("backimage");  
 		  backgroundimage.width = canvas.width;
 		  backgroundimage.height = canvas.height;
-		  backgroundimage.src = "images/Hintergrund/"+randomnumber+".png";*/
+		  backgroundimage.src = "images/Hintergrund/"+randomnumber+".png";
 	
     initGL(canvas);
     initShaders();
@@ -196,20 +196,4 @@ function TextureLoader(anz,texturenames) {
 		  gl.bindTexture(gl.TEXTURE_2D, null);
   }
   textureArray[anz].image.src = texturenames[anz];
-}
-
- function setupLight()
- {
-        gl.uniform1f(shaderProgram.materialShininessUniform, 10.0);
-
-        gl.uniform1i(shaderProgram.showSpecularHighlightsUniform, 1);
-
-        gl.uniform3f(shaderProgram.ambientColorUniform, 1.0, 1.0, 1.0);
-        gl.uniform3f(shaderProgram.pointLightingSpecularColorUniform,
-        1.8, 1.8, 1.8);
-        gl.uniform3f(shaderProgram.pointLightingDiffuseColorUniform,
-        1.8, 1.0, 1.0);
-    
-        gl.uniform3f(shaderProgram.pointLightingLocationUniform,
-        -10, 4, 20);
 }

@@ -9,6 +9,7 @@ var shaderProgram;
 var game;
 var canvasWidth;
 var canvasHeight;
+var canvas;
 
 function initGL(canvas)
 {
@@ -34,14 +35,14 @@ function initGL(canvas)
 
 function main()
 {
-    var canvas = document.getElementById("webGLCanvas");
+    canvas = document.getElementById("webGLCanvas");
 	
 		  var randomnumber=Math.floor((Math.random()*4)+1);
 		  
-	/*	  var backgroundimage = document.getElementById("backimage");  
+		  var backgroundimage = document.getElementById("backimage");  
 		  backgroundimage.width = canvas.width;
 		  backgroundimage.height = canvas.height;
-		  backgroundimage.src = "images/Hintergrund/"+randomnumber+".png";*/
+		  backgroundimage.src = "images/Hintergrund/"+randomnumber+".png";
 	
     initGL(canvas);
     initShaders();
