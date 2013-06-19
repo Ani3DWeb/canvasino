@@ -1,20 +1,20 @@
 
 function RubikColorModel($gl, $shaderProgram) {	
  	this.CubeColors = [
-		[["pink","pink","pink"], ["pink","pink","pink"], ["pink","pink","pink"]],  // top
+		[["weiss","weiss","weiss"], ["weiss","logo","weiss"], ["weiss","weiss","weiss"]],  // top
 		[["green","green","green"], ["green","green","green"], ["green","green","green"]],  // front	
 		[["orange","orange","orange"], ["orange","orange","orange"], ["orange","orange","orange"]],  // left
 		[["blue","blue","blue"], ["blue","blue","blue"], ["blue","blue","blue"]],  // back
 		[["red","red","red"], ["red","red","red"], ["red","red","red"]],  // right
 		[["yellow","yellow","yellow"], ["yellow","yellow","yellow"], ["yellow","yellow","yellow"]]  // down;		
 	];
-	this.getModelColors = function(x,y,a) {
+	this.getColorAtPosition = function(x,y,a) {
 			return this.CubeColors[a][x][y];
-	}
+	};
 	
 	this.texturize = function(tex) {
 	    var texture = tex;
-		if(texture=="pink") {
+		if(texture=="weiss") {
 		   return textureArray[0];
 		} else if(texture=="green") {
 		   return textureArray[1]
@@ -26,10 +26,12 @@ function RubikColorModel($gl, $shaderProgram) {
 		   return textureArray[4]
 		} else if(texture=="yellow") {
 		   return textureArray[5]
+		} else if(texture=="logo") {
+		   return textureArray[7]
 		}
 		return textureArray[6];
 		
-	}
+	};
 	this.getColors = function(x,y,z){
 	 var colorPositions = [];
 		for(var i=0; i<=6;i++) {
@@ -37,30 +39,30 @@ function RubikColorModel($gl, $shaderProgram) {
 		}
 		if(z==0){
 		//	console.log("back"+this.getModelColors(x,y,z,3));
-			colorPositions[3] = this.texturize(this.getModelColors(x,y,3));
+			colorPositions[3] = this.texturize(this.getColorAtPosition(x,y,3));
 		}		
 		if(z==2){
 		//	console.log("front"+this.getModelColors(x,y,z,1));
-			colorPositions[1] = this.texturize(this.getModelColors(x,y,1));
+			colorPositions[1] = this.texturize(this.getColorAtPosition(x,y,1));
 		}
 		if(x==0) {
 		 //  console.log("left"+this.getModelColors(y,z,z,2));
-		   colorPositions[2] = this.texturize(this.getModelColors(z,y,2));
+		   colorPositions[2] = this.texturize(this.getColorAtPosition(z,y,2));
 		}
 		if(x==2) {
 		 //  console.log("right"+this.getModelColors(y,z,z,4));
-		   colorPositions[4] = this.texturize(this.getModelColors(z,y,4));
+		   colorPositions[4] = this.texturize(this.getColorAtPosition(z,y,4));
 		}	
 		if(y==0){
 		//	console.log("down"+this.getModelColors(x,z,y,5));
-			colorPositions[5] = this.texturize(this.getModelColors(x,z,5));
+			colorPositions[5] = this.texturize(this.getColorAtPosition(x,z,5));
 		}				
 		if(y==2){
 		 //  console.log("top"+this.getModelColors(x,z,y,0));
-		   colorPositions[0] = this.texturize(this.getModelColors(x,z,0));
+		   colorPositions[0] = this.texturize(this.getColorAtPosition(x,z,0));
 		}		
 		return colorPositions;
-	}
+	};
 	this.update = function(axis, layerNumber, direction)
 	{
 		var ColorCache = [2];
@@ -87,11 +89,9 @@ function RubikColorModel($gl, $shaderProgram) {
 				  this.CubeColors[5][layerNumber][1] = ColorCache[1];
 				  this.CubeColors[5][layerNumber][0] = ColorCache[0];
 				   if(layerNumber==2) {
-						console.log('rotate right 1');
 				        // switch right colors +90
 						ColorCache[0] = this.CubeColors[4][0][0]; // 0
 						ColorCache[1] = this.CubeColors[4][0][1]; // 7	
-					    console.log(ColorCache[0]+" "+ColorCache[1]);
 						/*  face numbers
 						   -------------
 						   | 2 | 6 | 3 |
@@ -117,11 +117,9 @@ function RubikColorModel($gl, $shaderProgram) {
 						// cache --> 6
 						this.CubeColors[4][1][2] = ColorCache[1];						
 				   } else if(layerNumber==0) {
-						console.log('rotate left 1');
 				        // switch left colors +90
 						ColorCache[0] = this.CubeColors[2][2][0]; // 0
 						ColorCache[1] = this.CubeColors[2][2][1]; // 7	
-					    console.log(ColorCache[0]+" "+ColorCache[1]);
 						/*  face numbers
 						   -------------
 						   | 2 | 6 | 3 |
@@ -148,7 +146,6 @@ function RubikColorModel($gl, $shaderProgram) {
 						this.CubeColors[2][1][0] = ColorCache[1];		   
 				   }
 				}else {
-				  console.log(ColorCache);
 				  // down --> front
 				  this.CubeColors[1][layerNumber][2] = this.CubeColors[5][layerNumber][2];
 				  this.CubeColors[1][layerNumber][1] = this.CubeColors[5][layerNumber][1];
@@ -166,11 +163,9 @@ function RubikColorModel($gl, $shaderProgram) {
 				  this.CubeColors[0][layerNumber][1] = ColorCache[1];
 				  this.CubeColors[0][layerNumber][0] = ColorCache[2];
 				   if(layerNumber==2) {
-						console.log('rotate right -1');
 				        // switch right colors -90
 						ColorCache[0] = this.CubeColors[4][0][0]; // 0
 						ColorCache[1] = this.CubeColors[4][0][1]; // 7	
-					    console.log(ColorCache[0]+" "+ColorCache[1]);
 						/*  face numbers
 						   -------------
 						   | 2 | 6 | 3 |
@@ -196,11 +191,9 @@ function RubikColorModel($gl, $shaderProgram) {
 						// cache --> 4
 						this.CubeColors[4][1][0] = ColorCache[1];
 				   } else if(layerNumber==0) {
-						console.log('rotate left -1');
 				        // switch left colors -90
 						ColorCache[0] = this.CubeColors[2][2][0]; // 0
 						ColorCache[1] = this.CubeColors[2][2][1]; // 7	
-					    console.log(ColorCache[0]+" "+ColorCache[1]);
 						/*  face numbers
 						   -------------
 						   | 2 | 6 | 3 |
@@ -405,11 +398,9 @@ function RubikColorModel($gl, $shaderProgram) {
 				  this.CubeColors[5][1][layerNumber] = ColorCache[1];
 				  this.CubeColors[5][2][layerNumber] = ColorCache[0];
 				   if(layerNumber==2) {
-						console.log('rotate front 1');
 				        // switch front colors +90
 						ColorCache[0] = this.CubeColors[1][2][0]; // 0
 						ColorCache[1] = this.CubeColors[1][2][1]; // 7	
-					    console.log(ColorCache[0]+" "+ColorCache[1]);
 						/*  face numbers
 						   -------------
 						   | 2 | 6 | 3 |
@@ -435,12 +426,9 @@ function RubikColorModel($gl, $shaderProgram) {
 						// cache --> 6
 						this.CubeColors[1][1][2] = ColorCache[1];	
 				   } else if(layerNumber==0) {
-						console.log('rotate back 1');
-//--->>>
 				        // switch back colors +90
 						ColorCache[0] = this.CubeColors[3][0][0]; // 0
 						ColorCache[1] = this.CubeColors[3][0][1]; // 7	
-					    console.log(ColorCache[0]+" "+ColorCache[1]);
 						/*  face numbers
 						   -------------
 						   | 2 | 6 | 3 |
@@ -464,8 +452,7 @@ function RubikColorModel($gl, $shaderProgram) {
 						// 4 --> 5
 						this.CubeColors[3][2][1] = this.CubeColors[3][1][0];
 						// cache --> 4
-						this.CubeColors[3][1][0] = ColorCache[1];
-//<<<---						
+						this.CubeColors[3][1][0] = ColorCache[1];						
 				   }
 				}else {
 				  // down --> left 
@@ -485,11 +472,9 @@ function RubikColorModel($gl, $shaderProgram) {
 				  this.CubeColors[0][1][layerNumber] = ColorCache[1];
 				  this.CubeColors[0][0][layerNumber] = ColorCache[0];	
 				   if(layerNumber==2) {
-						console.log('rotate front -1');
 				        // switch front colors -90
 						ColorCache[0] = this.CubeColors[1][2][0]; // 0
 						ColorCache[1] = this.CubeColors[1][2][1]; // 7	
-					    console.log(ColorCache[0]+" "+ColorCache[1]);
 						/*  face numbers
 						   -------------
 						   | 2 | 6 | 3 |
@@ -515,11 +500,9 @@ function RubikColorModel($gl, $shaderProgram) {
 						// cache --> 4
 						this.CubeColors[1][1][0] = ColorCache[1];						
 				   } else if(layerNumber==0) {
-						console.log('rotate back -1');	
 				        // switch back colors -90
 						ColorCache[0] = this.CubeColors[3][0][0]; // 0
 						ColorCache[1] = this.CubeColors[3][0][1]; // 7	
-					    console.log(ColorCache[0]+" "+ColorCache[1]);
 						/*  face numbers
 						   -------------
 						   | 2 | 6 | 3 |
@@ -547,6 +530,9 @@ function RubikColorModel($gl, $shaderProgram) {
 				   }
 				}
 		}
-	}	
+	};	
+	this.getColorArray = function() {
+		return this.CubeColors;
+	};
 }
  

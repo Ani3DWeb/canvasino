@@ -9,6 +9,7 @@ var shaderProgram;
 var game;
 var canvasWidth;
 var canvasHeight;
+var canvas;
 
 function initGL(canvas)
 {
@@ -23,6 +24,8 @@ function initGL(canvas)
 		
 		canvasWidth = canvas.width;
 		canvasHeight = canvas.height;
+		
+				
     } catch (e) {
     }
     if (!gl)
@@ -34,7 +37,7 @@ function initGL(canvas)
 
 function main()
 {
-    var canvas = document.getElementById("webGLCanvas");
+    canvas = document.getElementById("webGLCanvas");
 	
 		  var randomnumber=Math.floor((Math.random()*4)+1);
 		  
@@ -75,13 +78,24 @@ function initShaders()
 		  gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
 		  
 		  shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
-		  gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
+		  gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);		  
+		  		  		  
+		  shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
+		  gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
 		  
 		  shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
 		  shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uniSampler");
 		  shaderProgram.rotationMatrixUniform = gl.getUniformLocation(shaderProgram, "uRotation");
 		  shaderProgram.coordinatesMatrixUniform = gl.getUniformLocation(shaderProgram, "uCoordinates");
-
+		  shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
+		  
+		 shaderProgram.materialShininessUniform = gl.getUniformLocation(shaderProgram, "uMaterialShininess");
+		 shaderProgram.showSpecularHighlightsUniform = gl.getUniformLocation(shaderProgram, "uShowSpecularHighlights");		  
+		  
+		 shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
+		 shaderProgram.pointLightingLocationUniform = gl.getUniformLocation(shaderProgram, "uPointLightingLocation");
+		 shaderProgram.pointLightingSpecularColorUniform = gl.getUniformLocation(shaderProgram, "uPointLightingSpecularColor");
+		 shaderProgram.pointLightingDiffuseColorUniform = gl.getUniformLocation(shaderProgram, "uPointLightingDiffuseColor");		  
 }
 
 function getShader(gl, id)
@@ -182,4 +196,20 @@ function TextureLoader(anz,texturenames) {
 		  gl.bindTexture(gl.TEXTURE_2D, null);
   }
   textureArray[anz].image.src = texturenames[anz];
+}
+
+ function setupLight()
+ {
+        gl.uniform1f(shaderProgram.materialShininessUniform, 10.0);
+
+        gl.uniform1i(shaderProgram.showSpecularHighlightsUniform, 1);
+
+        gl.uniform3f(shaderProgram.ambientColorUniform, 1.0, 1.0, 1.0);
+        gl.uniform3f(shaderProgram.pointLightingSpecularColorUniform,
+        1.8, 1.8, 1.8);
+        gl.uniform3f(shaderProgram.pointLightingDiffuseColorUniform,
+        1.8, 1.0, 1.0);
+    
+        gl.uniform3f(shaderProgram.pointLightingLocationUniform,
+        -10, 4, 20);
 }
