@@ -26,8 +26,7 @@ function RubikGame($gl, $shaderProgram) {
         perspectiveMatrix = makePerspective(45, canvasWidth / canvasHeight, 0.1, 100.0);
 		
 		PerspectivTranslate([0.0,0.0,-8.0])
-		PerspectivRotate(rot++,[1.0,1.0,0.0]);
-		//PerspectivRotate(30,[1.0,0.0,0.0]);
+		PerspectivRotate(30,[1.0,1.0,0.0]);
 		
         var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
