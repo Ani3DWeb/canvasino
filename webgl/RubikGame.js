@@ -10,6 +10,7 @@ var angle = 0;
 var mvMatrix = Matrix.I(4);
 var tmp = 0;
 var rot = 0;
+var rotationAngle = 5;
 function RubikGame($gl, $shaderProgram) {
  //   this.perspectiveMatrix = makePerspective(45, 640.0 / 480.0, 0.1, 100.0);
  	initTextures(getCubeTextureNames());
@@ -36,8 +37,8 @@ function RubikGame($gl, $shaderProgram) {
 		if(tmp == 0)
 		{
 			if(angle < 90) {
-			angle +=5;
-				self.rubik.rotateLayer('z', 2, 5,-1);
+			angle += rotationAngle;
+				self.rubik.rotateLayer('z', 2, -1);
 			} else {
 				tmp = 1;
 				angle = 0;
@@ -45,22 +46,49 @@ function RubikGame($gl, $shaderProgram) {
 		} else if (tmp == 1)
 		{
 			if(angle < 90) {
-			angle +=5;
-				self.rubik.rotateLayer('x', 2, 5,1);
+			angle += rotationAngle;
+				self.rubik.rotateLayer('x', 2, 1);
 			} else {
 				tmp = 2;
 				angle = 0;
 			}			
-		} else if (tmp == 2)
+		}  else if (tmp == 2)
 		{
 			if(angle < 90) {
-			angle +=5;
-				self.rubik.rotateLayer('y', 0, 5,-1);
+			angle += rotationAngle;
+				self.rubik.rotateLayer('y', 0, -1);
 			} else {
 				tmp = 3;
 				angle = 0;
 			}			
-		} 		
+		} else if(tmp == 3)
+		{
+			if(angle < 90) {
+			angle += rotationAngle;
+				self.rubik.rotateLayer('y', 0, 1);
+			} else {
+				tmp = 4;
+				angle = 0;
+			}
+		} else if (tmp == 4)
+		{
+			if(angle < 90) {
+			angle += rotationAngle;
+				self.rubik.rotateLayer('x', 2, -1);
+			} else {
+				tmp = 5;
+				angle = 0;
+			}			
+		} else if (tmp == 5)
+		{
+			if(angle < 90) {
+			angle += rotationAngle;
+				self.rubik.rotateLayer('z', 2, 1);
+			} else {
+				tmp = 6;
+				angle = 0;
+			}			
+		} 			
 		
 		self.rubik.draw();
 
@@ -87,7 +115,8 @@ function getCubeTextureNames() {
 						  "RubiksCube/images/blau.png",
 						  "RubiksCube/images/rot.png",
 						  "RubiksCube/images/gelb.png",
-						  "RubiksCube/images/schwarz.png");
+						  "RubiksCube/images/schwarz.png",
+						  "RubiksCube/images/weiss_logo.png");
 }
 
 function PerspectivRotate(angle, v) {
