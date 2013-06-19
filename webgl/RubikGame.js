@@ -33,17 +33,10 @@ function RubikGame($gl, $shaderProgram) {
 		
 	
 		PerspectivTranslate([0.0,0.0,-8.0])
-<<<<<<< .mine
-		PerspectivRotate(30,[1.0,1.0,0.0]);
-
-
-
-=======
 		if((XRotation >0) & (YRotation > 0)) {
 			PerspectivRotate(XRotation,[1.0,0.0,0.0]);
 			PerspectivRotate(YRotation,[0.0,1.0,0.0]);
 		}
->>>>>>> .theirs
 		
         var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
