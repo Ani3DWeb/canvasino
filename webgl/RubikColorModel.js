@@ -315,7 +315,7 @@ function RubikColorModel($gl, $shaderProgram) {
 				  // cache --> left
 				  this.CubeColors[2][2][layerNumber] = ColorCache[2];
 				  this.CubeColors[2][1][layerNumber] = ColorCache[1];
-				  this.CubeColors[2][0][layerNumber] = ColorCache[1];
+				  this.CubeColors[2][0][layerNumber] = ColorCache[0];
 				   if(layerNumber==2) {
 				        // switch top colors -90
 						ColorCache[0] = this.CubeColors[0][2][2]; 

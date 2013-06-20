@@ -81,7 +81,6 @@
     </Head>
 
     <Body onload="main();">
-        Demo </br>
 		<img id="backimage"  style="position:absolute; left: 50px; top: 10px; z-index: -1;"/>
         <Canvas id="webGLCanvas" width="500" height="500" style="float:left;margin:2em; left: 50px; top: 0px;">
         </Canvas>
@@ -102,11 +101,12 @@
 		<button onclick="game.showTest('FT');">show front and top</button><br>
 		<button onclick="game.showTest('D');">show down</button>
 		<button onclick="game.showTest('FD');">show front and down</button><br>
-		<button onclick="game.showTest('B');">show back</button><br>
+		<button onclick="game.showTest('B');">show back</button>
+		<button onclick="game.showTest('FL');">show front and left</button><br>		
 		<button onclick="game.showTest('R');">show right</button><br>
-		<button onclick="game.showTest('L');">show left</button>
-		<button onclick="game.showTest('FL');">show front and left</button><br><br>
+		<button onclick="game.showTest('L');">show left</button><br><br>
 		<button onclick="game.showTest('Rotate');">Rotate</button>
-		<button onclick="game.showTest('Stop');">Stop</button>		
+		<button onclick="game.showTest('Stop');">Stop</button><br><br>
+		<button onclick="game.showTest('Reset');">Reset</button>		
  </Body>
 </Html>

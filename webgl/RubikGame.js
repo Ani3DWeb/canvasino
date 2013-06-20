@@ -155,6 +155,7 @@ function RubikGame($gl, $shaderProgram) {
 		}
 		if(face=='Rotate'){ PerspectivRotate(0,[0.0,1.0,0.0]); rot=0; rotatePers = true;}
 		if(face=='Stop'){ rotatePers = false;}
+		if(face=='Reset') { PerspectivRotate(0,[1.0,1.0,0.0]); this.rubik = new RubikCube($gl, $shaderProgram);};
 	}
 }
 
