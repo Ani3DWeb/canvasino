@@ -10,7 +10,12 @@ var angle = 0;
 var mvMatrix = Matrix.I(4);
 var tmp = 0;
 var rotationAngle = 5;
-var XRotation = 0, YRotation = 0;
+var XRotation = 30, YRotation = 30;
+
+var axis, layer, direction ;
+var rotate = false;
+var rotatePers = false;
+var rot = 0;
 
 function RubikGame($gl, $shaderProgram) {
 
@@ -33,24 +38,26 @@ function RubikGame($gl, $shaderProgram) {
 		
 	
 		PerspectivTranslate([0.0,0.0,-8.0])
-		if((XRotation >0) & (YRotation > 0)) {
-			PerspectivRotate(XRotation,[1.0,0.0,0.0]);
-			PerspectivRotate(YRotation,[0.0,1.0,0.0]);
+		if(rotatePers==true) {
+			PerspectivRotate(rot++,[1.0,1.0,0.0]);
 		}
 		
         var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
         //Zeichne Rubik
-		if(tmp == 0)
-		{
+	/*	if(tmp == 0)
+		{*/
+		if(rotate==true) {
 			if(angle < 90) {
 			angle += rotationAngle;
-				self.rubik.rotateLayer('z', 2, -1);
+				self.rubik.rotateLayer(axis, layer, direction);
 			} else {
 				tmp = 1;
 				angle = 0;
+				rotate = false;
 			}
-		} else if (tmp == 1)
+		}
+	/*	} else if (tmp == 1)
 		{
 			if(angle < 90) {
 			angle += rotationAngle;
@@ -68,7 +75,7 @@ function RubikGame($gl, $shaderProgram) {
 				tmp = 3;
 				angle = 0;
 			}			
-		} else if(tmp == 3)
+		} /* else if(tmp == 3)
 		{
 			if(angle < 90) {
 			angle += rotationAngle;
@@ -95,7 +102,7 @@ function RubikGame($gl, $shaderProgram) {
 				tmp = 6;
 				angle = 0;
 			}			
-		} 			
+		} 		*/	
 		
 		self.rubik.draw();
 
@@ -106,6 +113,49 @@ function RubikGame($gl, $shaderProgram) {
         //rotate Layer von rubik aufrufen
 
     };
+	this.rotateTest = function (a, l) {
+		axis = a;
+		layer = l;
+	}
+	this.directionTest = function (dir) {
+	    direction = dir; 
+		rotate = true;
+		//self.rubik.rotateLayer(axis, layer, dir);
+	}
+	this.showTest = function(face) {
+		if(face=='F') {
+			PerspectivRotate(0,[0.0,1.0,0.0]);
+		}
+		if(face=='T') {
+			PerspectivRotate(90,[1.0,0.0,0.0]);		
+		}
+		if(face=='D') {
+			PerspectivRotate(-90,[1.0,0.0,0.0]);			
+		}
+		if(face=='B') {
+			PerspectivRotate(180,[0.0,1.0,0.0]);			
+		}
+		if(face=='R') {
+			PerspectivRotate(-90,[0.0,1.0,0.0]);		
+		}
+		if(face=='L') {
+			PerspectivRotate(90,[0.0,1.0,0.0]);				
+		}
+		if(face=='FR') {
+			PerspectivRotate(-30,[0.0,1.0,0.0]);		
+		}
+		if(face=='FT') {
+			PerspectivRotate(30,[1.0,0.0,0.0]);			
+		}
+		if(face=='FD') {
+			PerspectivRotate(-30,[1.0,0.0,0.0]);		
+		}
+		if(face=='FL') {
+			PerspectivRotate(30,[0.0,1.0,0.0]);			
+		}
+		if(face=='Rotate'){ PerspectivRotate(0,[0.0,1.0,0.0]); rot=0; rotatePers = true;}
+		if(face=='Stop'){ rotatePers = false;}
+	}
 }
 
 function getCubeTextureNames() {
@@ -128,7 +178,8 @@ function getCubeTextureNames() {
 
 function PerspectivRotate(angle, v) {
   var inRadians = angle * Math.PI / 180.0;  
-  perspectiveMatrix = perspectiveMatrix.x(Matrix.Rotation(inRadians, $V([v[0], v[1], v[2]])).ensure4x4());
+  mvMatrix = Matrix.Rotation(inRadians, $V([v[0], v[1], v[2]])).ensure4x4();
+ // perspectiveMatrix = perspectiveMatrix.x(Matrix.Rotation(inRadians, $V([v[0], v[1], v[2]])).ensure4x4());
 }
 
 function PerspectivTranslate(v) {
@@ -156,13 +207,13 @@ function handleMouseMove(event) {
 		var newX = event.clientX;
 		var newY = event.clientY;
 		
-	    XRotation += 1.6;
+	 //   XRotation = 1.6;
 		
 		if(XRotation > 360) {XRotation = 0;}
 
 		var deltaY = newY - lastMouseY;
 		
-		YRotation -= 0.8 ;
+	//	YRotation = 1.6 ;
 		
 		if(YRotation < 0) {YRotation = 360;}
 }
@@ -180,7 +231,7 @@ function handleMouseMove(event) {
         1.8, 1.0, 1.0);
     
         gl.uniform3f(shaderProgram.pointLightingLocationUniform,
-        0, 0, 20);
+        -20, -10, 20);
 }
 
 

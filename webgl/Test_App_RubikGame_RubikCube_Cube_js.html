@@ -32,7 +32,7 @@
 			  void main(void) {
 			  vec3 combinedLight;
 
-            vec3 lightDirection = normalize(uPointLightingLocation - varPosition.xyz);
+            vec3 lightDirection = normalize(uPointLightingLocation);//* - varPosition.xyz);
             vec3 normal = normalize(varNormal);
 
             float specularLight = 0.0;
@@ -82,8 +82,31 @@
 
     <Body onload="main();">
         Demo </br>
-		<img id="backimage"  style="position:absolute; left: 50px; top: 100px; z-index: -1;"/>
-        <Canvas style="float:left;margin:2em;" id="webGLCanvas" width="500" height="500">
+		<img id="backimage"  style="position:absolute; left: 50px; top: 10px; z-index: -1;"/>
+        <Canvas id="webGLCanvas" width="500" height="500" style="float:left;margin:2em; left: 50px; top: 0px;">
         </Canvas>
-    </Body>
+		<button onclick="game.rotateTest('x',0);">X 0</button>
+		<button onclick="game.rotateTest('x',1);">X 1</button>
+		<button onclick="game.rotateTest('x',2);">X 2</button><br>
+		<button onclick="game.rotateTest('y',0);">Y 0</button>
+		<button onclick="game.rotateTest('y',1);">Y 1</button>
+		<button onclick="game.rotateTest('y',2);">Y 2</button><br>
+		<button onclick="game.rotateTest('z',0);">Z 0</button>
+		<button onclick="game.rotateTest('z',1);">Z 1</button>
+		<button onclick="game.rotateTest('z',2);">Z 2</button><br>
+		<button onclick="game.directionTest(1);">+</button><br>
+		<button onclick="game.directionTest(-1);">-</button><br><br>
+		<button onclick="game.showTest('F');">show front</button>
+		<button onclick="game.showTest('FR');">show front and right</button><br>
+		<button onclick="game.showTest('T');">show top</button>
+		<button onclick="game.showTest('FT');">show front and top</button><br>
+		<button onclick="game.showTest('D');">show down</button>
+		<button onclick="game.showTest('FD');">show front and down</button><br>
+		<button onclick="game.showTest('B');">show back</button><br>
+		<button onclick="game.showTest('R');">show right</button><br>
+		<button onclick="game.showTest('L');">show left</button>
+		<button onclick="game.showTest('FL');">show front and left</button><br><br>
+		<button onclick="game.showTest('Rotate');">Rotate</button>
+		<button onclick="game.showTest('Stop');">Stop</button>		
+ </Body>
 </Html>
