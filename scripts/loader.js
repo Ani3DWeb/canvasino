@@ -53,6 +53,8 @@ $(document).ready( function() {
 						$('.screen .gameboy').css({'z-index': 0});
 					}
 				}
+				if(xRev==2&yRev==0) {location.reload();}
+			//	alert(xRev+" "+ yRev);
 			}	
 			if(direction === 'forward') { 
 				forward();
@@ -82,7 +84,7 @@ $(document).ready( function() {
 				game.showIt();
 			});
 			$('.back').click(function() {
-				game.hideIt();
+				game.hideIt();	
 			});
 
 		} 
