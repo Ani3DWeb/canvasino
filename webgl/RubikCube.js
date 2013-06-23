@@ -45,6 +45,7 @@ function RubikCube($gl, $shaderProgram) {
 	}
 	
         this.selectCube=function(x,y,z){
+           // console.log(x+" "+y+" "+z);
             if(this.selectedCube!==null){
                 this.selectedCube.unselect();
             }

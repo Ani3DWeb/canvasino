@@ -16,13 +16,16 @@ var axis, layer, direction ;
 var rotate = false;
 var rotatePers = false;
 var rot = 0;
-
 function RubikGame($gl, $shaderProgram) {
 
  	initTextures(getCubeTextureNames());
     this.rubik = new RubikCube($gl, $shaderProgram);
     var self = this;
-	
+    this.selectedX=1;
+    this.selectedY=1;
+    this.selectedZ=2;
+    this.selectedFace='F';
+    this.controlMode=0; //0: Selection, 1: Rotate
 		canvas.onmousedown = handleMouseDown;
 		document.onmouseup = handleMouseUp;
 		document.onmousemove = handleMouseMove;
@@ -105,12 +108,39 @@ function RubikGame($gl, $shaderProgram) {
 		} 		*/	
 		
 		self.rubik.draw();
+                self.rubik.selectCube(self.selectedX,self.selectedY,self.selectedZ);
 
     };
 
 
     this.keyPressed = function(key) {
+        if(this.controlMode===0){
         switch(key){
+            case 37: //Left-Key
+                this.moveLeftRight(-1);
+                break;
+            case 38: //Up-Key
+                this.moveUpDown(1);
+                break;
+            case 39: //Right-Key
+                this.moveLeftRight(1);
+                break;
+            case 40: //Down-Key
+                this.moveUpDown(-1);
+                break;
+            case 65: //A-Key
+                //switch to Rotation-Mode
+                this.controlMode=1;
+                break;
+            case 66,89: //B-Key (or Y)
+                //nothing
+                break;
+                    
+        }
+        this.checkSelection();
+        }
+        else{
+          switch(key){
             case 37: //Left-Key
                 
                 break;
@@ -124,16 +154,84 @@ function RubikGame($gl, $shaderProgram) {
                 
                 break;
             case 65: //A-Key
-                
+                //nothing
                 break;
             case 66,89: //B-Key (or Y)
-                
+                //switch Back To Selection-Mode
+                this.controlMode=0;
                 break;
                     
         }
-        alert(key);
+        }
+
 
     };
+    
+    this.moveLeftRight = function(direction){
+        switch(this.selectedFace){
+            case 'F':
+            case 'T':
+            case 'D':
+                this.selectedX+=direction;
+                break;
+                
+            case 'L':
+                this.selectedZ+=direction;
+                break;
+                
+            case 'R':
+                this.selectedZ-=direction;
+                break;
+                
+            case 'B':
+                this.selectedX-=direction;
+                break;
+        }
+    };
+    this.moveUpDown = function(direction){
+        switch(this.selectedFace){
+            case 'F':
+            case 'L':
+            case 'R':
+            case 'B':
+                this.selectedY+=direction;
+                break;              
+            case 'T':
+                this.selectedZ-=direction;
+                break;              
+            case 'D':
+                this.selectedZ+=direction;
+                break;
+        }
+    };
+    
+    this.checkSelection = function(){
+        if(this.selectedX===3){
+            this.selectedX=2;
+            this.selectedFace='R';
+        }
+        if(this.selectedX===-1){
+            this.selectedX=0;
+            this.selectedFace='L';
+        }
+        if(this.selectedY===3){
+            this.selectedY=2;
+            this.selectedFace='T';
+        }
+        if(this.selectedY===-1){
+            this.selectedY=0;
+            this.selectedFace='D';
+        }
+        if(this.selectedZ===3){
+            this.selectedZ=2;
+            this.selectedFace='F';
+        }
+        if(this.selectedZ===-1){
+            this.selectedZ=0;
+            this.selectedFace='B';
+        }
+    };
+    
 	this.rotateTest = function (a, l) {
 		axis = a;
 		layer = l;
