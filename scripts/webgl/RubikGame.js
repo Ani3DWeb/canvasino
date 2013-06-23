@@ -42,7 +42,7 @@ function RubikGame($gl, $shaderProgram) {
 	
 		PerspectivTranslate([0.0,0.0,-8.0])
 		if(rotatePers==true) {
-			PerspectivRotate(rot++,[1.0,1.0,0.0]);
+			ModelViewMatrixRotate(rot++,[1.0,1.0,0.0]);
 		}
 		
         var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
@@ -114,6 +114,7 @@ function RubikGame($gl, $shaderProgram) {
 
 
     this.keyPressed = function(key) {
+		PerspectivRotate(90,[0.0,1.0,0.0]);
         if(this.controlMode===0){
         switch(key){
             case 37: //Left-Key
@@ -265,7 +266,7 @@ function RubikGame($gl, $shaderProgram) {
         if(this.selectedY===3){
             this.selectedY=2;
             this.selectedFace='T';
-        }
+		}
         if(this.selectedY===-1){
             this.selectedY=0;
             this.selectedFace='D';
@@ -294,38 +295,38 @@ function RubikGame($gl, $shaderProgram) {
 	}
 	this.showTest = function(face) {
 		if(face=='F') {
-			PerspectivRotate(0,[0.0,1.0,0.0]);
+			ModelViewMatrixRotate(0,[0.0,1.0,0.0]);
 		}
 		if(face=='T') {
-			PerspectivRotate(90,[1.0,0.0,0.0]);		
+			ModelViewMatrixRotate(90,[1.0,0.0,0.0]);		
 		}
 		if(face=='D') {
-			PerspectivRotate(-90,[1.0,0.0,0.0]);			
+			ModelViewMatrixRotate(-90,[1.0,0.0,0.0]);			
 		}
 		if(face=='B') {
-			PerspectivRotate(180,[0.0,1.0,0.0]);			
+			ModelViewMatrixRotate(180,[0.0,1.0,0.0]);			
 		}
 		if(face=='R') {
-			PerspectivRotate(-90,[0.0,1.0,0.0]);		
+			ModelViewMatrixRotate(-90,[0.0,1.0,0.0]);		
 		}
 		if(face=='L') {
-			PerspectivRotate(90,[0.0,1.0,0.0]);				
+			ModelViewMatrixRotate(90,[0.0,1.0,0.0]);				
 		}
 		if(face=='FR') {
-			PerspectivRotate(-30,[0.0,1.0,0.0]);		
+			ModelViewMatrixRotate(-30,[0.0,1.0,0.0]);		
 		}
 		if(face=='FT') {
-			PerspectivRotate(30,[1.0,0.0,0.0]);			
+			ModelViewMatrixRotate(30,[1.0,0.0,0.0]);			
 		}
 		if(face=='FD') {
-			PerspectivRotate(-30,[1.0,0.0,0.0]);		
+			ModelViewMatrixRotate(-30,[1.0,0.0,0.0]);		
 		}
 		if(face=='FL') {
-			PerspectivRotate(30,[0.0,1.0,0.0]);			
+			ModelViewMatrixRotate(30,[0.0,1.0,0.0]);			
 		}
-		if(face=='Rotate'){ PerspectivRotate(0,[0.0,1.0,0.0]); rot=0; rotatePers = true;}
+		if(face=='Rotate'){/* PerspectivRotate(0,[0.0,1.0,0.0]); rot=0;*/ rotatePers = true;}
 		if(face=='Stop'){ rotatePers = false;}
-		if(face=='Reset') { PerspectivRotate(0,[1.0,1.0,0.0]); this.rubik = new RubikCube($gl, $shaderProgram);};
+		if(face=='Reset') { ModelViewMatrixRotate(0,[1.0,1.0,0.0]); this.rubik = new RubikCube($gl, $shaderProgram);};
 	}
 }
 
@@ -355,10 +356,10 @@ function getCubeTextureNames() {
 						  "images/webgl/rubik/weiss_logo.png");*/
 }
 
-function PerspectivRotate(angle, v) {
+function ModelViewMatrixRotate(angle, v) {
+	alert("Hier1");
   var inRadians = angle * Math.PI / 180.0;  
   mvMatrix = Matrix.Rotation(inRadians, $V([v[0], v[1], v[2]])).ensure4x4();
- // perspectiveMatrix = perspectiveMatrix.x(Matrix.Rotation(inRadians, $V([v[0], v[1], v[2]])).ensure4x4());
 }
 
 function PerspectivTranslate(v) {
