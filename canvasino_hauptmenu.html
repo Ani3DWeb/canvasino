@@ -15,46 +15,85 @@
 	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 	<link rel="icon" href="images/favicon.ico" type="image/x-icon">
 
-        <script type="text/javascript" src="webgl/Libs/sylvester.js"></script>
-        <script type="text/javascript" src="webgl/Libs/glUtils.js"></script>
-        <script type="text/javascript" src="webgl/Cube.js"></script>
-        <script type="text/javascript" src="webgl/RubikCube.js"></script>
-        <script type="text/javascript" src="webgl/RubikGame.js"></script>
-        <script type="text/javascript" src="webgl/RubikColorModel.js"></script>		
-        <script type="text/javascript" src="webgl/SlotMachine.js"></script>
-        <script type="text/javascript" src="webgl/SlotGame.js"></script>		
-        <script type="text/javascript" src="webgl/App.js"></script>	
+        <script type="text/javascript" src="scripts/Libs/sylvester.js"></script>
+        <script type="text/javascript" src="scripts/Libs/glUtils.js"></script>
+        <script type="text/javascript" src="scripts/webgl/Cube.js"></script>
+        <script type="text/javascript" src="scripts/webgl/RubikCube.js"></script>
+        <script type="text/javascript" src="scripts/webgl/RubikGame.js"></script>
+        <script type="text/javascript" src="scripts/webgl/RubikColorModel.js"></script>		
+        <script type="text/javascript" src="scripts/webgl/SlotMachine.js"></script>
+        <script type="text/javascript" src="scripts/webgl/SlotGame.js"></script>		
+        <script type="text/javascript" src="scripts/webgl/App.js"></script>	
 		
-        <Script id="shader-fs" type="x-shader/x-fragment">
+         <Script id="shader-fs" type="x-shader/x-fragment">
+		precision mediump float;
 			  varying highp vec2 vTextureCoord;
-			  
+				varying vec3 varNormal;
+				varying vec4 varPosition;
+				
 			  uniform sampler2D uSampler;
 			  
+				uniform float uMaterialShininess;
+
+				uniform bool uShowSpecularHighlights;
+				uniform bool uUseLighting;
+				uniform bool uUseTextures;
+
+				uniform vec3 uAmbientColor;
+
+				uniform vec3 uPointLightingLocation;
+				uniform vec3 uPointLightingSpecularColor;
+				uniform vec3 uPointLightingDiffuseColor;			  
+			  
 			  void main(void) {
-				highp vec4 texelColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+			  vec3 combinedLight;
+
+            vec3 lightDirection = normalize(uPointLightingLocation);//* - varPosition.xyz);
+            vec3 normal = normalize(varNormal);
+
+            float specularLight = 0.0;
+            if (uShowSpecularHighlights) 
+            {
+                vec3 eyeDirection = normalize(-varPosition.xyz);
+                vec3 reflectionDirection = reflect(-lightDirection, normal);
+
+                specularLight = pow(max(dot(reflectionDirection, eyeDirection), 0.0), uMaterialShininess);
+            }
+
+            float diffuseLight = max(dot(normal, lightDirection), 0.0);
+            combinedLight = uAmbientColor
+                + uPointLightingSpecularColor * specularLight
+                + uPointLightingDiffuseColor * diffuseLight;	
 				
-				gl_FragColor = vec4(texelColor.rgb, texelColor.a);// * vLighting, texelColor.a);
-			   // gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+				highp vec4 texelColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));				
+				gl_FragColor = vec4(texelColor.rgb * combinedLight, texelColor.a);
 			  }
         </Script>
 
         <Script id="shader-vs" type="x-shader/x-vertex">
+		precision mediump float;
 			  attribute vec3 aVertexPosition;
 			  attribute vec2 aTextureCoord;
-			
-			  uniform mat4 uMVMatrix;
-			  uniform mat4 uPMatrix;
+			  attribute highp vec3 aVertexNormal;
 			  
+			  uniform mat4 uMVMatrix;
+			  uniform mat4 uPMatrix;			  
 			  uniform mat4 uRotation;	  
-			  uniform mat4 uCoordinates;
+			  uniform mat4 uCoordinates;			  
+			  uniform highp mat3 uNMatrix;
 			  
 			  varying highp vec2 vTextureCoord;
+			  varying highp vec3 vLighting;
+			  varying vec3 varNormal;
+			  varying vec4 varPosition;
 			
 			  void main(void) {
-				gl_Position = uPMatrix * uRotation * uCoordinates * vec4(aVertexPosition, 1.0);
+			    varPosition = uMVMatrix * uRotation * uCoordinates * vec4(aVertexPosition, 1.0);
+				gl_Position = uPMatrix * varPosition;
 				vTextureCoord = aTextureCoord;
+				varNormal = uNMatrix * aVertexNormal;
 			  }
-        </Script>		
+        </Script>	
 </head>
 
 <body>
@@ -63,8 +102,8 @@
 		<div id="logo"></div>
 		<div class="screen">
 		  
-		  <div id="game02" game="2" ></div>
-		  <div id="game01" game="1"></div>
+		  <div id="game02" data-gamenumber="2" ></div>
+		  <div id="game01" data-gamenumber="1"></div>
 		  
 		  <div class="gameboy">
 			  <div class="canvasino">

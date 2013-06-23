@@ -1,13 +1,14 @@
 <Html>
     <Head>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-        <script type="text/javascript" src="Libs/sylvester.js"></script>
-        <script type="text/javascript" src="Libs/glUtils.js"></script>
-        <script type="text/javascript" src="Cube.js"></script>
-        <script type="text/javascript" src="RubikCube.js"></script>
-        <script type="text/javascript" src="RubikGame.js"></script>
-        <script type="text/javascript" src="RubikColorModel.js"></script>
-        <script type="text/javascript" src="App_RubiksCube.js"></script>
+        
+                <script type="text/javascript" src="scripts/Libs/sylvester.js"></script>
+        <script type="text/javascript" src="scripts/Libs/glUtils.js"></script>
+        <script type="text/javascript" src="scripts/webgl/Cube.js"></script>
+        <script type="text/javascript" src="scripts/webgl/RubikCube.js"></script>
+        <script type="text/javascript" src="scripts/webgl/RubikGame.js"></script>
+        <script type="text/javascript" src="scripts/webgl/RubikColorModel.js"></script>				
+        <script type="text/javascript" src="scripts/webgl/App.js"></script>	
 		
         <Script id="shader-fs" type="x-shader/x-fragment">
 		precision mediump float;
@@ -80,7 +81,7 @@
         </Script>
     </Head>
 
-    <Body onload="main();">
+    <Body onload="gamenumber=2;main();">
 		<img id="backimage"  style="position:absolute; left: 50px; top: 10px; z-index: -1;">
         <Canvas id="webGLCanvas" width="500" height="500" style="float:left;margin:2em; left: 50px; top: 0px;">
         </Canvas>

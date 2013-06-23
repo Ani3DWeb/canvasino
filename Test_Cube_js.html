@@ -1,9 +1,9 @@
 <Html>
     <Head>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-        <script type="text/javascript" src="Libs/sylvester.js"></script>
-        <script type="text/javascript" src="Libs/glUtils.js"></script>
-        <script type="text/javascript" src="Cube.js"></script>
+        <script type="text/javascript" src="scripts/Libs/sylvester.js"></script>
+        <script type="text/javascript" src="scripts/Libs/glUtils.js"></script>
+        <script type="text/javascript" src="scripts/webgl/Cube.js"></script>
         <Script id="shader-fs" type="x-shader/x-fragment">
 				varying highp vec2 vTextureCoord;
 
@@ -206,16 +206,16 @@
 				textureArray[anz].image.src = texturenames[anz];
 			}	
 
-			function getTextureNames() {
-					return new Array("Slotmachine/images/1_kirsche.png",
-					"Slotmachine/images/2_pflaume.png",
-					"Slotmachine/images/3_zitrone.png",
-					"Slotmachine/images/4_orange.png",
-					"Slotmachine/images/5_melone.png",
-					"Slotmachine/images/6_klee.png",
-					"Slotmachine/images/7_sieben.png",
-					"Slotmachine/images/8_diamant.png");
-			}	
+                        function getTextureNames() {
+                        return new Array("images/webgl/slot/1_kirsche.png",
+                        "images/webgl/slot/2_pflaume.png",
+                        "images/webgl/slot/3_zitrone.png",
+                        "images/webgl/slot/4_orange.png",
+                        "images/webgl/slot/5_melone.png",
+                        "images/webgl/slot/6_klee.png",
+                        "images/webgl/slot/7_sieben.png",
+                        "images/webgl/slot/8_diamant.png");
+                        }	
 
 			function initColors(number) {
 			var colorPositions = [];

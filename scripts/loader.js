@@ -1,6 +1,6 @@
 var gamenumber;
 $(document).ready( function() {
-	var game = {	
+	var gameCanvas = {	
 		animation: function(direction) {
 			var rows = 11; /* Zeilen innheralb von gameboy.png */
 			var columns = 3; /* Spalten innerhalb von gameboy.png */
@@ -67,6 +67,7 @@ $(document).ready( function() {
 			$('.screen .gameboy').css({'z-index': 100});
 			this.animation('forward');
 			$('.back').show();
+                        
 		},
 		hideIt: function() {
 			$('.back').fadeOut(200);
@@ -80,11 +81,11 @@ $(document).ready( function() {
 			$('.canvasino, .back').hide();
 			$('#game01, #game02').click(function() {		
 			$(this).addClass('onFocus');
-				gamenumber = $(this).attr('game');
-				game.showIt();
+				gamenumber = $(this).attr('data-gamenumber');
+				gameCanvas.showIt();
 			});
 			$('.back').click(function() {
-				game.hideIt();	
+				gameCanvas.hideIt();	
 			});
 
 		} 

@@ -17,7 +17,7 @@ var rotate = false;
 var rotatePers = false;
 var rot = 0;
 function RubikGame($gl, $shaderProgram) {
-
+    console.log("Starte SlotMachineGame...");
  	initTextures(getCubeTextureNames());
     this.rubik = new RubikCube($gl, $shaderProgram);
     var self = this;
@@ -278,6 +278,7 @@ function RubikGame($gl, $shaderProgram) {
             this.selectedZ=0;
             this.selectedFace='B';
         }
+        console.log("Darzustellende Seite: "+this.selectedFace);
         this.showTest(this.selectedFace);
     };
     
@@ -329,29 +330,29 @@ function RubikGame($gl, $shaderProgram) {
 }
 
 function getCubeTextureNames() {
-		return new Array("RubiksCube/images/Flaeche_pink.png",
-						  "RubiksCube/images/Flaeche_gruen.png",
-						  "RubiksCube/images/Flaeche_orange.png",
-						  "RubiksCube/images/Flaeche_blau.png",
-						  "RubiksCube/images/Flaeche_rot.png",
-						  "RubiksCube/images/Flaeche_gelb.png",
-						  "RubiksCube/images/Flaeche_schwarz.png",
-                                                  "RubiksCube/images/Flaeche_pink_logo.png",
-                                                  "RubiksCube/images/pink_select.png",
-						  "RubiksCube/images/gruen_select.png",
-						  "RubiksCube/images/orange_select.png",
-						  "RubiksCube/images/blau_select.png",
-						  "RubiksCube/images/rot_select.png",
-						  "RubiksCube/images/gelb_select.png",
-						  "RubiksCube/images/Flaeche_schwarz.png");
-		/*return  new Array("RubiksCube/images/weiss.png",
-						  "RubiksCube/images/gruen.png",
-						  "RubiksCube/images/orange.png",
-						  "RubiksCube/images/blau.png",
-						  "RubiksCube/images/rot.png",
-						  "RubiksCube/images/gelb.png",
-						  "RubiksCube/images/schwarz.png",
-						  "RubiksCube/images/weiss_logo.png");*/
+		return new Array("images/webgl/rubik/Flaeche_pink.png",
+						  "images/webgl/rubik/Flaeche_gruen.png",
+						  "images/webgl/rubik/Flaeche_orange.png",
+						  "images/webgl/rubik/Flaeche_blau.png",
+						  "images/webgl/rubik/Flaeche_rot.png",
+						  "images/webgl/rubik/Flaeche_gelb.png",
+						  "images/webgl/rubik/Flaeche_schwarz.png",
+                                                  "images/webgl/rubik/Flaeche_pink_logo.png",
+                                                  "images/webgl/rubik/pink_select.png",
+						  "images/webgl/rubik/gruen_select.png",
+						  "images/webgl/rubik/orange_select.png",
+						  "images/webgl/rubik/blau_select.png",
+						  "images/webgl/rubik/rot_select.png",
+						  "images/webgl/rubik/gelb_select.png",
+						  "images/webgl/rubik/Flaeche_schwarz.png");
+		/*return  new Array("images/webgl/rubik/weiss.png",
+						  "images/webgl/rubik/gruen.png",
+						  "images/webgl/rubik/orange.png",
+						  "images/webgl/rubik/blau.png",
+						  "images/webgl/rubik/rot.png",
+						  "images/webgl/rubik/gelb.png",
+						  "images/webgl/rubik/schwarz.png",
+						  "images/webgl/rubik/weiss_logo.png");*/
 }
 
 function PerspectivRotate(angle, v) {

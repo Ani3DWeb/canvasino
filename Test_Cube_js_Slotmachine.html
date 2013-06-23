@@ -1,12 +1,12 @@
 <Html>
     <Head>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-        <script type="text/javascript" src="Libs/sylvester.js"></script>
-        <script type="text/javascript" src="Libs/glUtils.js"></script>
-        <script type="text/javascript" src="Cube.js"></script>
-        <script type="text/javascript" src="SlotGame.js"></script>	
-		<script type="text/javascript" src="SlotMachine.js"></script>	
-		<script type="text/javascript" src="App_Slotmachine.js"></script>			
+        <script type="text/javascript" src="scripts/Libs/sylvester.js"></script>
+        <script type="text/javascript" src="scripts/Libs/glUtils.js"></script>
+        <script type="text/javascript" src="scripts/webgl/Cube.js"></script>	
+        <script type="text/javascript" src="scripts/webgl/SlotMachine.js"></script>
+        <script type="text/javascript" src="scripts/webgl/SlotGame.js"></script>		
+        <script type="text/javascript" src="scripts/webgl/App.js"></script>			
         <Script id="shader-fs" type="x-shader/x-fragment">
 			  varying highp vec2 vTextureCoord;
 			  
@@ -39,8 +39,9 @@
         </Script>
     </Head>
 
-    <Body onload="main();">
+    <Body onload="gamenumber=1;main();">
         Demo </br>
+        <img id="backimage"  style="position:absolute; left: 50px; top: 10px; z-index: -1;">
         <Canvas style="float:left;margin:2em;" id="webGLCanvas" width="500" height="500">
         </Canvas></br>
 		
