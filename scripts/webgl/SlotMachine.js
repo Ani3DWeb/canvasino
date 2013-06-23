@@ -64,7 +64,7 @@ function SlotMachine($gl) {
 				for (var c=0; c <= 8; c++) {
 					
 					
-					circle[wheelNumber][c] -= delta / 1000.0;
+					circle[wheelNumber][c] -= delta / 1000.0*(wheelNumber*5+1);
 					grad[wheelNumber][c] = -(360/(2 * Math.PI))*circle[wheelNumber][c];					
 					cubeRotation[wheelNumber][c] = grad[wheelNumber][c];
 					cubeYOffset[wheelNumber][c] = yIncValue* Math.sin(circle[wheelNumber][c]);
@@ -144,7 +144,7 @@ function SlotMachine($gl) {
     this.randomize = function() {
 		for (var i = 0; i<3;i++){
 				randomFront[i] = Math.round(Math.random()*8);
-				randomCircular[i] += Math.round(Math.random()*2)
+				randomCircular[i] += Math.round(Math.random()*3)
 		}
     };
 
@@ -183,5 +183,10 @@ function initCubeTextures(w,c) {
 				break;	
 		}
 		
+		colorPositions[0] = textureArray[11];
+		colorPositions[2] = textureArray[9];
+		colorPositions[3] = textureArray[8];
+		colorPositions[4] = textureArray[12];
+		colorPositions[5] = textureArray[13];
 		return colorPositions;
 }
