@@ -49,12 +49,12 @@ function RubikColorModel($gl, $shaderProgram) {
 		} else if(texture=="logo") {
 		   return textureArray[14]
 		}
-		return textureArray[15];
+		return textureArray[6];
 		
 	};
 	this.getColors = function(x,y,z){
 	 var colorPositions = [];
-		for(var i=0; i<=6;i++) {
+		for(var i=0; i<=14;i++) {
 			colorPositions[i] = textureArray[6];
 		}
 		if(z==0){

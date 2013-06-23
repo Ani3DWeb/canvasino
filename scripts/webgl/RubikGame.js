@@ -338,14 +338,14 @@ function getCubeTextureNames() {
 						  "images/webgl/rubik/Flaeche_rot.png",
 						  "images/webgl/rubik/Flaeche_gelb.png",
 						  "images/webgl/rubik/Flaeche_schwarz.png",
-                                                  "images/webgl/rubik/Flaeche_pink_logo.png",
-                                                  "images/webgl/rubik/pink_select.png",
+                          "images/webgl/rubik/Flaeche_pink_logo.png",
+                          "images/webgl/rubik/pink_select.png",
 						  "images/webgl/rubik/gruen_select.png",
 						  "images/webgl/rubik/orange_select.png",
 						  "images/webgl/rubik/blau_select.png",
 						  "images/webgl/rubik/rot_select.png",
 						  "images/webgl/rubik/gelb_select.png",
-						  "images/webgl/rubik/Flaeche_schwarz.png");
+						  "images/webgl/rubik/pink_select_logo.png");
 		/*return  new Array("images/webgl/rubik/weiss.png",
 						  "images/webgl/rubik/gruen.png",
 						  "images/webgl/rubik/orange.png",
@@ -357,7 +357,6 @@ function getCubeTextureNames() {
 }
 
 function ModelViewMatrixRotate(angle, v) {
-	alert("Hier1");
   var inRadians = angle * Math.PI / 180.0;  
   mvMatrix = Matrix.Rotation(inRadians, $V([v[0], v[1], v[2]])).ensure4x4();
 }
