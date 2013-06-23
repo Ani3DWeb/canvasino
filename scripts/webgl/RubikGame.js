@@ -15,7 +15,7 @@ var XRotation = 30, YRotation = 30;
 var axis, layer, direction ;
 var rotate = false;
 var rotatePers = false;
-var rot = 0;
+var rot = 0.7;
 function RubikGame($gl, $shaderProgram) {
     console.log("Starte SlotMachineGame...");
  	initTextures(getCubeTextureNames());
@@ -42,7 +42,7 @@ function RubikGame($gl, $shaderProgram) {
 	
 		PerspectivTranslate([0.0,0.0,-8.0])
 		if(rotatePers==true) {
-			ModelViewMatrixRotate(rot++,[1.0,1.0,0.0]);
+			ModelViewMatrixRotate(rot,[1.0,1.0,0.0]);
 		}
 		
         var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
@@ -294,23 +294,30 @@ function RubikGame($gl, $shaderProgram) {
 		//self.rubik.rotateLayer(axis, layer, dir);
 	}
 	this.showTest = function(face) {
+		mvMatrix = Matrix.I(4);
 		if(face=='F') {
-			ModelViewMatrixRotate(0,[0.0,1.0,0.0]);
+			ModelViewMatrixRotate(30,[1.0,0.0,0.0]);		
+			ModelViewMatrixRotate(-30,[0.0,1.0,0.0]);
 		}
 		if(face=='T') {
-			ModelViewMatrixRotate(90,[1.0,0.0,0.0]);		
+			ModelViewMatrixRotate(120,[1.0,0.0,0.0]);	
+			ModelViewMatrixRotate(30,[0.0,0.0,1.0]);			
 		}
 		if(face=='D') {
-			ModelViewMatrixRotate(-90,[1.0,0.0,0.0]);			
+			ModelViewMatrixRotate(-60,[1.0,0.0,0.0]);	
+			ModelViewMatrixRotate(-30,[0.0,0.0,1.0]);			
 		}
 		if(face=='B') {
-			ModelViewMatrixRotate(180,[0.0,1.0,0.0]);			
+			ModelViewMatrixRotate(30,[1.0,0.0,0.0]);
+			ModelViewMatrixRotate(150,[0.0,1.0,0.0]);	
 		}
 		if(face=='R') {
-			ModelViewMatrixRotate(-90,[0.0,1.0,0.0]);		
+			ModelViewMatrixRotate(30,[1.0,0.0,0.0]);	
+			ModelViewMatrixRotate(-120,[0.0,1.0,0.0]);
 		}
 		if(face=='L') {
-			ModelViewMatrixRotate(90,[0.0,1.0,0.0]);				
+			ModelViewMatrixRotate(30,[1.0,0.0,0.0]);	
+			ModelViewMatrixRotate(60,[0.0,1.0,0.0]);
 		}
 		if(face=='FR') {
 			ModelViewMatrixRotate(-30,[0.0,1.0,0.0]);		
@@ -324,7 +331,7 @@ function RubikGame($gl, $shaderProgram) {
 		if(face=='FL') {
 			ModelViewMatrixRotate(30,[0.0,1.0,0.0]);			
 		}
-		if(face=='Rotate'){/* PerspectivRotate(0,[0.0,1.0,0.0]); rot=0;*/ rotatePers = true;}
+		if(face=='Rotate'){rotatePers = true;}
 		if(face=='Stop'){ rotatePers = false;}
 		if(face=='Reset') { ModelViewMatrixRotate(0,[1.0,1.0,0.0]); this.rubik = new RubikCube($gl, $shaderProgram);};
 	}
@@ -358,7 +365,7 @@ function getCubeTextureNames() {
 
 function ModelViewMatrixRotate(angle, v) {
   var inRadians = angle * Math.PI / 180.0;  
-  mvMatrix = Matrix.Rotation(inRadians, $V([v[0], v[1], v[2]])).ensure4x4();
+  mvMatrix = mvMatrix.x(Matrix.Rotation(inRadians, $V([v[0], v[1], v[2]])).ensure4x4());
 }
 
 function PerspectivTranslate(v) {
