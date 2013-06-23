@@ -11,6 +11,8 @@ function RubikCube($gl, $shaderProgram) {
 	var ColorModel = new RubikColorModel($gl, $shaderProgram);
 //	var cube;
     self.colorCache = [];
+    
+    this.selectedCube=null;
     // cubeXYZ init:
 	this.initCube = function (){
 		for (var x = 0; x < 3; x++) {
@@ -42,6 +44,14 @@ function RubikCube($gl, $shaderProgram) {
 		}
 	}
 	
+        this.selectCube=function(x,y,z){
+            if(this.selectedCube!==null){
+                this.selectedCube.unselect();
+            }
+            this.selectedCube=this.cubeXYZ[x][y][z];
+            this.selectedCube.select();
+        }
+        
     //rotateLayer(x,1,90);
     //rotateLayer(z,3,-90);
 	var angle = 0;

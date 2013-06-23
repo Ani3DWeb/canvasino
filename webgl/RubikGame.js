@@ -110,12 +110,34 @@ function RubikGame($gl, $shaderProgram) {
 
 
     this.keyPressed = function(key) {
-        //rotate Layer von rubik aufrufen
+        switch(key){
+            case 37: //Left-Key
+                
+                break;
+            case 38: //Up-Key
+                
+                break;
+            case 39: //Right-Key
+                
+                break;
+            case 40: //Down-Key
+                
+                break;
+            case 65: //A-Key
+                
+                break;
+            case 66,89: //B-Key (or Y)
+                
+                break;
+                    
+        }
+        alert(key);
 
     };
 	this.rotateTest = function (a, l) {
 		axis = a;
 		layer = l;
+                this.rubik.selectCube(l,1,2);
 	}
 	this.directionTest = function (dir) {
 	    direction = dir; 
@@ -160,21 +182,29 @@ function RubikGame($gl, $shaderProgram) {
 }
 
 function getCubeTextureNames() {
-	/*	return  new Array("RubiksCube/images/Flaeche_weiss.png",
+		return new Array("RubiksCube/images/Flaeche_pink.png",
 						  "RubiksCube/images/Flaeche_gruen.png",
 						  "RubiksCube/images/Flaeche_orange.png",
 						  "RubiksCube/images/Flaeche_blau.png",
 						  "RubiksCube/images/Flaeche_rot.png",
 						  "RubiksCube/images/Flaeche_gelb.png",
-						  "RubiksCube/images/Flaeche_schwarz.png");*/
-		return  new Array("RubiksCube/images/weiss.png",
+						  "RubiksCube/images/Flaeche_schwarz.png",
+                                                  "RubiksCube/images/Flaeche_pink_logo.png",
+                                                  "RubiksCube/images/pink_select.png",
+						  "RubiksCube/images/gruen_select.png",
+						  "RubiksCube/images/orange_select.png",
+						  "RubiksCube/images/blau_select.png",
+						  "RubiksCube/images/rot_select.png",
+						  "RubiksCube/images/gelb_select.png",
+						  "RubiksCube/images/Flaeche_schwarz.png");
+		/*return  new Array("RubiksCube/images/weiss.png",
 						  "RubiksCube/images/gruen.png",
 						  "RubiksCube/images/orange.png",
 						  "RubiksCube/images/blau.png",
 						  "RubiksCube/images/rot.png",
 						  "RubiksCube/images/gelb.png",
 						  "RubiksCube/images/schwarz.png",
-						  "RubiksCube/images/weiss_logo.png");
+						  "RubiksCube/images/weiss_logo.png");*/
 }
 
 function PerspectivRotate(angle, v) {

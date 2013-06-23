@@ -5,10 +5,10 @@ var Cube = function ($gl,$shaderProgram,width){
  var cubeVerticesTextureCoordBuffer;
  var cubeVerticesIndexBuffer;
  var cubeVertexIndices;
- var cubeVerticesNormalBuffer
+ var cubeVerticesNormalBuffer;
  var textureInitPositions = [];
  this.colorLogic = [];
-
+ this.selectedOffset=0;
  this.mvMatrixStackCoordinate = [];
  this.mvMatrixStackRotation = [];
  
@@ -94,7 +94,7 @@ var Cube = function ($gl,$shaderProgram,width){
 			12, 13, 14,     12, 14, 15,   // bottom
 			16, 17, 18,     16, 18, 19,   // right
 			20, 21, 22,     20, 22, 23    // left
-		  ]
+		  ];
 		  
 		  // Now send the element array to GL
 		  
@@ -189,7 +189,7 @@ var Cube = function ($gl,$shaderProgram,width){
           0.0, 0.0,
           1.0, 0.0,
           1.0, 1.0,
-          0.0, 1.0,
+          0.0, 1.0
 		  ];
 
 		  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates),
@@ -202,27 +202,27 @@ var Cube = function ($gl,$shaderProgram,width){
 		  // top, front, left, back, right, down	
 
 					// Draw top face 
-					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[0]);
+					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[0+ this.selectedOffset]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 24);		  
 		  
 				  // Draw front face
-					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[1]);
+					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[1+ this.selectedOffset]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);					
 
 					// Draw left face 
-					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[2]);
+					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[2+ this.selectedOffset]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 60);
 
 					// Draw  back face 
-					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[3]);
+					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[3+ this.selectedOffset]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 12);					
 
 					// Draw right face
-					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[4]);
+					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[4+ this.selectedOffset]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 48);
 
 					// Draw down face 
-					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[5]);
+					gl.bindTexture(gl.TEXTURE_2D, textureInitPositions[5+ this.selectedOffset]);
 					gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 36);
 
 					gl.uniform1i($shaderProgram.samplerUniform, 0);				
@@ -246,7 +246,7 @@ var Cube = function ($gl,$shaderProgram,width){
 				var m = Matrix.Rotation(arad, $V([v[0], v[1], v[2]])).ensure4x4();
 				this.CubeCoordMatrix = this.CubeCoordMatrix.x(m);
 			  this.mvPushMatrixCoordinate();			
-		}
+		};
 		
 		this.rotateOrigin = function(ang,v) {
 			this.mvPushMatrixRotation();
@@ -274,11 +274,18 @@ var Cube = function ($gl,$shaderProgram,width){
 			return colorLogic;
 		};
 		this.setCubeNumber = function(num) {
-			cubenumber = num
+			cubenumber = num;
 		};
 		this.getCubeNumber = function() {
 			return cubenumber;
-		};		
+		};	
+                
+                this.select = function(){
+                    this.selectedOffset=6;
+                };
+                this.unselect = function(){
+                    this.selectedOffset=0;
+                };
 		this.propagateMatrixUniforms = function()
 		{
 			  var pUniform = gl.getUniformLocation($shaderProgram, "uPMatrix");
@@ -306,7 +313,7 @@ var Cube = function ($gl,$shaderProgram,width){
 		};
 		
 		this.mvPopMatrixCoordinate = function() {
-			if (this.mvMatrixStackCoordinate.length == 0) {
+			if (this.mvMatrixStackCoordinate.length === 0) {
 				throw "Invalid popMatrix!";
 			}
 			return this.CubeCoordMatrix = this.mvMatrixStackCoordinate.pop();
@@ -314,9 +321,9 @@ var Cube = function ($gl,$shaderProgram,width){
 		this.mvPushMatrixRotation = function() {
 			 this.mvMatrixStackRotation.push(this.CubeRotationMatrix);	
 		};
-		
+                	
 		this.mvPopMatrixRotation = function() {
-			if (this.mvMatrixStackRotation.length == 0) {
+			if (this.mvMatrixStackRotation.length === 0) {
 				throw "Invalid popMatrix!";
 			}
 			return this.CubeRotationMatrix = this.mvMatrixStackRotation.pop();
@@ -328,4 +335,4 @@ var Cube = function ($gl,$shaderProgram,width){
 			this.CubeCoordMatrix = this.mvPopMatrixCoordinate();
 		};
 		this.save();		
-}
+};

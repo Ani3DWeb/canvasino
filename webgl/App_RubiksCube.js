@@ -50,6 +50,7 @@ function main()
     initShaders();
     initGame();
 
+    document.onkeydown = keyPressed;
     setInterval(game.drawScene, 50);
 }
 
@@ -165,8 +166,16 @@ function MakeTransform(Object) {
 
 
 //Steuerung initialisieren
-function initControl(key) {
-
+function keyPressed(event) {
+    var keyCode=0;
+    if (!event)
+    event = window.event;
+  if (event.which) {
+    keyCode = event.which;
+  } else if (event.keyCode) {
+    keyCode = event.keyCode;
+  }
+  game.keyPressed(keyCode);
 }
 
 //

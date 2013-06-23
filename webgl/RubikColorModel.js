@@ -32,6 +32,26 @@ function RubikColorModel($gl, $shaderProgram) {
 		return textureArray[6];
 		
 	};
+        	this.texturizeSelected = function(tex) {
+	    var texture = tex;
+		if(texture=="weiss") {
+		   return textureArray[8];
+		} else if(texture=="green") {
+		   return textureArray[9]
+		} else if(texture=="orange") {
+		   return textureArray[10]
+		} else if(texture=="blue") {
+		   return textureArray[11]
+		} else if(texture=="red") {
+		   return textureArray[12]
+		} else if(texture=="yellow") {
+		   return textureArray[13]
+		} else if(texture=="logo") {
+		   return textureArray[14]
+		}
+		return textureArray[15];
+		
+	};
 	this.getColors = function(x,y,z){
 	 var colorPositions = [];
 		for(var i=0; i<=6;i++) {
@@ -40,26 +60,32 @@ function RubikColorModel($gl, $shaderProgram) {
 		if(z==0){
 		//	console.log("back"+this.getModelColors(x,y,z,3));
 			colorPositions[3] = this.texturize(this.getColorAtPosition(x,y,3));
+                        colorPositions[9] = this.texturizeSelected(this.getColorAtPosition(x,y,3));
 		}		
 		if(z==2){
 		//	console.log("front"+this.getModelColors(x,y,z,1));
 			colorPositions[1] = this.texturize(this.getColorAtPosition(x,y,1));
+                        colorPositions[7] = this.texturizeSelected(this.getColorAtPosition(x,y,1));
 		}
 		if(x==0) {
 		 //  console.log("left"+this.getModelColors(y,z,z,2));
 		   colorPositions[2] = this.texturize(this.getColorAtPosition(z,y,2));
+                   colorPositions[8] = this.texturizeSelected(this.getColorAtPosition(z,y,2));
 		}
 		if(x==2) {
 		 //  console.log("right"+this.getModelColors(y,z,z,4));
 		   colorPositions[4] = this.texturize(this.getColorAtPosition(z,y,4));
+                   colorPositions[10] = this.texturizeSelected(this.getColorAtPosition(z,y,4));
 		}	
 		if(y==0){
 		//	console.log("down"+this.getModelColors(x,z,y,5));
 			colorPositions[5] = this.texturize(this.getColorAtPosition(x,z,5));
+                        colorPositions[11] = this.texturizeSelected(this.getColorAtPosition(x,z,5));
 		}				
 		if(y==2){
 		 //  console.log("top"+this.getModelColors(x,z,y,0));
 		   colorPositions[0] = this.texturize(this.getColorAtPosition(x,z,0));
+                   colorPositions[6] = this.texturizeSelected(this.getColorAtPosition(x,z,0));
 		}		
 		return colorPositions;
 	};
