@@ -144,7 +144,7 @@ function SlotMachine($gl) {
     this.randomize = function() {
 		for (var i = 0; i<3;i++){
 				randomFront[i] = Math.round(Math.random()*8);
-				randomCircular[i] += Math.round(Math.random()*3)
+				randomCircular[i] += Math.round(Math.random()*2)
 		}
     };
 
