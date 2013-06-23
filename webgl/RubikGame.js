@@ -142,16 +142,16 @@ function RubikGame($gl, $shaderProgram) {
         else{
           switch(key){
             case 37: //Left-Key
-                
+                this.rotateLeftRight(-1);
                 break;
             case 38: //Up-Key
-                
+                this.rotateUpDown(-1);
                 break;
             case 39: //Right-Key
-                
+                this.rotateLeftRight(1);
                 break;
             case 40: //Down-Key
-                
+                this.rotateUpDown(1);
                 break;
             case 65: //A-Key
                 //nothing
@@ -187,6 +187,7 @@ function RubikGame($gl, $shaderProgram) {
                 this.selectedX-=direction;
                 break;
         }
+        
     };
     this.moveUpDown = function(direction){
         switch(this.selectedFace){
@@ -204,6 +205,53 @@ function RubikGame($gl, $shaderProgram) {
                 break;
         }
     };
+    
+    this.rotateLeftRight = function(dir){
+        direction=dir;
+        switch(this.selectedFace){
+            case 'F':
+            case 'B':
+            case 'L':
+            case 'R':
+                axis='y';
+                layer=this.selectedY;
+                rotate=true;
+                break;              
+            case 'T':          
+                direction*=-1;
+            case 'D':
+
+                axis='z';
+                layer=this.selectedZ;
+                rotate=true;
+                break;   
+        }
+        this.controlMode=0;
+    }
+    
+        this.rotateUpDown = function(dir){
+        direction=dir;
+        switch(this.selectedFace){
+            case 'B':
+                direction*=-1; 
+            case 'F':
+
+            case 'T':             
+            case 'D':
+                axis='x';
+                layer=this.selectedX;
+                rotate=true;
+                break;              
+            case 'R':
+            direction*=-1;
+            case 'L':
+                axis='z';
+                layer=this.selectedZ;
+                rotate=true;
+                break;   
+        }
+        this.controlMode=0;
+    }
     
     this.checkSelection = function(){
         if(this.selectedX===3){
@@ -230,6 +278,7 @@ function RubikGame($gl, $shaderProgram) {
             this.selectedZ=0;
             this.selectedFace='B';
         }
+        this.showTest(this.selectedFace);
     };
     
 	this.rotateTest = function (a, l) {
