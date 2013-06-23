@@ -114,7 +114,7 @@ function RubikGame($gl, $shaderProgram) {
 
 
     this.keyPressed = function(key) {
-		PerspectivRotate(90,[0.0,1.0,0.0]);
+        PerspectivRotate(90,[0.0,1.0,0.0]);
         if(this.controlMode===0){
         switch(key){
             case 37: //Left-Key
@@ -133,7 +133,8 @@ function RubikGame($gl, $shaderProgram) {
                 //switch to Rotation-Mode
                 this.controlMode=1;
                 break;
-            case 66,89: //B-Key (or Y)
+            case 66:
+            case 89: //B-Key (or Y)
                 //nothing
                 break;
                     
@@ -157,7 +158,8 @@ function RubikGame($gl, $shaderProgram) {
             case 65: //A-Key
                 //nothing
                 break;
-            case 66,89: //B-Key (or Y)
+            case 66:
+            case 89: //B-Key (or Y)
                 //switch Back To Selection-Mode
                 this.controlMode=0;
                 break;

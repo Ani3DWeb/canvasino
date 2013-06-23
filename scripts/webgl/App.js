@@ -52,7 +52,7 @@ function main()
     initShaders();
     console.log("Shader initialisiert.");
     initGame();
-
+    initGameboyKeys();
     document.onkeydown = keyPressed;
     setInterval(game.drawScene, 50);
 }
@@ -178,6 +178,14 @@ function MakeTransform(Object) {
 
 
 //Steuerung initialisieren
+function initGameboyKeys(){
+
+    $('#left, #right, #top, #bottom, #buttonA, #buttonB').click(
+            function() {
+        game.keyPressed(parseInt($(this).attr('data-key-id')));
+});
+}
+
 function keyPressed(event) {
     var keyCode = 0;
     if (!event)
