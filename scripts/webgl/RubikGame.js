@@ -11,11 +11,12 @@ var mvMatrix = Matrix.I(4);
 var tmp = 0;
 var rotationAngle = 5;
 var XRotation = 30, YRotation = 30;
-
+var initState = true;
 var axis, layer, direction ;
 var rotate = false;
 var rotatePers = false;
 var rot = 0.7;
+
 function RubikGame($gl, $shaderProgram) {
     console.log("Starte SlotMachineGame...");
  	initTextures(getCubeTextureNames());
@@ -41,6 +42,13 @@ function RubikGame($gl, $shaderProgram) {
 		
 	
 		PerspectivTranslate([0.0,0.0,-8.0])
+		
+		if(initState==true) {
+			initState=false;
+			ModelViewMatrixRotate(30,[1.0,0.0,0.0]);		
+			ModelViewMatrixRotate(-30,[0.0,1.0,0.0]);			
+		}
+
 		if(rotatePers==true) {
 			ModelViewMatrixRotate(rot,[1.0,1.0,0.0]);
 		}
