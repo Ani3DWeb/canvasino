@@ -53,8 +53,8 @@ function SlotMachine($gl) {
     //rotateLayer(z,3,-90);
     this.rotateWheel = function(wheelNumber) {
 		var currentTime = (new Date).getTime();
-		console.log(randomCircular[wheelNumber] + " " + grad[wheelNumber][randomFront[wheelNumber]]);
-		if (grad[wheelNumber][randomFront[wheelNumber]]>randomCircular[wheelNumber]*360)
+		//console.log(randomCircular[wheelNumber] + " " + grad[wheelNumber][randomFront[wheelNumber]]);
+		if (grad[wheelNumber][randomFront[wheelNumber]]>=randomCircular[wheelNumber]*360)
 		{
 			$SlotMachine.stopRotation(wheelNumber);
 		}
@@ -95,10 +95,10 @@ function SlotMachine($gl) {
 				var delta = 0;
 				for (var c=0; c <= 8; c++) {
 					
-					
-					circle[wheelNumber][c] -= delta / 1000.0;
+					var ausgleich = Math.round(circle[wheelNumber][c]/((2 * Math.PI)/8));
+					circle[wheelNumber][c] = ausgleich*((2 * Math.PI)/8);//delta / 1000.0;
 					grad[wheelNumber][c] = -(360/(2 * Math.PI))*circle[wheelNumber][c];
-					cubeRotation[wheelNumber][c] = grad[wheelNumber][c];
+					cubeRotation[wheelNumber][c] = grad[wheelNumber][c]-grad[wheelNumber][c]%(360/8);
 					cubeYOffset[wheelNumber][c] = yIncValue* Math.sin(circle[wheelNumber][c]);
 					cubeZOffset[wheelNumber][c] = zIncValue* Math.cos(circle[wheelNumber][c]);
 					
@@ -137,20 +137,24 @@ function SlotMachine($gl) {
 		
 		if (randomFront[0]==randomFront[1]
 			&&randomFront[1]==randomFront[2])
-			console.log("Winner");
+			console.log("Winner " + randomFront[2]);
 		
     };
 
     this.randomize = function() {
 		for (var i = 0; i<3;i++){
 				randomFront[i] = Math.round(Math.random()*8);
-				randomCircular[i] += Math.round(Math.random()*2)
+				randomCircular[i] += Math.round(Math.random()*1)+1;
+				console.log("Wheel " + i + ": Front:"+ randomFront[i] + " Umdrehungen: " + randomCircular[i]);
 		}
+		
     };
 	
 	this.randomizeSingle = function(wheelNumber) {
+		var preCircular = randomCircular[wheelNumber];
 		randomFront[wheelNumber] = Math.round(Math.random()*8);
-		randomCircular[wheelNumber] += Math.round(Math.random()*2);
+		randomCircular[wheelNumber] += Math.round(Math.random()*1)+1;
+		console.log("Wheel " + wheelNumber + ": Front:"+ randomFront[wheelNumber] + " Umdrehungen: " + (randomCircular[wheelNumber]-preCircular));
     };
 
     this.control = function() {

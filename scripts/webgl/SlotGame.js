@@ -70,7 +70,7 @@ function SlotGame($gl, $shaderProgram) {
 				$SlotMachine.randomizeSingle(1);
                 break;
             case 65: //A-Key
-				$SlotMachine.start();
+				$SlotMachine.randomize();
                 break;
             case 66:
             case 89: //B-Key 
