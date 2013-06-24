@@ -1,6 +1,9 @@
 <Html>
     <Head>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		
+			<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
         
                 <script type="text/javascript" src="scripts/Libs/sylvester.js"></script>
         <script type="text/javascript" src="scripts/Libs/glUtils.js"></script>
@@ -108,6 +111,22 @@
 		<button onclick="game.showTest('L');">show left</button><br><br>
 		<button onclick="game.showTest('Rotate');">Rotate</button>
 		<button onclick="game.showTest('Stop');">Stop</button><br><br>
-		<button onclick="game.showTest('Reset');">Reset</button>		
+		<button onclick="game.showTest('Reset');">Reset</button>	
+
+			  	<div class="back">
+			  
+				    <div id="controls">
+						<div id="left" data-key-id="37"></div>
+						<div id="top" data-key-id="38"></div>
+						<div id="right" data-key-id="39"></div>
+						<div id="bottom" data-key-id="40"></div>
+					</div>	    	
+			    	<div id="buttonA" data-key-id="65">
+			    	</div>
+			    	
+			    	<div id="buttonB" data-key-id="66">
+			    	</div>
+			  </div>
+		
  </Body>
 </Html>
