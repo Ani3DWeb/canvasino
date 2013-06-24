@@ -54,6 +54,30 @@ function SlotGame($gl, $shaderProgram) {
         countReady = 0;
 
     };
+	
+	this.keyPressed = function(key) {
+        
+        switch(key){
+            case 37: //Left-Key
+				$SlotMachine.randomizeSingle(0);
+                break;
+            case 38: //Up-Key
+                break;
+            case 39: //Right-Key
+				$SlotMachine.randomizeSingle(2);
+                break;
+            case 40: //Down-Key
+				$SlotMachine.randomizeSingle(1);
+                break;
+            case 65: //A-Key
+				$SlotMachine.start();
+                break;
+            case 66:
+            case 89: //B-Key 
+                break;
+                    
+        }
+    };
 }
 
 

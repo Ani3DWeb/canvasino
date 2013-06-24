@@ -147,6 +147,11 @@ function SlotMachine($gl) {
 				randomCircular[i] += Math.round(Math.random()*2)
 		}
     };
+	
+	this.randomizeSingle = function(wheelNumber) {
+		randomFront[wheelNumber] = Math.round(Math.random()*8);
+		randomCircular[wheelNumber] += Math.round(Math.random()*2);
+    };
 
     this.control = function() {
 
