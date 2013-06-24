@@ -98,7 +98,7 @@ function SlotMachine($gl) {
 					var ausgleich = Math.round(circle[wheelNumber][c]/((2 * Math.PI)/8));
 					circle[wheelNumber][c] = ausgleich*((2 * Math.PI)/8);//delta / 1000.0;
 					grad[wheelNumber][c] = -(360/(2 * Math.PI))*circle[wheelNumber][c];
-					cubeRotation[wheelNumber][c] = grad[wheelNumber][c]-grad[wheelNumber][c]%(360/8);
+					cubeRotation[wheelNumber][c] = grad[wheelNumber][c];
 					cubeYOffset[wheelNumber][c] = yIncValue* Math.sin(circle[wheelNumber][c]);
 					cubeZOffset[wheelNumber][c] = zIncValue* Math.cos(circle[wheelNumber][c]);
 					
@@ -145,7 +145,7 @@ function SlotMachine($gl) {
 		for (var i = 0; i<3;i++){
 				randomFront[i] = Math.round(Math.random()*8);
 				randomCircular[i] += Math.round(Math.random()*1)+1;
-				console.log("Wheel " + i + ": Front:"+ randomFront[i] + " Umdrehungen: " + randomCircular[i]);
+				console.log("Wheel " + (i+1) + ": Front:"+ randomFront[i] + " Umdrehungen: " + randomCircular[i]);
 		}
 		
     };
@@ -154,7 +154,7 @@ function SlotMachine($gl) {
 		var preCircular = randomCircular[wheelNumber];
 		randomFront[wheelNumber] = Math.round(Math.random()*8);
 		randomCircular[wheelNumber] += Math.round(Math.random()*1)+1;
-		console.log("Wheel " + wheelNumber + ": Front:"+ randomFront[wheelNumber] + " Umdrehungen: " + (randomCircular[wheelNumber]-preCircular));
+		console.log("Wheel " + (wheelNumber+1) + ": Front:"+ randomFront[wheelNumber] + " Umdrehungen: " + (randomCircular[wheelNumber]-preCircular));
     };
 
     this.control = function() {
