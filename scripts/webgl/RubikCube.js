@@ -1,6 +1,6 @@
 /*
  * RubikCube:
- * Datenhaltung und Status-Logik (gelöst/wo ist welche Farbe)
+ *  und Status-Logik (gelöst/wo ist welche Farbe)
  * 
  */
 
@@ -11,7 +11,7 @@ function RubikCube($gl, $shaderProgram) {
 	var ColorModel = new RubikColorModel($gl, $shaderProgram);
 //	var cube;
     self.colorCache = [];
-    
+    //
     this.selectedCube=null;
     // cubeXYZ init:
 	this.initCube = function (){
@@ -42,7 +42,7 @@ function RubikCube($gl, $shaderProgram) {
 				}
 			}
 		}
-	}
+	};
 	
         this.selectCube=function(x,y,z){
           //  console.log(x+" "+y+" "+z);
@@ -51,7 +51,16 @@ function RubikCube($gl, $shaderProgram) {
             }
             this.selectedCube=this.cubeXYZ[x][y][z];
             this.selectedCube.select();
-        }
+        };
+        
+        this.selectCubeForRotation=function(x,y,z){
+          //  console.log(x+" "+y+" "+z);
+            if(this.selectedCube!==null){
+                this.selectedCube.unselect();
+            }
+            this.selectedCube=this.cubeXYZ[x][y][z];
+            this.selectedCube.rotationMode();
+        };
         
     //rotateLayer(x,1,90);
     //rotateLayer(z,3,-90);

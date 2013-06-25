@@ -280,6 +280,10 @@ var Cube = function ($gl,$shaderProgram,width){
 			return cubenumber;
 		};	
                 
+                this.rotationMode = function(){
+                    this.selectedOffset=12;
+                };
+                
                 this.select = function(){
                     this.selectedOffset=6;
                 };
