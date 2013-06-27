@@ -62,18 +62,24 @@ function SlotGame($gl, $shaderProgram) {
         
         switch(key){
             case 37: //Left-Key
+				if (grad[0][randomFront[0]]>=randomCircular[0]*360)
 				$SlotMachine.randomizeSingle(0);
                 break;
             case 38: //Up-Key
                 break;
             case 39: //Right-Key
+				if (grad[2][randomFront[2]]>=randomCircular[2]*360)
 				$SlotMachine.randomizeSingle(2);
                 break;
             case 40: //Down-Key
+				if (grad[1][randomFront[1]]>=randomCircular[1]*360)
 				$SlotMachine.randomizeSingle(1);
                 break;
             case 65: //A-Key
-				$SlotMachine.randomize();
+				if (grad[0][randomFront[0]]>=randomCircular[0]*360
+					&&grad[1][randomFront[1]]>=randomCircular[1]*360
+					&&grad[2][randomFront[2]]>=randomCircular[2]*360)
+					$SlotMachine.randomize();
                 break;
             case 66:
             case 89: //B-Key 
