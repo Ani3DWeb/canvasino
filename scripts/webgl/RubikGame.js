@@ -20,6 +20,7 @@ var rot = 0.7;
 function RubikGame($gl, $shaderProgram) {
     console.log("Starte SlotMachineGame...");
     initTextures(getCubeTextureNames());
+    this.initialized=0;
     this.rubik = new RubikCube($gl, $shaderProgram);
     var self = this;
     this.selectedX = 1;
@@ -47,6 +48,12 @@ function RubikGame($gl, $shaderProgram) {
             initState = false;
             ModelViewMatrixRotate(30, [1.0, 0.0, 0.0]);
             ModelViewMatrixRotate(-30, [0.0, 1.0, 0.0]);
+        }
+
+        if(self.initialized<5&&!rotate){
+            console.log("dreh dich");
+             self.randomize();
+             self.initialized++;
         }
 
         if (rotatePers === true) {
@@ -122,6 +129,7 @@ function RubikGame($gl, $shaderProgram) {
             self.rubik.selectCubeForRotation(self.selectedX, self.selectedY, self.selectedZ);
 
         }
+
         self.rubik.draw();
 
     };
@@ -268,6 +276,13 @@ function RubikGame($gl, $shaderProgram) {
                 break;
         }
         this.controlMode = 0;
+    };
+    
+    this.randomize = function(){
+        var tempAxis =['x','y','z'];
+        axis=tempAxis[Math.floor(Math.random()*3)];
+        layer=Math.floor(Math.random()*3);
+        rotate = true;
     };
 
     this.checkSelection = function() {
