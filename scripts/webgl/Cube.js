@@ -237,7 +237,7 @@ var Cube = function ($gl,$shaderProgram,width){
 			  this.mvPushMatrixCoordinate();
 			  var m = Matrix.Translation($V([v[0], v[1], v[2]])).ensure4x4();
 			  this.CubeCoordMatrix = this.CubeCoordMatrix.x(m);
-			  this.mvPushMatrixCoordinate();
+	//		  this.mvPopMatrixCoordinate();
 		};
 		
 		this.rotate = function(ang,v) {
@@ -245,16 +245,13 @@ var Cube = function ($gl,$shaderProgram,width){
 				var arad = ang * Math.PI / 180.0;
 				var m = Matrix.Rotation(arad, $V([v[0], v[1], v[2]])).ensure4x4();
 				this.CubeCoordMatrix = this.CubeCoordMatrix.x(m);
-			  this.mvPushMatrixCoordinate();			
+		//	  this.mvPopMatrixCoordinate();
 		};
 		
 		this.rotateOrigin = function(ang,v) {
-			this.mvPushMatrixRotation();
-			//	this.CubeRotationMatrix = Matrix.Translation($V([0, 0, 0])).ensure4x4();
 				var arad = ang * Math.PI / 180.0;
 				var m = Matrix.Rotation(arad, $V([v[0], v[1], v[2]])).ensure4x4();
 				this.CubeRotationMatrix = this.CubeRotationMatrix.x(m);
-			this.mvPushMatrixRotation();
 		};
 		
 		this.scale = function(){
@@ -322,16 +319,6 @@ var Cube = function ($gl,$shaderProgram,width){
 			}
 			return this.CubeCoordMatrix = this.mvMatrixStackCoordinate.pop();
 		};	
-		this.mvPushMatrixRotation = function() {
-			 this.mvMatrixStackRotation.push(this.CubeRotationMatrix);	
-		};
-                	
-		this.mvPopMatrixRotation = function() {
-			if (this.mvMatrixStackRotation.length === 0) {
-				throw "Invalid popMatrix!";
-			}
-			return this.CubeRotationMatrix = this.mvMatrixStackRotation.pop();
-		};			
 		this.save = function() {
 			this.mvPushMatrixCoordinate(this.CubeCoordMatrix);
 		};

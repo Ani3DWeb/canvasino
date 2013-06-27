@@ -77,8 +77,6 @@ function SlotMachine($gl) {
 					
 					wheel[wheelNumber][c].revert();
 					wheel[wheelNumber][c].revert();
-					wheel[wheelNumber][c].revert();
-					wheel[wheelNumber][c].revert();
 					//console.log(cubeXOffset[wheelNumber][c] + " " +cubeYOffset[wheelNumber][c] +" " + cubeZOffset[wheelNumber][c]);
 				}
 			}
@@ -107,8 +105,6 @@ function SlotMachine($gl) {
 					wheel[wheelNumber][c].rotate(cubeRotation[wheelNumber][c], [1, 0, 0]);
 					wheel[wheelNumber][c].draw();
 					
-					wheel[wheelNumber][c].revert();
-					wheel[wheelNumber][c].revert();
 					wheel[wheelNumber][c].revert();
 					wheel[wheelNumber][c].revert();
 					//console.log(cubeXOffset[wheelNumber][c] + " " +cubeYOffset[wheelNumber][c] +" " + cubeZOffset[wheelNumber][c]);
