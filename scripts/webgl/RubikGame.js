@@ -50,11 +50,7 @@ function RubikGame($gl, $shaderProgram) {
             ModelViewMatrixRotate(-30, [0.0, 1.0, 0.0]);
         }
 
-        if(self.initialized<5&&!rotate){
-            console.log("dreh dich");
-             self.randomize();
-             self.initialized++;
-        }
+
 
         if (rotatePers === true) {
             ModelViewMatrixRotate(rot, [1.0, 1.0, 0.0]);
@@ -65,6 +61,8 @@ function RubikGame($gl, $shaderProgram) {
         //Zeichne Rubik
         /*	if(tmp == 0)
          {*/
+        
+
         if (rotate===true) {
             if (angle < 90) {
                 angle += rotationAngle;
@@ -74,6 +72,11 @@ function RubikGame($gl, $shaderProgram) {
                 angle = 0;
                 rotate = false;
             }
+        }
+               if(self.initialized<5&&!rotate){
+            console.log("dreh dich");
+             self.randomize();
+             self.initialized++;
         }
         /*	} else if (tmp == 1)
          {
@@ -282,6 +285,12 @@ function RubikGame($gl, $shaderProgram) {
         var tempAxis =['x','y','z'];
         axis=tempAxis[Math.floor(Math.random()*3)];
         layer=Math.floor(Math.random()*3);
+        if(Math.random()<0.5){
+        direction=1;
+        }
+        else{
+            direction=-1;
+        }
         rotate = true;
     };
 
