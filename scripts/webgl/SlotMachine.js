@@ -51,20 +51,18 @@ function SlotMachine($gl) {
 
     //rotateLayer(x,1,90);
     //rotateLayer(z,3,-90);
-    this.rotateWheel = function(wheelNumber) {
-		var currentTime = (new Date).getTime();
+    this.rotateWheel = function(wheelNumber,delta) {
+		
 		//console.log(randomCircular[wheelNumber] + " " + grad[wheelNumber][randomFront[wheelNumber]]);
 		if (grad[wheelNumber][randomFront[wheelNumber]]>=randomCircular[wheelNumber]*360)
 		{
 			$SlotMachine.stopRotation(wheelNumber);
 		}
 		else{
-			if (lastCubeUpdateTime) {
-				var delta = currentTime - lastCubeUpdateTime;
-				for (var c=0; c <= 8; c++) {
+			for (var c=0; c <= 8; c++) {
 					
 					
-					circle[wheelNumber][c] -= delta / 1000.0*(wheelNumber*5+1);
+					circle[wheelNumber][c] -= delta / 700.0*(wheelNumber+1*1.5);
 					grad[wheelNumber][c] = -(360/(2 * Math.PI))*circle[wheelNumber][c];					
 					cubeRotation[wheelNumber][c] = grad[wheelNumber][c];
 					cubeYOffset[wheelNumber][c] = yIncValue* Math.sin(circle[wheelNumber][c]);
@@ -76,13 +74,15 @@ function SlotMachine($gl) {
 					wheel[wheelNumber][c].draw();
 					
 					wheel[wheelNumber][c].revert();
+					//wheel[wheelNumber][c].revert();
+					//wheel[wheelNumber][c].revert();
 					wheel[wheelNumber][c].revert();
 					//console.log(cubeXOffset[wheelNumber][c] + " " +cubeYOffset[wheelNumber][c] +" " + cubeZOffset[wheelNumber][c]);
 				}
-			}
+			
 		}
 			//console.log("ich bin da und drehe");
-		 lastCubeUpdateTime = currentTime;
+		 
 		 
 			
     };
@@ -107,6 +107,8 @@ function SlotMachine($gl) {
 					
 					wheel[wheelNumber][c].revert();
 					wheel[wheelNumber][c].revert();
+					//wheel[wheelNumber][c].revert();
+					//wheel[wheelNumber][c].revert();
 					//console.log(cubeXOffset[wheelNumber][c] + " " +cubeYOffset[wheelNumber][c] +" " + cubeZOffset[wheelNumber][c]);
 				}
 			   //buhlscher randomGen
@@ -139,9 +141,10 @@ function SlotMachine($gl) {
 
     this.randomize = function() {
 		for (var i = 0; i<3;i++){
+				var temp=randomCircular[i];
 				randomFront[i] = Math.round(Math.random()*8);
 				randomCircular[i] += Math.round(Math.random()*1)+1;
-				console.log("Wheel " + (i+1) + ": Front:"+ randomFront[i] + " Umdrehungen: " + randomCircular[i]);
+				console.log("Wheel " + (i+1) + ": Front:"+ randomFront[i] + " Umdrehungen: " + (randomCircular[i]-temp));
 		}
 		
     };

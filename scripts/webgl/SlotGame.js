@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Eigentliches Spiel: 
  *      
  * Logik für SlotMachine:
@@ -34,7 +34,7 @@ function SlotGame($gl, $shaderProgram) {
         //TODO: Perspektive einstellen
         perspectiveMatrix = makePerspective(45, canvasWidth / canvasHeight, 0.1, 100.0);
 
-        PerspectivTranslate([0.0, 0.0, -2.0])
+        PerspectivTranslate([0.0, 0.0, -1.7])
         //PerspectivRotate(120,[1.0,0.0,0.0]);
 
         //var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
@@ -48,10 +48,13 @@ function SlotGame($gl, $shaderProgram) {
 
 
         //Zeichne Rubik
-        $SlotMachine.rotateWheel(0);
-        $SlotMachine.rotateWheel(1);
-        $SlotMachine.rotateWheel(2);
+		var currentTime = (new Date).getTime();
+		var delta = currentTime - lastCubeUpdateTime;
+        $SlotMachine.rotateWheel(1,delta);
+        $SlotMachine.rotateWheel(0,delta);
+        $SlotMachine.rotateWheel(2,delta);
         countReady = 0;
+		lastCubeUpdateTime = currentTime;
 
     };
 	
