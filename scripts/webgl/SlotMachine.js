@@ -68,15 +68,14 @@ function SlotMachine($gl) {
 					cubeYOffset[wheelNumber][c] = yIncValue* Math.sin(circle[wheelNumber][c]);
 					cubeZOffset[wheelNumber][c] = zIncValue* Math.cos(circle[wheelNumber][c]);
 					
-					//wheel[wheelNumber][c].save();
+					wheel[wheelNumber][c].save();
+					
 					wheel[wheelNumber][c].translate([cubeXOffset[wheelNumber][c], cubeYOffset[wheelNumber][c], cubeZOffset[wheelNumber][c]]);	
 					wheel[wheelNumber][c].rotate(cubeRotation[wheelNumber][c], [1, 0, 0]);
 					wheel[wheelNumber][c].draw();
 					
 					wheel[wheelNumber][c].revert();
-					//wheel[wheelNumber][c].revert();
-					//wheel[wheelNumber][c].revert();
-					wheel[wheelNumber][c].revert();
+
 					//console.log(cubeXOffset[wheelNumber][c] + " " +cubeYOffset[wheelNumber][c] +" " + cubeZOffset[wheelNumber][c]);
 				}
 			
@@ -100,15 +99,14 @@ function SlotMachine($gl) {
 					cubeYOffset[wheelNumber][c] = yIncValue* Math.sin(circle[wheelNumber][c]);
 					cubeZOffset[wheelNumber][c] = zIncValue* Math.cos(circle[wheelNumber][c]);
 					
-					//wheel[wheelNumber][c].save();
+					wheel[wheelNumber][c].save();
+					
 					wheel[wheelNumber][c].translate([cubeXOffset[wheelNumber][c], cubeYOffset[wheelNumber][c], cubeZOffset[wheelNumber][c]]);	
 					wheel[wheelNumber][c].rotate(cubeRotation[wheelNumber][c], [1, 0, 0]);
 					wheel[wheelNumber][c].draw();
 					
 					wheel[wheelNumber][c].revert();
-					wheel[wheelNumber][c].revert();
-					//wheel[wheelNumber][c].revert();
-					//wheel[wheelNumber][c].revert();
+
 					//console.log(cubeXOffset[wheelNumber][c] + " " +cubeYOffset[wheelNumber][c] +" " + cubeZOffset[wheelNumber][c]);
 				}
 			   //buhlscher randomGen

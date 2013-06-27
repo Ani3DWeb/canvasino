@@ -234,18 +234,14 @@ var Cube = function ($gl,$shaderProgram,width){
 			this.texturize();
 		};
 		this.translate = function(v){
-			  this.mvPushMatrixCoordinate();
 			  var m = Matrix.Translation($V([v[0], v[1], v[2]])).ensure4x4();
 			  this.CubeCoordMatrix = this.CubeCoordMatrix.x(m);
-	//		  this.mvPopMatrixCoordinate();
 		};
 		
 		this.rotate = function(ang,v) {
-			  this.mvPushMatrixCoordinate();
 				var arad = ang * Math.PI / 180.0;
 				var m = Matrix.Rotation(arad, $V([v[0], v[1], v[2]])).ensure4x4();
 				this.CubeCoordMatrix = this.CubeCoordMatrix.x(m);
-		//	  this.mvPopMatrixCoordinate();
 		};
 		
 		this.rotateOrigin = function(ang,v) {
