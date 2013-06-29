@@ -142,14 +142,14 @@ function getShader(gl, id)
 
 
 function initGame() {
-        
+
     if (gamenumber == 1) {
-        console.log("Lade Spiel #"+gamenumber);
+        console.log("Lade Spiel #" + gamenumber);
         game = new SlotGame(gl, shaderProgram);
-        console.log("Lade Spiel #"+gamenumber);
+        console.log("Lade Spiel #" + gamenumber);
     } else if (gamenumber == 2) {
         game = new RubikGame(gl, shaderProgram);
-        console.log("Lade Spiel #"+gamenumber);
+        console.log("Lade Spiel #" + gamenumber);
     }
     // game = new RubikGame(gl, shaderProgram);
 }
@@ -178,12 +178,12 @@ function MakeTransform(Object) {
 
 
 //Steuerung initialisieren
-function initGameboyKeys(){
+function initGameboyKeys() {
 
     $('#left, #right, #top, #bottom, #buttonA, #buttonB').click(
             function() {
-        game.keyPressed(parseInt($(this).attr('data-key-id')));
-});
+                game.keyPressed(parseInt($(this).attr('data-key-id')));
+            });
 }
 
 function keyPressed(event) {
@@ -219,10 +219,12 @@ function TextureLoader(anz, texturenames) {
     {
         gl.bindTexture(gl.TEXTURE_2D, textureArray[anz]);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureArray[anz].image);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
-    }
+    };
     textureArray[anz].image.src = texturenames[anz];
 }

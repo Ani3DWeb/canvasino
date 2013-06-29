@@ -20,14 +20,14 @@ var rot = 0.7;
 function RubikGame($gl, $shaderProgram) {
     console.log("Starte SlotMachineGame...");
     initTextures(getCubeTextureNames());
-    this.initialized=0;
+    this.initialized = 0;
     this.rubik = new RubikCube($gl, $shaderProgram);
-    var self = this;
+    
     this.selectedX = 1;
     this.selectedY = 1;
     this.selectedZ = 2;
     this.selectedFace = 'F';
-    this.controlMode = 0; //0: Selection, 1: Rotate
+    this.controlMode = 0; //0: Selection, 1: Rotate, 2: Free Rotation View
     canvas.onmousedown = handleMouseDown;
     document.onmouseup = handleMouseUp;
     document.onmousemove = handleMouseMove;
@@ -37,8 +37,7 @@ function RubikGame($gl, $shaderProgram) {
         $gl.clear($gl.COLOR_BUFFER_BIT | $gl.DEPTH_BUFFER_BIT);
         $gl.enable($gl.DEPTH_TEST);
         $gl.depthFunc($gl.LEQUAL);
-        setupLight();
-        //TODO: Perspektive einstellen
+        self.setupLight();
         perspectiveMatrix = makePerspective(45, canvasWidth / canvasHeight, 0.1, 100.0);
 
 
@@ -61,9 +60,9 @@ function RubikGame($gl, $shaderProgram) {
         //Zeichne Rubik
         /*	if(tmp == 0)
          {*/
-        
 
-        if (rotate===true) {
+
+        if (rotate === true) {
             if (angle < 90) {
                 angle += rotationAngle;
                 self.rubik.rotateLayer(axis, layer, direction);
@@ -73,63 +72,21 @@ function RubikGame($gl, $shaderProgram) {
                 rotate = false;
             }
         }
-               if(self.initialized<5&&!rotate){
+        if (self.initialized < 5 && !rotate) {
             console.log("dreh dich");
-             self.randomize();
-             self.initialized++;
+            self.randomize();
+            self.initialized++;
         }
-        /*	} else if (tmp == 1)
-         {
-         if(angle < 90) {
-         angle += rotationAngle;
-         self.rubik.rotateLayer('x', 2, 1);
-         } else {
-         tmp = 2;
-         angle = 0;
-         }			
-         }  else if (tmp == 2)
-         {
-         if(angle < 90) {
-         angle += rotationAngle;
-         self.rubik.rotateLayer('y', 0, -1);
-         } else {
-         tmp = 3;
-         angle = 0;
-         }			
-         } /* else if(tmp == 3)
-         {
-         if(angle < 90) {
-         angle += rotationAngle;
-         self.rubik.rotateLayer('y', 0, 1);
-         } else {
-         tmp = 4;
-         angle = 0;
-         }
-         } else if (tmp == 4)
-         {
-         if(angle < 90) {
-         angle += rotationAngle;
-         self.rubik.rotateLayer('x', 2, -1);
-         } else {
-         tmp = 5;
-         angle = 0;
-         }			
-         } else if (tmp == 5)
-         {
-         if(angle < 90) {
-         angle += rotationAngle;
-         self.rubik.rotateLayer('z', 2, 1);
-         } else {
-         tmp = 6;
-         angle = 0;
-         }			
-         } 		*/
 
         if (self.controlMode === 0) {
             self.rubik.selectCube(self.selectedX, self.selectedY, self.selectedZ);
         }
         else if (self.controlMode === 1) {
             self.rubik.selectCubeForRotation(self.selectedX, self.selectedY, self.selectedZ);
+
+        }
+        else if (self.controlMode === 2) {
+            self.rubik.hideSelection();
 
         }
 
@@ -160,13 +117,13 @@ function RubikGame($gl, $shaderProgram) {
                     break;
                 case 66:
                 case 89: //B-Key (or Y)
-                    //nothing
+                    //switch to Free Rotation
                     break;
 
             }
             this.checkSelection();
         }
-        else {
+        else if (this.controlMode === 1) {
             switch (key) {
                 case 37: //Left-Key
                     this.rotateLeftRight(-1);
@@ -181,8 +138,31 @@ function RubikGame($gl, $shaderProgram) {
                     this.rotateUpDown(1);
                     break;
                 case 65: //A-Key
-                    //nothing
+                    //switch Back To Selection-Mode
+                    this.controlMode = 0;
                     break;
+                case 66:
+                case 89: //B-Key (or Y)
+                    //switch
+                    break;
+
+            }
+        }
+        else if (this.controlMode === 2) {
+            switch (key) {
+                case 37: //Left-Key
+                    //free Rotation
+                    break;
+                case 38: //Up-Key
+                    //Free Rotation
+                    break;
+                case 39: //Right-Key
+                    //Free Rotation
+                    break;
+                case 40: //Down-Key
+                    //Free Rotation
+                    break;
+                case 65: //A-Key
                 case 66:
                 case 89: //B-Key (or Y)
                     //switch Back To Selection-Mode
@@ -191,7 +171,6 @@ function RubikGame($gl, $shaderProgram) {
 
             }
         }
-
 
     };
 
@@ -280,16 +259,16 @@ function RubikGame($gl, $shaderProgram) {
         }
         this.controlMode = 0;
     };
-    
-    this.randomize = function(){
-        var tempAxis =['x','y','z'];
-        axis=tempAxis[Math.floor(Math.random()*3)];
-        layer=Math.floor(Math.random()*3);
-        if(Math.random()<0.5){
-        direction=1;
+
+    this.randomize = function() {
+        var tempAxis = ['x', 'y', 'z'];
+        axis = tempAxis[Math.floor(Math.random() * 3)];
+        layer = Math.floor(Math.random() * 3);
+        if (Math.random() < 0.5) {
+            direction = 1;
         }
-        else{
-            direction=-1;
+        else {
+            direction = -1;
         }
         rotate = true;
     };
@@ -383,6 +362,24 @@ function RubikGame($gl, $shaderProgram) {
         }
         ;
     }
+
+
+    this.setupLight = function()
+    {
+        gl.uniform1f(shaderProgram.materialShininessUniform, 10.0);
+
+        gl.uniform1i(shaderProgram.showSpecularHighlightsUniform, 1);
+
+        gl.uniform3f(shaderProgram.ambientColorUniform, 1.0, 1.0, 1.0);
+        gl.uniform3f(shaderProgram.pointLightingSpecularColorUniform,
+                0.8, 0.8, 0.8);
+        gl.uniform3f(shaderProgram.pointLightingDiffuseColorUniform,
+                0.8, 0.8, 0.8);
+
+        gl.uniform3f(shaderProgram.pointLightingLocationUniform,
+                10, 10, 20);
+    };
+    var self = this;
 }
 
 function getCubeTextureNames() {
@@ -463,21 +460,7 @@ function handleMouseMove(event) {
     }
 }
 
-function setupLight()
-{
-    gl.uniform1f(shaderProgram.materialShininessUniform, 10.0);
 
-    gl.uniform1i(shaderProgram.showSpecularHighlightsUniform, 1);
-
-    gl.uniform3f(shaderProgram.ambientColorUniform, 1.0, 1.0, 1.0);
-    gl.uniform3f(shaderProgram.pointLightingSpecularColorUniform,
-            1.8, 1.8, 1.8);
-    gl.uniform3f(shaderProgram.pointLightingDiffuseColorUniform,
-            1.8, 1.0, 1.0);
-
-    gl.uniform3f(shaderProgram.pointLightingLocationUniform,
-            -20, -10, 20);
-}
 
 
 

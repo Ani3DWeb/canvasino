@@ -53,6 +53,10 @@ function RubikCube($gl, $shaderProgram) {
             this.selectedCube.select();
         };
         
+        this.hideSelection= function(){
+            this.selectedCube.unselect();
+        }
+        
         this.selectCubeForRotation=function(x,y,z){
           //  console.log(x+" "+y+" "+z);
             if(this.selectedCube!==null){
