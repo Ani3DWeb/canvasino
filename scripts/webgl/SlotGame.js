@@ -51,6 +51,11 @@ function SlotGame($gl, $shaderProgram) {
         //Zeichne Rubik
         var currentTime = (new Date).getTime();
         var delta = currentTime - lastCubeUpdateTime;
+		
+		//if (wheelStateAlt[0]!=wheelState[0]||wheelStateAlt[1]!=wheelState[1]||wheelStateAlt[2]!=wheelState[2]){
+		//		soundsSlot.playSpinning();
+		//	}
+		
         $SlotMachine.rotateWheel(1, delta);
         $SlotMachine.rotateWheel(0, delta);
         $SlotMachine.rotateWheel(2, delta);
@@ -81,8 +86,10 @@ function SlotGame($gl, $shaderProgram) {
             	soundsSlot.playArm();
                 if (rotationNr[0]==randomCircular[0]
                         && rotationNr[1]==randomCircular[1]
-                        && rotationNr[2]==randomCircular[2])
+                        && rotationNr[2]==randomCircular[2]){
+					soundsSlot.playSpinning();
                     $SlotMachine.randomize();
+				}
                 break;
             case 66:
             case 89: //B-Key 

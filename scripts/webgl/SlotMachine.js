@@ -9,6 +9,7 @@ var lastCubeUpdateTime = 0;
 var randomFront;
 var randomCircular;
 var countReady=0;
+var countReadyFirst = true;
 var rotationNr=0;
 var winner = false;
 var wheelState;
@@ -26,7 +27,7 @@ function SlotMachine($gl) {
 	randomFront = new Array (3);
 	randomCircular = new Array (3);
 	rotationNr = new Array (3);
-	wheelState = new Array (3); //t=turn, s=stop
+	wheelState = new Array (3);
 	wheelStateAlt = new Array (3);
 	
     for (var w=0; w <= 3; w++) {
@@ -40,8 +41,8 @@ function SlotMachine($gl) {
 		randomFront[w] = 0;
 		randomCircular[w] = 0;
 		rotationNr[w] = 0;
-		wheelState = 't';
-		wheelStateAlt = 's';
+		wheelState[w] = false;
+		wheelStateAlt[w] = true;
 		
         for (var c=0; c <= 8; c++) {
             wheel[w][c] = new Cube(gl, shaderProgram, 0.25);
@@ -61,18 +62,15 @@ function SlotMachine($gl) {
     //rotateLayer(x,1,90);
     //rotateLayer(z,3,-90);
     this.rotateWheel = function(wheelNumber,delta) {
-		//soundsSlot.playSpinning();
+		//
 		//console.log(randomCircular[wheelNumber] + " " + grad[wheelNumber][randomFront[wheelNumber]]);
 		if (rotationNr[wheelNumber]==randomCircular[wheelNumber])
 		{
-			wheelState[wheelNumber] = 's';
+			wheelState[wheelNumber] = false;
 			$SlotMachine.stopRotation(wheelNumber);
 		}
 		else{
-			wheelState[wheelNumber] = 't';
-			if (wheelStateAlt[wheelNumber]!=wheelState[wheelNumber]){
-				//rotate Sound
-			}
+			wheelState[wheelNumber] = true;
 			//console.log(circle[wheelNumber][randomFront[wheelNumber]]+ " "+rotationNr[wheelNumber] + " " +randomCircular[wheelNumber]);
 			for (var c=0; c <= 8; c++) {
 					
@@ -108,7 +106,6 @@ function SlotMachine($gl) {
     };
 
 	this.stopRotation = function(wheelNumber){
-		//soundsSlot.playStop()
 		countReady++;
 		rotationNr[wheelNumber]=0;
 		randomCircular[wheelNumber]=0;
@@ -135,9 +132,12 @@ function SlotMachine($gl) {
 				}
 			   //buhlscher randomGen
 			}
-		if (countReady==3 && wheelState[1]!= wheelStateAlt[1] || wheelState[0]!= wheelStateAlt[0] || wheelState[2]!= wheelStateAlt[2] )
+		if (countReady==3&&countReadyFirst==true){
 			$SlotMachine.checkState();
-			wheelState[1]= wheelStateAlt[1]; wheelState[0]= wheelStateAlt[0]; wheelState[2]= wheelStateAlt[2];
+			//soundsSlot.stopSpinning();
+			}
+		
+			wheelState[wheelNumber]= wheelStateAlt[wheelNumber];
 	};
 	
 	this.start = function(){
@@ -150,7 +150,6 @@ function SlotMachine($gl) {
 			&&randomCircular[1]==0
 			&&randomCircular[2]==0
 			){
-				$SlotMachine.randomize();
 			}
 		};
 	
@@ -162,11 +161,13 @@ function SlotMachine($gl) {
 				winner=true;
 				console.log("Winner " + randomFront[2]);
 				soundsSlot.playWin();
-				//TODO: Musik + Overlay gewonnen
+				//TODO: Overlay gewonnen
 			} 
 		} else {
-			//soundsSlot.playLose();
+			soundsSlot.playLose();
+			console.log("Looser")
 		}
+		countReadyFirst=false;
 		
     };
 
@@ -175,7 +176,10 @@ function SlotMachine($gl) {
 				var temp=randomCircular[i];
 				randomFront[i] = Math.round(Math.random()*8);
 				randomCircular[i] = Math.round(Math.random()*1)+1;
+				wheelState[i]=true;
+				wheelStateAlt[i]=true;
 				console.log("Wheel " + (i+1) + ": Front:"+ randomFront[i] + " Umdrehungen: " + (randomCircular[i]-temp));
+				countReadyFirst=true;
 		}
 		
     };
@@ -184,6 +188,9 @@ function SlotMachine($gl) {
 		var preCircular = randomCircular[wheelNumber];
 		randomFront[wheelNumber] = Math.round(Math.random()*8);
 		randomCircular[wheelNumber] = Math.round(Math.random()*1)+1;
+		wheelState[wheelNumber]=true;
+		wheelStateAlt[wheelNumber]=true;
+		countReadyFirst=true;
 		console.log("Wheel " + (wheelNumber+1) + ": Front:"+ randomFront[wheelNumber] + " Umdrehungen: " + (randomCircular[wheelNumber]-preCircular));
     };
 
