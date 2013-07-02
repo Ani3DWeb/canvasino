@@ -151,7 +151,7 @@ function SlotMachine($gl) {
 		for (var i = 0; i<3;i++){
 				var temp=randomCircular[i];
 				randomFront[i] = Math.round(Math.random()*8);
-				randomCircular[i] += Math.round(Math.random()*1)+1;
+				randomCircular[i] = Math.round(Math.random()*1)+1;
 				console.log("Wheel " + (i+1) + ": Front:"+ randomFront[i] + " Umdrehungen: " + (randomCircular[i]-temp));
 		}
 		
@@ -160,7 +160,7 @@ function SlotMachine($gl) {
 	this.randomizeSingle = function(wheelNumber) {
 		var preCircular = randomCircular[wheelNumber];
 		randomFront[wheelNumber] = Math.round(Math.random()*8);
-		randomCircular[wheelNumber] += Math.round(Math.random()*1)+1;
+		randomCircular[wheelNumber] = Math.round(Math.random()*1)+1;
 		console.log("Wheel " + (wheelNumber+1) + ": Front:"+ randomFront[wheelNumber] + " Umdrehungen: " + (randomCircular[wheelNumber]-preCircular));
     };
 
