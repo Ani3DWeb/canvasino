@@ -22,7 +22,8 @@ var FreeDirection = 0;
 var FreeRotationAngle = 0;
 
 function RubikGame($gl, $shaderProgram) {
-    console.log("Starte SlotMachineGame...");
+    console.log("Starte RubikGame...");
+    soundsRubik.playTheme();
     initTextures(getCubeTextureNames());
     this.initialized = 0;
     this.rubik = new RubikCube($gl, $shaderProgram);
@@ -124,6 +125,7 @@ function RubikGame($gl, $shaderProgram) {
                     break;
                 case 65: //A-Key
                     //switch to Rotation-Mode
+                    soundsRubik.playSelect();
                     this.controlMode = 1;
                     break;
                 case 66:
@@ -138,15 +140,19 @@ function RubikGame($gl, $shaderProgram) {
         else if (this.controlMode === 1) {
             switch (key) {
                 case 37: //Left-Key
+                	soundsRubik.playTurn();
                     this.rotateLeftRight(-1);
                     break;
                 case 38: //Up-Key
+                	soundsRubik.playTurn();
                     this.rotateUpDown(-1);
                     break;
                 case 39: //Right-Key
+                	soundsRubik.playTurn();
                     this.rotateLeftRight(1);
                     break;
                 case 40: //Down-Key
+                	soundsRubik.playTurn();
                     this.rotateUpDown(1);
                     break;
                 case 65: //A-Key

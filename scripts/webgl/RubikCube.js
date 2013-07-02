@@ -133,7 +133,10 @@ function RubikCube($gl, $shaderProgram) {
 		  if(counter == 9) { num_solved_faces++;}
 		}
 		console.log("Solved faces: "+num_solved_faces);
-		if(num_solved_faces==6) { console.log("*** gewonnen ***"); }
+		if(num_solved_faces==6) { 
+			soundsRubik.playWin();
+			console.log("*** gewonnen ***"); 
+		}
     };
 
     this.randomize = function() {
