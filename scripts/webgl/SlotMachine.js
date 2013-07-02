@@ -54,7 +54,7 @@ function SlotMachine($gl) {
     this.rotateWheel = function(wheelNumber,delta) {
 		
 		//console.log(randomCircular[wheelNumber] + " " + grad[wheelNumber][randomFront[wheelNumber]]);
-		if (grad[wheelNumber][randomFront[wheelNumber]]>=randomCircular[wheelNumber]*360)
+		if (grad[wheelNumber][randomFront[wheelNumber]]>=randomCircular[wheelNumber]*359)
 		{
 			$SlotMachine.stopRotation(wheelNumber);
 		}
