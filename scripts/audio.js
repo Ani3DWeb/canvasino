@@ -1,9 +1,10 @@
 $(document).ready( function() {
-
+	var allSounds;
+	var volume = 0.5;
 	var config = {}
 	config.audio = {directory: 'audio/', cubeDirectory: 'audio/Cube/', wheelDirectory: 'audio/Wheel/'}
 
-	var audio = {
+	audio = {
 	
 		loadFile: function(file) {
 			// Audioelement erstellen
@@ -22,9 +23,10 @@ $(document).ready( function() {
 			return audioElement;
 			
 		},
-		playFile: function(audioElement) {
+		playFile: function(audioElement, loop) {
+			audioElement.load();
 			audioElement.addEventListener('canplay', function() {
-				audioElement.loop = true;
+				audioElement.loop = loop;
 				audioElement.play();			
 			});
 		},
@@ -32,6 +34,21 @@ $(document).ready( function() {
 			var random = Math.floor(Math.random() * audiofiles.length);
 			return audiofiles[random];
 		},
+		off: function() {
+			$.each( allSounds, function( key, file ) {
+				file.volume = 0;
+			});
+		},
+		on: function() {
+			$.each( allSounds, function( key, file ) {
+				file.volume = volume;
+			});
+		},
+		stop: function() {
+			$.each( allSounds, function( key, file ) {
+				file.volume = 0;
+			});
+		}
 	}
 	soundsRubik = {
 		loadFiles: function() {
@@ -45,30 +62,31 @@ $(document).ready( function() {
 				audio.loadFile(config.audio.cubeDirectory + 'CubeTurn4')
 				];
 			cubeWin = audio.loadFile(config.audio.cubeDirectory + 'CubeWin');
+			allSounds = [
+				cubeTheme, cubeSelect, cubeSwitch, 
+				cubeTurn[0], cubeTurn[1], cubeTurn[2], cubeTurn[3], cubeWin
+			];
 		},
 		
 		playTheme: function() {
-			cubeTheme.load();
-			cubeTheme.play();
+			audio.playFile(cubeTheme, true);
 		},
-		stopTheme: function() {
+		/*stopTheme: function() {
 			cubeTheme.load();	
-		},
+		},*/
 		playSelect: function() {
-			cubeSelect.load();
-			cubeSelect.play();
+			audio.playFile(cubeSelect, false);
 		},
 		playSwitch: function() {
-			cubeSwitch.load();
-			cubeSwitch.play();	
+			audio.playFile(cubeSwitch, false);	
 		},
 		playTurn: function() {
+		
 			file=audio.getRandom(cubeTurn);
-			file.load();
-			file.play();
+			audio.playFile(file, false);
 		},
 		playWin: function() {
-			cubeWin.play();
+			audio.playFile(cubeWin, false);	
 		}
 		
 	}
@@ -90,85 +108,80 @@ $(document).ready( function() {
 				audio.loadFile(config.audio.wheelDirectory + 'WheelStop3'),
 				];	
 			wheelWin = audio.loadFile(config.audio.wheelDirectory + 'WheelWin');
+			allSounds = [
+				wheelTheme, wheelArm, wheelCoin[0], 
+				wheelCoin[1], wheelCoin[2], wheelCoin[3], 
+				wheelLose, wheelSpinning, wheelStop[0], wheelStop[1], 
+				wheelStop[2], wheelWin
+				];
 		},
 		playTheme: function() {
-			wheelTheme.load();
-			wheelTheme.play();
+			audio.playFile(wheelTheme, true);	
 		},
-		stopTheme: function(){
+		/*stopTheme: function(){
 			wheelTheme.load();
-		},
+		},*/
 		playArm: function() {
-			wheelArm.load();
-			wheelArm.play();
+			audio.playFile(wheelArm, false);	
 		},
 		playCoin: function() {
 			file=audio.getRandom(WheelCoin);
-			file.load();
-			file.play();
+			audio.playFile(file, false);	
 		},
 		playLose: function() {
-			wheelLose.load();
-			wheelLose.play();
+			audio.playFile(wheelLose, false);	
 		},
 		playSpinning: function() {
-			wheelSpinning.load();
-			wheelSpinning.play();
+			audio.playFile(wheelSpinning, false);	
+		},
+		stopSpinning: function() {
+			file=audio.getRandom(wheelCoin);
+			audio.playFile(file, false);	
 		},
 		playStop: function() {
-			file=audio.getRandom(WheelStop);
-			file.load();
-			file.play();
+			file=audio.getRandom(wheelStop);
+			audio.playFile(file, false);	
 		},
 		playWin: function() {
-			wheelWin.load();
-			wheelWin.play();
+			audio.playFile(wheelWin, false);	
 		}
 	}
 	
 	var controls = {
 	
 		init: function( ) {
-			$('.controls').hide();
-			$('.start').show();
-						
-			// start 
-			$('.start').click(function() {
 			
-				var audioElement = audio.loadFile(config.audio.directory + 'audio1');
-				audio.playFile(audioElement);
-				$('.pause, .volume, .volume-value').show();
-				$('.start').hide();
-				
+			$('.start').show();
 				// pause
 				$('.pause').click(function() {
-					$(this).hide();		
-					$('.play').show();
-					audioElement.pause();
+					if($(this).hasClass('mute'))
+					{
+						audio.on();
+						$(this).removeClass('mute');
+					} else {
+						$(this).addClass('mute');
+						audio.off();
+					}					
 					return false;
 				});
 			
-				// play
-				$('.play').click(function() {
-					$(this).hide();		
-					$('.pause').show();		
-					audioElement.play();
-					return false;
-				});
-				
 				// volume
 				$( ".volume" ).slider({
 					range: "min",
-					value:  50,
+					value:  volume*100,
 					min: 0,
 					max: 100,
 					slide: function(event, ui) {
-						audioElement.volume = ui.value/100;
+						$.each( allSounds, function( key, file ) {
+							volume = ui.value/100;
+							console.log(volume);
+							file.volume = volume;
+						});
 						$( ".volume-value" ).text( ui.value );
 					}
 			    });
 			    $( ".volume-value" ).text( $( ".volume" ).slider( "value" ) );
-			});
+			//});
 		} 
 	}
 	

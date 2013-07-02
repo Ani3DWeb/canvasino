@@ -147,9 +147,9 @@ $(document).ready( function() {
 		},
 		hideIt: function() {
 			if(gamenumber == 1) {
-				soundsSlot.stopTheme();	
+				//soundsSlot.stopTheme();	
 			} else {
-				soundsRubik.stopTheme();
+				//soundsRubik.stopTheme();
 			}
 			$('.back').fadeOut(200);
 			this.animation('rewind');
@@ -176,7 +176,8 @@ $(document).ready( function() {
 			});
 
 			$('.back').click(function() {
-				gameCanvas.hideIt();	
+				gameCanvas.hideIt();
+				audio.stop();	
 			});
 			
 			$('#win_image').hide();
