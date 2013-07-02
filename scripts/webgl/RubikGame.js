@@ -8,7 +8,7 @@
 var perspectiveMatrix;
 var angle = 0;
 var mvMatrix = Matrix.I(4);
-var tmp = 0;
+//var tmp = 0;
 var rotationAngle = 5;
 var XRotation = 30, YRotation = 30;
 var initState = true;
@@ -16,9 +16,14 @@ var axis, layer, direction;
 var rotate = false;
 var rotatePers = false;
 var rot = 0.7;
+var rotateFree = false;
+var FreeAxis = [0.0,0.0,0.0];
+var FreeDirection = 0;
+var FreeRotationAngle = 0;
 
 function RubikGame($gl, $shaderProgram) {
-    console.log("Starte SlotMachineGame...");
+    console.log("Starte RubikGame...");
+    soundsRubik.playTheme();
     initTextures(getCubeTextureNames());
     this.initialized = 0;
     this.rubik = new RubikCube($gl, $shaderProgram);
@@ -28,9 +33,10 @@ function RubikGame($gl, $shaderProgram) {
     this.selectedZ = 2;
     this.selectedFace = 'F';
     this.controlMode = 0; //0: Selection, 1: Rotate, 2: Free Rotation View
-    canvas.onmousedown = handleMouseDown;
+	
+ /*   canvas.onmousedown = handleMouseDown;
     document.onmouseup = handleMouseUp;
-    document.onmousemove = handleMouseMove;
+    document.onmousemove = handleMouseMove;*/
 
     this.drawScene = function() {
         //Canvas leeren
@@ -49,25 +55,31 @@ function RubikGame($gl, $shaderProgram) {
             ModelViewMatrixRotate(-30, [0.0, 1.0, 0.0]);
         }
 
-
-
-        if (rotatePers === true) {
+  /*      if (rotatePers === true) {
             ModelViewMatrixRotate(rot, [1.0, 1.0, 0.0]);
-        }
+        }*/
 
         var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
-        //Zeichne Rubik
-        /*	if(tmp == 0)
-         {*/
-
+		
+		if(rotateFree==true) {
+			if(FreeRotationAngle < 90) {
+			   FreeRotationAngle += rotationAngle;
+			   // FreeAxis: [1.0,0.0,0.0] or [0.0,1.0,0.0]
+			   ModelViewMatrixRotate(rotationAngle * FreeDirection, FreeAxis);
+			} else {
+				FreeRotationAngle = 0;
+				rotateFree = false;
+			}
+		
+		}
 
         if (rotate === true) {
             if (angle < 90) {
                 angle += rotationAngle;
                 self.rubik.rotateLayer(axis, layer, direction);
             } else {
-                tmp = 1;
+            //    tmp = 1;
                 angle = 0;
                 rotate = false;
             }
@@ -113,11 +125,13 @@ function RubikGame($gl, $shaderProgram) {
                     break;
                 case 65: //A-Key
                     //switch to Rotation-Mode
+                    soundsRubik.playSelect();
                     this.controlMode = 1;
                     break;
                 case 66:
                 case 89: //B-Key (or Y)
                     //switch to Free Rotation
+					this.controlMode = 2;
                     break;
 
             }
@@ -126,15 +140,19 @@ function RubikGame($gl, $shaderProgram) {
         else if (this.controlMode === 1) {
             switch (key) {
                 case 37: //Left-Key
+                	soundsRubik.playTurn();
                     this.rotateLeftRight(-1);
                     break;
                 case 38: //Up-Key
+                	soundsRubik.playTurn();
                     this.rotateUpDown(-1);
                     break;
                 case 39: //Right-Key
+                	soundsRubik.playTurn();
                     this.rotateLeftRight(1);
                     break;
                 case 40: //Down-Key
+                	soundsRubik.playTurn();
                     this.rotateUpDown(1);
                     break;
                 case 65: //A-Key
@@ -152,15 +170,27 @@ function RubikGame($gl, $shaderProgram) {
             switch (key) {
                 case 37: //Left-Key
                     //free Rotation
+					FreeAxis = [0.0,1.0,0.0];
+					FreeDirection = 1;
+					rotateFree = true;
                     break;
                 case 38: //Up-Key
                     //Free Rotation
+					FreeAxis = [1.0,0.0,0.0];
+					FreeDirection = 1;
+					rotateFree = true;
                     break;
                 case 39: //Right-Key
                     //Free Rotation
+					FreeAxis = [0.0,1.0,0.0];
+					FreeDirection = -1;
+					rotateFree = true;
                     break;
                 case 40: //Down-Key
                     //Free Rotation
+					FreeAxis = [1.0,0.0,0.0];
+					FreeDirection = -1;
+					rotateFree = true;
                     break;
                 case 65: //A-Key
                 case 66:
@@ -168,7 +198,6 @@ function RubikGame($gl, $shaderProgram) {
                     //switch Back To Selection-Mode
                     this.controlMode = 0;
                     break;
-
             }
         }
 
@@ -405,14 +434,6 @@ function getCubeTextureNames() {
             "images/webgl/rubik/rot_pfeil.png",
             "images/webgl/rubik/gelb_pfeil.png",
             "images/webgl/rubik/pink_pfeil.png");
-    /*return  new Array("images/webgl/rubik/weiss.png",
-     "images/webgl/rubik/gruen.png",
-     "images/webgl/rubik/orange.png",
-     "images/webgl/rubik/blau.png",
-     "images/webgl/rubik/rot.png",
-     "images/webgl/rubik/gelb.png",
-     "images/webgl/rubik/schwarz.png",
-     "images/webgl/rubik/weiss_logo.png");*/
 }
 
 function ModelViewMatrixRotate(angle, v) {
@@ -423,7 +444,7 @@ function ModelViewMatrixRotate(angle, v) {
 function PerspectivTranslate(v) {
     perspectiveMatrix = perspectiveMatrix.x(Matrix.Translation($V([v[0], v[1], v[2]])).ensure4x4());
 }
-
+/*
 var mouseDown = false;
 var lastMouseX = null;
 var lastMouseY = null;
@@ -458,7 +479,7 @@ function handleMouseMove(event) {
     if (YRotation < 0) {
         YRotation = 360;
     }
-}
+}*/
 
 
 
