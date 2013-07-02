@@ -1,6 +1,6 @@
 var gamenumber;
 var counter = 0;
-gameoptions = {
+var gameoptions = {
 		
 	won: function() {
 		$('#win_image').show();
@@ -43,7 +43,7 @@ $(document).ready( function() {
 				$('#second').html(timer.second);
 			}
 			
-			// bei der 60. Sekunde Minute hochzählen und Sekunde zurücksetzen
+			// bei der 60. Sekunde Minute hochzï¿½hlen und Sekunde zurï¿½cksetzen
 			if ((timer.second % 60) == 0)
 			{
 				timer.second = 0;

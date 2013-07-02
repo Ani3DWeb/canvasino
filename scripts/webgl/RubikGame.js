@@ -28,13 +28,14 @@ function RubikGame($gl, $shaderProgram) {
     soundsRubik.playTheme();
     initTextures(getCubeTextureNames());
     this.initialized = 0;
+    this.randomDifficulty=5;
     this.rubik = new RubikCube($gl, $shaderProgram);
     
     this.selectedX = 1;
     this.selectedY = 1;
     this.selectedZ = 2;
     this.selectedFace = 'F';
-    this.controlMode = 0; //0: Selection, 1: Rotate, 2: Free Rotation View
+    this.controlMode = -1; //-1: Startup, til Cube randomized, 0: Selection, 1: Rotate, 2: Free Rotation View
 
     this.drawScene = function() {
         //Canvas leeren
@@ -47,7 +48,7 @@ function RubikGame($gl, $shaderProgram) {
 
         PerspectivTranslate([0.0, 0.0, -8.0]);
 
-        if (initState == true) {
+        if (initState) {
             initState = false;
             ModelViewMatrixRotate(30, [1.0, 0.0, 0.0]);
             ModelViewMatrixRotate(-30, [0.0, 1.0, 0.0]);
@@ -57,7 +58,7 @@ function RubikGame($gl, $shaderProgram) {
         gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
         //Zeichne Rubik
 
-        if (rotate === true) {
+        if (rotate) {
             if (angle < 90) {
                 angle += rotationAngle;
                 self.rubik.rotateLayer(axis, layer, direction);
@@ -68,7 +69,7 @@ function RubikGame($gl, $shaderProgram) {
             }
         }
 		
-		if (rotateFree === true) {
+		if (rotateFree) {
 			if(FreeRotationAngle < 90) {
 				FreeRotationAngle += rotationAngle;
 				// FreeAxis: [1.0,0.0,0.0] or [0.0,1.0,0.0]
@@ -79,12 +80,13 @@ function RubikGame($gl, $shaderProgram) {
 			}
 		}
 		
-        if (self.initialized < 5 && !rotate) {
-            console.log("dreh dich");
+        if (self.initialized <  self.randomDifficulty && !rotate) {
             self.randomize();
             self.initialized++;
         }
-
+        else if(self.initialized ===  self.randomDifficulty && self.controlMode=== -1){
+            self.controlMode = 0;
+        }
         if (self.controlMode === 0) {
             self.rubik.selectCube(self.selectedX, self.selectedY, self.selectedZ);
         }
@@ -292,11 +294,21 @@ function RubikGame($gl, $shaderProgram) {
         }
         this.controlMode = 0;
     };
-
+    //rotates random Layer in random direction
     this.randomize = function() {
         var tempAxis = ['x', 'y', 'z'];
-        axis = tempAxis[Math.floor(Math.random() * 3)];
-        layer = Math.floor(Math.random() * 3);
+        var tAxis = axis;
+        var tLayer = layer;
+         //nie 2mal gleiche achse/layer:
+        do{
+             axis=tempAxis[Math.floor(Math.random() * 3)];
+        }
+        while(tAxis===axis);
+        do{
+             layer = Math.floor(Math.random() * 3);
+        }
+        while(tLayer===layer); 
+        
         if (Math.random() < 0.5) {
             direction = 1;
         }
