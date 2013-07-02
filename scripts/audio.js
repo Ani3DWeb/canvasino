@@ -36,10 +36,8 @@ $(document).ready( function() {
 	soundsRubik = {
 		loadFiles: function() {
 			cubeTheme = audio.loadFile(config.audio.cubeDirectory + 'CubeTheme');
-			cubeSelect = [
-				audio.loadFile(config.audio.cubeDirectory + 'CubeSelect1'), 
-				audio.loadFile(config.audio.cubeDirectory + 'CubeSelect2')
-				];
+			cubeSelect = audio.loadFile(config.audio.cubeDirectory + 'CubeSelect1'), 			
+			cubeSwitch = audio.loadFile(config.audio.cubeDirectory + 'CubeSelect2');
 			cubeTurn = [
 				audio.loadFile(config.audio.cubeDirectory + 'CubeTurn1'),
 				audio.loadFile(config.audio.cubeDirectory + 'CubeTurn2'),
@@ -57,9 +55,12 @@ $(document).ready( function() {
 			cubeTheme.load();	
 		},
 		playSelect: function() {
-			file=audio.getRandom(cubeSelect);
-			file.load();
-			file.play();
+			cubeSelect.load();
+			cubeSelect.play();
+		},
+		playSwitch: function() {
+			cubeSwitch.load();
+			cubeSwitch.play();	
 		},
 		playTurn: function() {
 			file=audio.getRandom(cubeTurn);
@@ -92,8 +93,7 @@ $(document).ready( function() {
 		},
 		playTheme: function() {
 			wheelTheme.load();
-			wheelTheme.loop();
-			wheelTheme.play()
+			wheelTheme.play();
 		},
 		stopTheme: function(){
 			wheelTheme.load();

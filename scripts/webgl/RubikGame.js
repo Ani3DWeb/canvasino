@@ -133,18 +133,22 @@ function RubikGame($gl, $shaderProgram) {
             switch (key) {
                 case 37: //Left-Key
                 	soundsRubik.playTurn();
+                	gameoptions.countRotations('rotate');
                     this.rotateLeftRight(-1);
                     break;
                 case 38: //Up-Key
                 	soundsRubik.playTurn();
+                	gameoptions.countRotations('rotate');
                     this.rotateUpDown(-1);
                     break;
                 case 39: //Right-Key
                 	soundsRubik.playTurn();
+                	gameoptions.countRotations('rotate');
                     this.rotateLeftRight(1);
                     break;
                 case 40: //Down-Key
                 	soundsRubik.playTurn();
+                	gameoptions.countRotations('rotate');
                     this.rotateUpDown(1);
                     break;
                 case 65: //A-Key

@@ -1,5 +1,80 @@
 var gamenumber;
+var counter = 0;
+gameoptions = {
+		
+	won: function() {
+		$('#win_image').show();
+		$('#win_image img').css("animation","flow 2s").css("-webkit-animation","flow 2s").css("-moz-animation","flow 2s");
+		this.countRotations("win");
+	},
+	
+	countRotations: function(status) {		
+		if (status == "rotate")
+		{	
+			counter++;
+		}
+		else if (status == "win")
+		{
+			counter = 0;	
+		}
+		$('#count_rotations').html(counter);
+	},
+	test: function() {
+		console.log('geht');
+	}
+}
+	
 $(document).ready( function() {
+	var time;
+	var timer = {
+	
+		second:1,
+		minute: 0,
+		hour: 0,
+		start: function() {
+			$('#timer').show();
+			//bei einer Ziffer 0 davor anzeigen
+			if (timer.second < 10)
+			{
+				$('#second').html('0' + timer.second);
+			}
+			else
+			{
+				$('#second').html(timer.second);
+			}
+			
+			// bei der 60. Sekunde Minute hochzählen und Sekunde zurücksetzen
+			if ((timer.second % 60) == 0)
+			{
+				timer.second = 0;
+				timer.minute++;
+		
+			if (timer.second < 10)
+				{
+					$('#second').html('0' + timer.second);
+				}
+			else
+				{
+					$('#second').html(timer.second);
+				}
+		
+			if (timer.minute < 10)
+				{
+					$('#minute').html('0' + timer.minute);
+				}
+			else
+				{
+					$('#minute').html(timer.minute);
+				}
+			}
+			if (timer.minute == 59)
+			{
+				timer.minute = 0;
+			}
+			timer.second = timer.second + 1;
+		}
+	}
+	
 	var gameCanvas = {	
 		animation: function(direction) {
 			var rows = 11; /* Zeilen innheralb von gameboy.png */
@@ -38,6 +113,7 @@ $(document).ready( function() {
 					if( y++ == rows-1 ) {	
 						clearTimeout(timeout);
 						$('.canvasino').show();
+						time = setInterval(timer.start, 1000);
 						main();
 					}
 				}
@@ -54,7 +130,6 @@ $(document).ready( function() {
 					}
 				}
 				if(xRev==2&yRev==0) {location.reload();}
-			//	alert(xRev+" "+ yRev);
 			}	
 			if(direction === 'forward') { 
 				forward();
@@ -67,9 +142,15 @@ $(document).ready( function() {
 			$('.screen .gameboy').css({'z-index': 100});
 			this.animation('forward');
 			$('.back').show();
+			
                         
 		},
 		hideIt: function() {
+			if(gamenumber == 1) {
+				soundsSlot.stopTheme();	
+			} else {
+				soundsRubik.stopTheme();
+			}
 			$('.back').fadeOut(200);
 			this.animation('rewind');
 		}
@@ -99,46 +180,11 @@ $(document).ready( function() {
 			});
 			
 			$('#win_image').hide();
-			
-			
-			/*$('#message_win').click(function() {
-				$('#win_image img').show();
-				$('#win_image img').css("animation","flow 2s").css("-webkit-animation","flow 2s").css("-moz-animation","flow 2s");
-			
-				
-			});
-			
-			$('#win_image img').click(function() {
-				$(this).hide();
-					
-				
-			}); */
-
-
-			
 
 		} 
 	}
 	//game.hideIt();
-	controls.init();
+	controls.init();	
 });
 
-function showWinMessage()
-{
-	$('#win_image').show();
-	$('#win_image img').css("animation","flow 2s").css("-webkit-animation","flow 2s").css("-moz-animation","flow 2s");
-}
 
-var counter = 0;
-
-function countRotations(status)
-{
-if (status == "rotate")
-{
-	counter++;
-}
-else
-{
-	counter = 0;
-}
-}
