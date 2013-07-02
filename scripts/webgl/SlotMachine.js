@@ -61,7 +61,7 @@ function SlotMachine($gl) {
     //rotateLayer(x,1,90);
     //rotateLayer(z,3,-90);
     this.rotateWheel = function(wheelNumber,delta) {
-		
+		//soundsSlot.playSpinning();
 		//console.log(randomCircular[wheelNumber] + " " + grad[wheelNumber][randomFront[wheelNumber]]);
 		if (rotationNr[wheelNumber]==randomCircular[wheelNumber])
 		{
@@ -108,6 +108,7 @@ function SlotMachine($gl) {
     };
 
 	this.stopRotation = function(wheelNumber){
+		//soundsSlot.playStop()
 		countReady++;
 		rotationNr[wheelNumber]=0;
 		randomCircular[wheelNumber]=0;
@@ -134,8 +135,9 @@ function SlotMachine($gl) {
 				}
 			   //buhlscher randomGen
 			}
-		if (countReady==3)
+		if (countReady==3 && wheelState[1]!= wheelStateAlt[1] || wheelState[0]!= wheelStateAlt[0] || wheelState[2]!= wheelStateAlt[2] )
 			$SlotMachine.checkState();
+			wheelState[1]= wheelStateAlt[1]; wheelState[0]= wheelStateAlt[0]; wheelState[2]= wheelStateAlt[2];
 	};
 	
 	this.start = function(){
@@ -159,8 +161,11 @@ function SlotMachine($gl) {
 			if (winner==false){
 				winner=true;
 				console.log("Winner " + randomFront[2]);
+				soundsSlot.playWin();
 				//TODO: Musik + Overlay gewonnen
-			}
+			} 
+		} else {
+			//soundsSlot.playLose();
 		}
 		
     };

@@ -17,6 +17,7 @@ var mvMatrix = Matrix.I(4);
 var $SlotMachine;
 
 function SlotGame($gl, $shaderProgram) {
+	soundsSlot.playTheme();
     console.log("Starte SlotMachineGame...");
     this.perspectiveMatrix = makePerspective(45, 640.0 / 480.0, 0.1, 100.0);
     //this.rubik = new SlotGame($gl, $shaderProgram);
@@ -76,6 +77,8 @@ function SlotGame($gl, $shaderProgram) {
                     $SlotMachine.randomizeSingle(1);
                 break;
             case 65: //A-Key
+            	//soundsSlot.playCoin();
+            	soundsSlot.playArm();
                 if (rotationNr[0]==randomCircular[0]
                         && rotationNr[1]==randomCircular[1]
                         && rotationNr[2]==randomCircular[2])
