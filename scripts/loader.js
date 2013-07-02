@@ -84,12 +84,14 @@ $(document).ready( function() {
 				gamenumber = $(this).attr('data-gamenumber');
 				gameCanvas.showIt();
 				$('#timer, #rotations').hide();
+				soundsSlot.loadFiles();
 			});
 			
 			$('#game02').click(function() {		
 			$(this).addClass('onFocus');
 				gamenumber = $(this).attr('data-gamenumber');
 				gameCanvas.showIt();
+				soundsRubik.loadFiles();
 			});
 
 			$('.back').click(function() {
