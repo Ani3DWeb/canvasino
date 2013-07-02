@@ -79,17 +79,64 @@ $(document).ready( function() {
 				
 		init: function() {
 			$('.canvasino, .back').hide();
-			$('#game01, #game02').click(function() {		
+			$('#game01').click(function() {		
+			$(this).addClass('onFocus');
+				gamenumber = $(this).attr('data-gamenumber');
+				gameCanvas.showIt();
+				$('#timer, #rotations').hide();
+			});
+			
+			$('#game02').click(function() {		
 			$(this).addClass('onFocus');
 				gamenumber = $(this).attr('data-gamenumber');
 				gameCanvas.showIt();
 			});
+
 			$('.back').click(function() {
 				gameCanvas.hideIt();	
 			});
+			
+			$('#win_image').hide();
+			
+			
+			/*$('#message_win').click(function() {
+				$('#win_image img').show();
+				$('#win_image img').css("animation","flow 2s").css("-webkit-animation","flow 2s").css("-moz-animation","flow 2s");
+			
+				
+			});
+			
+			$('#win_image img').click(function() {
+				$(this).hide();
+					
+				
+			}); */
+
+
+			
 
 		} 
 	}
 	//game.hideIt();
 	controls.init();
 });
+
+function showWinMessage()
+{
+	$('#win_image').show();
+	$('#win_image img').css("animation","flow 2s").css("-webkit-animation","flow 2s").css("-moz-animation","flow 2s");
+}
+
+var counter = 0;
+
+function countRotations(status)
+{
+if (status == "rotate")
+{
+	counter++;
+}
+else
+{
+	counter = 0;
+}
+}
