@@ -68,18 +68,24 @@ function SlotGame($gl, $shaderProgram) {
 
         switch (key) {
             case 37: //Left-Key
-                if (rotationNr[0]==randomCircular[0])
+                if (rotationNr[0]==randomCircular[0]){
+					soundsSlot.playSpinning();
                     $SlotMachine.randomizeSingle(0);
+					}
                 break;
             case 38: //Up-Key
                 break;
             case 39: //Right-Key
-                if (rotationNr[2]==randomCircular[2])
+                if (rotationNr[2]==randomCircular[2]){
                     $SlotMachine.randomizeSingle(2);
+					soundsSlot.playSpinning();
+					}
                 break;
             case 40: //Down-Key
-                if (rotationNr[1]==randomCircular[1])
-                    $SlotMachine.randomizeSingle(1);
+                if (rotationNr[1]==randomCircular[1]){
+                    soundsSlot.playSpinning();
+					$SlotMachine.randomizeSingle(1);
+					}
                 break;
             case 65: //A-Key
             	//soundsSlot.playCoin();
