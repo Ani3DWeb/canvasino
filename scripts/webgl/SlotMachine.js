@@ -133,8 +133,8 @@ function SlotMachine($gl) {
 			   //buhlscher randomGen
 			}
 		if (countReady==3&&countReadyFirst==true){
+			soundsSlot.stopSpinning();
 			$SlotMachine.checkState();
-			//soundsSlot.stopSpinning();
 			}
 		
 			wheelState[wheelNumber]= wheelStateAlt[wheelNumber];
