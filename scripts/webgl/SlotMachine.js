@@ -9,6 +9,7 @@ var lastCubeUpdateTime = 0;
 var randomFront;
 var randomCircular;
 var countReady=0;
+var rotationNr=0;
 
 function SlotMachine($gl) {
     //TODO:
@@ -21,6 +22,7 @@ function SlotMachine($gl) {
 	circle = new Array (3);
 	randomFront = new Array (3);
 	randomCircular = new Array (3);
+	rotationNr = new Array (3);
 	
 	
     for (var w=0; w <= 3; w++) {
@@ -33,6 +35,7 @@ function SlotMachine($gl) {
 		circle[w] = new Array (8);
 		randomFront[w] = 0;
 		randomCircular[w] = 0;
+		rotationNr[w] = 0;
 		
         for (var c=0; c <= 8; c++) {
             wheel[w][c] = new Cube(gl, shaderProgram, 0.25);
@@ -54,7 +57,7 @@ function SlotMachine($gl) {
     this.rotateWheel = function(wheelNumber,delta) {
 		
 		//console.log(randomCircular[wheelNumber] + " " + grad[wheelNumber][randomFront[wheelNumber]]);
-		if (grad[wheelNumber][randomFront[wheelNumber]]>=randomCircular[wheelNumber]*359)
+		if (rotationNr[wheelNumber]==randomCircular[wheelNumber])
 		{
 			$SlotMachine.stopRotation(wheelNumber);
 		}
@@ -67,6 +70,11 @@ function SlotMachine($gl) {
 					cubeRotation[wheelNumber][c] = grad[wheelNumber][c];
 					cubeYOffset[wheelNumber][c] = yIncValue* Math.sin(circle[wheelNumber][c]);
 					cubeZOffset[wheelNumber][c] = zIncValue* Math.cos(circle[wheelNumber][c]);
+					
+					if (circle[wheelNumber][c]>2*Math.PI){
+							circle[wheelNumber][c] -=2*Math.PI;
+							rotationNr[wheelNumber]++;
+						}
 					
 					wheel[wheelNumber][c].save();
 					
@@ -88,6 +96,8 @@ function SlotMachine($gl) {
 
 	this.stopRotation = function(wheelNumber){
 		countReady++;
+		rotationNr[wheelNumber]=0;
+		randomCircular[wheelNumber]=0;
 		if (lastCubeUpdateTime) {
 				var delta = 0;
 				for (var c=0; c <= 8; c++) {
