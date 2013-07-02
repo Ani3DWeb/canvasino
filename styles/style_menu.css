@@ -1,6 +1,6 @@
 ﻿body {
 	background-color: #005501;
-	background-image:url('../images/Roulett_Tisch_wide.png');
+	background-image:url('images/Roulett_Tisch_glow.png');
 	background-repeat:no-repeat;
 	background-size: 150% auto;
 	font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;	
@@ -22,11 +22,11 @@ background-color: transparent;
 }
 
 .back:hover {
-	background-image:url('../images/hover/hover_back.png');
+	background-image:url('images/hover/hover_back.png');
 	cursor: pointer;	
 	}
 .back:active {
-	background-image:url('../images/click/click_back.png');
+	background-image:url('images/click/click_back.png');
 	cursor: pointer;
 }
 
@@ -50,7 +50,7 @@ background-color: transparent;
 }
 
 #logo {
-	background-image:url('../images/logo.png');
+	background-image:url('images/logo.png');
 	width: 450px;
 	height: 91px;
 	position: absolute;
@@ -65,50 +65,75 @@ background-color: transparent;
 }
 
 .screen #game01 {
-	background-image:url('../images/game01.gif');
-	width: 195px;
-	height: 117px;	
-	top: 210px;
-	left: 485px;
+	background-image:url('images/Spielmodul1.png');
+	width: 345px;
+	height: 146px;	
+	top: 280px;
+	left: 360px;
 }
 
 .screen #game02 {
-	background-image:url('../images/game02.gif');
-	width: 212px;
-	height: 143px;
-	top: 345px;
-	left: 610px;
+	background-image:url('images/Spielmodul2.png');
+	width: 368px;
+	height: 171px;
+	top: 400px;
+	left: 580px;
 }
 
 div#game01:hover, div#game02:hover {
-	border: 1px white dotted;
+	border: 3px transparent dotted;
 }
 
 #footer {
 	height: auto;
 	background-color: white;
-	-webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
-	border-radius: 15px;
+	opacity: 0.5;
+	filter: alpha(opacity = 50);
 	position: relative;
+	border-top: 2px black solid;
+	-moz-box-shadow: 3px 3px 3px black;
+	-webkit-box-shadow: 3px 3px 3px black;
+	box-shadow: 3px 3px 3px black;
 }
 
 #player {
 	text-align: center;
 	padding-top: 5px; 
 	padding-bottom: 5px;
+	opacity: 1.0;
+	filter: alpha(opacity = 100);
+	position: relative;
+
 }
 
 
-.controls { display: inline-block; }
-	.button { 
-		border: 1px solid #333; 
+.controls { 
+display: inline-block;
+ }
+	.button {
+	border: 1px solid #333; 
 		background: #000; 
 		color: #fff;
 		padding: 5px;
+ 
 		cursor: pointer;
+		-moz-border-radius: 8px;
+		-webkit-border-radius: 8px;
+		-khtml-border-radius: 8px;
+		border-radius: 8px;
+		opacity: 1.0;
+		filter: alpha(opacity = 100);
+
+
 	}
-	.volume { width: 250px; }
+	.volume { 
+	width: 250px; 
+	/*padding-bottom: 15px; */
+	}
+	
+	.volume-value {
+	padding-left: 10px;
+	}	
 	.ui-slider-range-min {	
 		border: 4px solid #000;
 		-moz-border-radius-topleft: 4px;
@@ -128,3 +153,266 @@ div#game01:hover, div#game02:hover {
 		-khtml-border-bottom-right-radius: 4px;
 		border-bottom-right-radius: 4px;
 	}
+	
+/*.start {
+	height: 40px;
+	width: 40px;
+	background-image:url('images/play_klein.png');
+	opacity: 1.0;
+	filter: alpha(opacity = 100);
+}  
+.play {
+	height: 40px;
+	width: 40px;
+	background-image:url('images/play_klein.png');
+	opacity: 1.0;
+	filter: alpha(opacity = 100);
+
+
+}
+
+.pause {
+	height: 40px;
+	width: 40px;
+	background-image:url('images/pause_klein.png');
+	opacity: 1.0;
+	filter: alpha(opacity = 100);	
+}*/
+
+
+	
+#main .screen .gameboy {
+	height: 660px;
+	width: 960px;
+	position: relative;	
+	background:url('images/canvasino_x.png') 0px 0px;
+	top: 60px;
+	margin-bottom: 60px;
+}
+
+#controls {
+	opacity: 0.5;
+	width: 140px;
+	height: 145px;
+	border: 1px transparent solid;
+	position: absolute;
+	left: 15px;
+	top: 235px;
+}
+
+
+#controls #left {
+	background-color: transparent;
+	position: absolute;
+	width: 47px;
+	height: 48px;
+	left: 0px;
+	top: 51px;
+	
+}
+
+#controls #left:hover {
+	background-image:url('images/hover/hover_left.png');
+	cursor: pointer;
+}
+
+#controls #left:active {
+	background-image:url('images/click/click_left.png');
+	cursor: pointer;
+}
+
+
+#controls #top {
+	background-color: transparent;
+	position: absolute;
+	width: 47px;
+	height: 48px;
+	left: 47px;
+	top: 5px;
+}
+
+#controls #top:hover {
+	background-image:url('images/hover/hover_click.png');
+	cursor: pointer;
+}
+
+#controls #top:active {
+	background-image:url('images/click/click_top.png');
+	cursor: pointer;
+}
+
+
+#controls #right {
+	background-color: transparent;
+	position: absolute;
+	width: 47px;
+	height: 48px;
+	left: 88px;
+	top: 52px;	
+}
+
+#controls #right:hover {
+	background-image:url('images/hover/hover_right.png');
+	cursor: pointer;
+}
+
+#controls #right:active {
+	background-image:url('images/click/click_right.png');
+	cursor: pointer;
+}
+
+#controls #bottom {
+	background-color: transparent;
+	position: absolute;
+	width: 47px;
+	height: 48px;
+	left: 42px;
+	top: 97px;	
+}
+
+#controls, #buttonA, #buttonB {
+	z-index: 200;
+}
+
+#controls #bottom:hover {
+	background-image:url('images/hover/hover_down.png');
+	cursor: pointer;
+}
+
+#controls #bottom:active {
+	background-image:url('images/click/click_down.png');
+	cursor: pointer;
+}
+#backimage {
+//	background-image:url('images/Start_look_Css.jpg');
+	position:absolute;
+	left: 180px;
+	top: 150px;
+    z-index: -1;	
+}
+canvas {
+//	background-color: white;
+//	filter:alpha(opacity=20); /* for IE*/
+//	opacity: 0.2;
+	
+//	width:600px;
+//	height:450px;
+	position:absolute;
+	left: 180px;
+	top: 150px;
+}
+
+#buttonA {
+	background-color: transparent;
+	width: 79px;
+	height: 80px;
+	position: absolute;
+	right: 92px;
+	top: 296px;	
+}
+
+#buttonA:hover {
+	background-image:url('images/hover/hover_A.png');
+	cursor: pointer;
+}
+
+#buttonA:active {
+	background-image:url('images/click/click_A.png');
+	cursor: pointer;
+}
+
+#buttonB {
+	background-color: transparent;
+	width: 79px;
+	height: 80px;
+	position: absolute;
+	right: 13px;
+	top: 242px;	
+}
+
+#buttonB:hover {
+	background-image:url('images/hover/hover_B.png');
+	cursor: pointer;
+}
+
+#buttonB:active {
+	background-image:url('images/click/click_B.png');
+	cursor: pointer;
+}
+
+
+#timer, #rotations {
+	position: absolute;
+	z-index: 2000;
+	font-weight: bold;
+	font-size: 20px;
+}
+
+#timer {
+	top: 575px;
+	left: 190px;
+}
+
+#rotations {
+	top: 575px;
+	left: 630px;
+}
+
+#popup_fenster {
+	background-color: transparent;
+	/*filter:alpha(opacity=75);
+	opacity: 0.75;*/
+	width:600px;
+	height:450px;
+	position:absolute;
+	left: 180px;
+	top: 150px;
+	z-index: 3000;
+}
+
+#message_win {
+	position: absolute;
+	width:50px;
+	height: 50px;
+	left: 0px;
+	top: 150px;
+	background-color: white;
+	z-index: 4000;
+	filter:alpha(opacity=100); /* for IE*/
+	opacity: 1.0;
+	cursor: pointer;
+
+}
+
+.gameboy {
+	position: absolute;
+}
+
+/* Bildanimation */
+
+@keyframes flow
+{
+0%  {width: 40px; height: 0px;}
+100% {width: 400px; height: 50px;}
+}
+
+@-webkit-keyframes flow /* Safari and Chrome */
+{
+0%  {width: 40px; height: 0px;}
+100% {width: 400px; height: 50px;}
+} 
+
+@-moz-keyframes flow /* Firefox */
+{
+0%  {width: 0px; height: 0px;}
+100% {width: 400px; height: 50px;}
+}
+
+#win_image {
+position: absolute;
+left: 100px;
+top: 80px;	
+}
+
+
+

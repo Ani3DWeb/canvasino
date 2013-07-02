@@ -5,10 +5,12 @@
 
 <title>Canvasino</title>
 <link href="styles/reset.css" rel="stylesheet" type="text/css">
-<link href="styles/style_menu.css" rel="stylesheet" type="text/css">
-<link href="styles/style_games.css" rel="stylesheet" type="text/css">
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+<link href="style_menu.css" rel="stylesheet" type="text/css">
+<!--<link href="styles/style_games.css" rel="stylesheet" type="text/css"> -->
+	<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script> -->
+	<script src="scripts/jquery-2.0.2.js"></script>
+	<script src="scripts/jquery-ui.js"></script>
 	<script src="scripts/audio.js"></script>
 	<script src="scripts/loader.js"></script>	
 		
@@ -119,7 +121,16 @@
 					<img id="backimage" />
 					<div id="container">
 						<Canvas id="webGLCanvas" width="600" height="450">
+						
 						</Canvas>
+						<div id="timer"><p><span id="zeit">Zeit: </span><span id="minute">00</span>:<span id="second">00</span></p></div>
+						<div id="rotations"><span id="count_rotations">0</span>. Umdrehung</div>
+						<div id="popup_fenster">
+							<div id="message_win">
+							
+							</div>
+							<div id="win_image"><img src="images/gewonnen2.png" /></div>
+						</div>
 					</div>
 			    	
 			    	<div id="buttonA" data-key-id="65">
@@ -135,9 +146,9 @@
 	</div>
 	<div id="footer">
 		<div id="player">
-		<div class="start button controls">START</div>
-			<div class="play button controls">play</div>
-			<div class="pause button controls">pause</div>
+		<div class="start button controls">Musik abspielen</div>
+			<div class="play button controls">Musik abspielen</div>
+			<div class="pause button controls">Pause</div>
 			<div class="volume controls"></div>
 			<div class="volume-value controls"></div>
 		</div>
@@ -147,5 +158,3 @@
 
 </html>
 
-
-</html>
