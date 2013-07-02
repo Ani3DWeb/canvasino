@@ -68,16 +68,19 @@ function SlotGame($gl, $shaderProgram) {
 
         switch (key) {
             case 37: //Left-Key
+				soundsSlot.playArm();
                 if (rotationNr[0]==randomCircular[0])
                     $SlotMachine.randomizeSingle(0);
                 break;
             case 38: //Up-Key
                 break;
             case 39: //Right-Key
+				soundsSlot.playArm();
                 if (rotationNr[2]==randomCircular[2])
                     $SlotMachine.randomizeSingle(2);
                 break;
             case 40: //Down-Key
+				soundsSlot.playArm();
                 if (rotationNr[1]==randomCircular[1])
                     $SlotMachine.randomizeSingle(1);
                 break;
