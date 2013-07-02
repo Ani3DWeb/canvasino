@@ -50,18 +50,9 @@ function RubikGame($gl, $shaderProgram) {
             ModelViewMatrixRotate(-30, [0.0, 1.0, 0.0]);
         }
 
-
-
-        if (rotatePers === true) {
-            ModelViewMatrixRotate(rot, [1.0, 1.0, 0.0]);
-        }
-
         var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
         //Zeichne Rubik
-        /*	if(tmp == 0)
-         {*/
-
 
         if (rotate === true) {
             if (angle < 90) {
@@ -314,20 +305,10 @@ function RubikGame($gl, $shaderProgram) {
             this.selectedFace = 'B';
         }
         console.log("Darzustellende Seite: " + this.selectedFace);
-        this.showTest(this.selectedFace);
+        this.RotateSelection(this.selectedFace);
     };
 
-    this.rotateTest = function(a, l) {
-        axis = a;
-        layer = l;
-        this.rubik.selectCube(l, 1, 2);
-    };
-    this.directionTest = function(dir) {
-        direction = dir;
-        rotate = true;
-        //self.rubik.rotateLayer(axis, layer, dir);
-    };
-    this.showTest = function(face) {
+    this.RotateSelection = function(face) {
         mvMatrix = Matrix.I(4);
         if (face == 'F') {
             ModelViewMatrixRotate(30, [1.0, 0.0, 0.0]);
@@ -353,30 +334,7 @@ function RubikGame($gl, $shaderProgram) {
             ModelViewMatrixRotate(30, [1.0, 0.0, 0.0]);
             ModelViewMatrixRotate(60, [0.0, 1.0, 0.0]);
         }
-        if (face == 'FR') {
-            ModelViewMatrixRotate(-30, [0.0, 1.0, 0.0]);
-        }
-        if (face == 'FT') {
-            ModelViewMatrixRotate(30, [1.0, 0.0, 0.0]);
-        }
-        if (face == 'FD') {
-            ModelViewMatrixRotate(-30, [1.0, 0.0, 0.0]);
-        }
-        if (face == 'FL') {
-            ModelViewMatrixRotate(30, [0.0, 1.0, 0.0]);
-        }
-        if (face == 'Rotate') {
-            rotatePers = true;
-        }
-        if (face == 'Stop') {
-            rotatePers = false;
-        }
-        if (face == 'Reset') {
-            ModelViewMatrixRotate(0, [1.0, 1.0, 0.0]);
-            this.rubik = new RubikCube($gl, $shaderProgram);
-        }
-        ;
-    }
+    };
 
 
     this.setupLight = function()
@@ -420,14 +378,6 @@ function getCubeTextureNames() {
             "images/webgl/rubik/rot_pfeil.png",
             "images/webgl/rubik/gelb_pfeil.png",
             "images/webgl/rubik/pink_pfeil.png");
-    /*return  new Array("images/webgl/rubik/weiss.png",
-     "images/webgl/rubik/gruen.png",
-     "images/webgl/rubik/orange.png",
-     "images/webgl/rubik/blau.png",
-     "images/webgl/rubik/rot.png",
-     "images/webgl/rubik/gelb.png",
-     "images/webgl/rubik/schwarz.png",
-     "images/webgl/rubik/weiss_logo.png");*/
 }
 
 function ModelViewMatrixRotate(angle, v) {
