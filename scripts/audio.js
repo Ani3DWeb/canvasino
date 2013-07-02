@@ -132,11 +132,10 @@ $(document).ready( function() {
 			audio.playFile(wheelLose, false);	
 		},
 		playSpinning: function() {
-			audio.playFile(wheelSpinning, false);	
+			audio.playFile(wheelSpinning, true);	
 		},
 		stopSpinning: function() {
-			file=audio.getRandom(wheelCoin);
-			audio.playFile(file, false);	
+			wheelSpinning.pause();	
 		},
 		playStop: function() {
 			file=audio.getRandom(wheelStop);
@@ -151,9 +150,9 @@ $(document).ready( function() {
 	
 		init: function( ) {
 			
-			$('.start').show();
+			//$('.start').show();
 				// pause
-				$('.pause').click(function() {
+				$('.sound').click(function() {
 					if($(this).hasClass('mute'))
 					{
 						audio.on();

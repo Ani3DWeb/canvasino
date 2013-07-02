@@ -113,6 +113,7 @@ $(document).ready( function() {
 					if( y++ == rows-1 ) {	
 						clearTimeout(timeout);
 						$('.canvasino').show();
+						$('#footer').show();
 						time = setInterval(timer.start, 1000);
 						main();
 					}
@@ -141,9 +142,7 @@ $(document).ready( function() {
 		showIt: function() {
 			$('.screen .gameboy').css({'z-index': 100});
 			this.animation('forward');
-			$('.back').show();
-			
-                        
+			$('.back').show();           
 		},
 		hideIt: function() {
 			if(gamenumber == 1) {
@@ -152,6 +151,7 @@ $(document).ready( function() {
 				//soundsRubik.stopTheme();
 			}
 			$('.back').fadeOut(200);
+			$('#footer').hide();
 			this.animation('rewind');
 		}
 	}
