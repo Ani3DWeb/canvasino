@@ -157,12 +157,9 @@ function SlotMachine($gl) {
 		
 		if (randomFront[0]==randomFront[1]
 			&&randomFront[1]==randomFront[2]){
-			if (winner==false){
-				winner=true;
 				console.log("Winner " + randomFront[2]);
 				soundsSlot.playWin();
 				//TODO: Overlay gewonnen
-			} 
 		} else {
 			soundsSlot.playLose();
 			console.log("Looser")
