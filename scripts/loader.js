@@ -114,7 +114,13 @@ $(document).ready( function() {
 						clearTimeout(timeout);
 						$('.canvasino').show();
 						$('#footer').show();
-						time = setInterval(timer.start, 1000);
+						if(gamenumber == 2) {
+							time = setInterval(timer.start, 1000);
+						} else if (gamenumber == 1) {
+							$('#controls #top').hover(
+								function(){$(this).css({'background': 'none'})}
+							);
+						}
 						main();
 					}
 				}

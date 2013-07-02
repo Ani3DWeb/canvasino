@@ -61,10 +61,16 @@ $(document).ready( function() {
 				audio.loadFile(config.audio.cubeDirectory + 'CubeTurn3'),
 				audio.loadFile(config.audio.cubeDirectory + 'CubeTurn4')
 				];
+			cubeSpin = [
+				audio.loadFile(config.audio.cubeDirectory + 'CubeSpin1'),
+				audio.loadFile(config.audio.cubeDirectory + 'CubeSpin2'),
+				audio.loadFile(config.audio.cubeDirectory + 'CubeSpin3'),
+			];
 			cubeWin = audio.loadFile(config.audio.cubeDirectory + 'CubeWin');
 			allSounds = [
 				cubeTheme, cubeSelect, cubeSwitch, 
-				cubeTurn[0], cubeTurn[1], cubeTurn[2], cubeTurn[3], cubeWin
+				cubeTurn[0], cubeTurn[1], cubeTurn[2], cubeTurn[3], 
+				cubeSpin[0], cubeSpin[1], cubeSpin[2], cubeWin
 			];
 		},
 		
@@ -81,12 +87,15 @@ $(document).ready( function() {
 			audio.playFile(cubeSwitch, false);	
 		},
 		playTurn: function() {
-		
 			file=audio.getRandom(cubeTurn);
 			audio.playFile(file, false);
 		},
 		playWin: function() {
 			audio.playFile(cubeWin, false);	
+		},
+		playSpin: function() {
+			file=audio.getRandom(cubeSpin);
+			audio.playFile(file, false);
 		}
 		
 	}

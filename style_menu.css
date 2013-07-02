@@ -362,12 +362,12 @@ canvas {
 	right: 13px;
 	top: 242px;	
 }
-
+/*
 #buttonB:hover {
 	background-image:url('images/hover/hover_B.png');
 	cursor: pointer;
 }
-
+*/
 #buttonB:active {
 	background-image:url('images/click/click_B.png');
 	cursor: pointer;
