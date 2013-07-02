@@ -10,6 +10,9 @@ var randomFront;
 var randomCircular;
 var countReady=0;
 var rotationNr=0;
+var winner = false;
+var wheelState;
+var wheelStateAlt;
 
 function SlotMachine($gl) {
     //TODO:
@@ -23,7 +26,8 @@ function SlotMachine($gl) {
 	randomFront = new Array (3);
 	randomCircular = new Array (3);
 	rotationNr = new Array (3);
-	
+	wheelState = new Array (3); //t=turn, s=stop
+	wheelStateAlt = new Array (3);
 	
     for (var w=0; w <= 3; w++) {
         wheel[w]=new Array (8);
@@ -36,6 +40,8 @@ function SlotMachine($gl) {
 		randomFront[w] = 0;
 		randomCircular[w] = 0;
 		rotationNr[w] = 0;
+		wheelState = 't';
+		wheelStateAlt = 's';
 		
         for (var c=0; c <= 8; c++) {
             wheel[w][c] = new Cube(gl, shaderProgram, 0.25);
@@ -59,9 +65,14 @@ function SlotMachine($gl) {
 		//console.log(randomCircular[wheelNumber] + " " + grad[wheelNumber][randomFront[wheelNumber]]);
 		if (rotationNr[wheelNumber]==randomCircular[wheelNumber])
 		{
+			wheelState[wheelNumber] = 's';
 			$SlotMachine.stopRotation(wheelNumber);
 		}
 		else{
+			wheelState[wheelNumber] = 't';
+			if (wheelStateAlt[wheelNumber]!=wheelState[wheelNumber]){
+				//rotate Sound
+			}
 			//console.log(circle[wheelNumber][randomFront[wheelNumber]]+ " "+rotationNr[wheelNumber] + " " +randomCircular[wheelNumber]);
 			for (var c=0; c <= 8; c++) {
 					
@@ -144,8 +155,13 @@ function SlotMachine($gl) {
     this.checkState = function() {
 		
 		if (randomFront[0]==randomFront[1]
-			&&randomFront[1]==randomFront[2])
-			console.log("Winner " + randomFront[2]);
+			&&randomFront[1]==randomFront[2]){
+			if (winner==false){
+				winner=true;
+				console.log("Winner " + randomFront[2]);
+				//TODO: Musik + Overlay gewonnen
+			}
+		}
 		
     };
 
