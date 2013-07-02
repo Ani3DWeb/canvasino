@@ -62,6 +62,7 @@ function SlotMachine($gl) {
 			$SlotMachine.stopRotation(wheelNumber);
 		}
 		else{
+			//console.log(circle[wheelNumber][randomFront[wheelNumber]]+ " "+rotationNr[wheelNumber] + " " +randomCircular[wheelNumber]);
 			for (var c=0; c <= 8; c++) {
 					
 					
@@ -71,9 +72,10 @@ function SlotMachine($gl) {
 					cubeYOffset[wheelNumber][c] = yIncValue* Math.sin(circle[wheelNumber][c]);
 					cubeZOffset[wheelNumber][c] = zIncValue* Math.cos(circle[wheelNumber][c]);
 					
-					if (circle[wheelNumber][c]>2*Math.PI){
-							circle[wheelNumber][c] -=2*Math.PI;
-							rotationNr[wheelNumber]++;
+					if (circle[wheelNumber][c]<2 * Math.PI){
+							circle[wheelNumber][c] +=2 * Math.PI;
+							if (c == randomFront[wheelNumber])
+								rotationNr[wheelNumber]++;
 						}
 					
 					wheel[wheelNumber][c].save();
