@@ -21,7 +21,15 @@ var gameoptions = {
 	},
 	test: function() {
 		console.log('geht');
-	}
+	},
+	
+	showAlert: function() {
+		alert('test');
+	},
+	
+	setCurrency: function(currency) {
+		$('#currency_value').html(currency);	
+		}	
 }
 	
 $(document).ready( function() {
@@ -115,11 +123,14 @@ $(document).ready( function() {
 						$('.canvasino').show();
 						$('#footer').show();
 						if(gamenumber == 2) {
+							$('#currency').hide();
 							time = setInterval(timer.start, 1000);
 						} else if (gamenumber == 1) {
+							gameoptions.setCurrency('500');
+							$('#currency').show();
 							$('#controls #top').hover(
 								function(){$(this).css({'background': 'none'})}
-							);
+							);		
 						}
 						main();
 					}

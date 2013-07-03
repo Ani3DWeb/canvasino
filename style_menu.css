@@ -374,7 +374,7 @@ canvas {
 }
 
 
-#timer, #rotations {
+#timer, #rotations, #currency {
 	position: absolute;
 	z-index: 2000;
 	font-weight: bold;
@@ -384,6 +384,12 @@ canvas {
 #timer {
 	top: 575px;
 	left: 190px;
+}
+
+#currency {
+	top: 550px;
+	left: 190px;
+
 }
 
 #rotations {
