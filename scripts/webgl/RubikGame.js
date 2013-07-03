@@ -19,9 +19,10 @@ var rotatePers = false;
 var rot = 0.7;
 
 var rotateFree = false;
-var FreeAxis = [0.0,0.0,0.0];
 var FreeDirection = 0;
-var FreeRotationAngle = 0;
+var FreeRotationAngle = 0;		
+var FreeAxis = ["y","z","x","z","x","y"];
+var FreeIndex = 0;
 
 function RubikGame($gl, $shaderProgram) {
     console.log("Starte RubikGame...");
@@ -69,11 +70,14 @@ function RubikGame($gl, $shaderProgram) {
             }
         }
 		
-		if (rotateFree) {
-			if(FreeRotationAngle < 90) {
+			if (rotateFree) {
+				if(FreeRotationAngle < 90) {
 				FreeRotationAngle += rotationAngle;
-				// FreeAxis: [1.0,0.0,0.0] or [0.0,1.0,0.0]
-				ModelViewMatrixRotate(rotationAngle * FreeDirection, FreeAxis);				
+				if(FreeAxis==0){
+					ModelViewMatrixRotate(rotationAngle * FreeDirection, FreeAxis[0]);	
+				} else (FreeAxis==4){
+				    ModelViewMatrixRotate(rotationAngle * FreeDirection, FreeAxis[4]);	
+				}				
 			} else {
 				FreeRotationAngle = 0;
 				rotateFree = false;
@@ -175,26 +179,30 @@ function RubikGame($gl, $shaderProgram) {
             switch (key) {
                 case 37: //Left-Key
                     //free Rotation
-					FreeAxis = [0.0,1.0,0.0];
 					FreeDirection = 1;
+					this.rotateFreeLeftRight(FreeDirection);
+					FreeIndex = 0;
 					rotateFree = true;
                     break;
                 case 38: //Up-Key
                     //Free Rotation
-					FreeAxis = [1.0,0.0,0.0];
 					FreeDirection = 1;
-					rotateFree = true;
+					this.rotateFreeUpDown(FreeDirection);
+					FreeIndex = 4;
+					rotateFree = true;					
                     break;
                 case 39: //Right-Key
                     //Free Rotation
-					FreeAxis = [0.0,1.0,0.0];
 					FreeDirection = -1;
-					rotateFree = true;
+					this.rotateFreeLeftRight(FreeDirection);
+					FreeIndex = 0;
+					rotateFree = true;					
                     break;
                 case 40: //Down-Key
                     //Free Rotation
-					FreeAxis = [1.0,0.0,0.0];
 					FreeDirection = -1;
+					this.rotateFreeUpDown(FreeDirection);
+					FreeIndex = 4;
 					rotateFree = true;
                     break;
                 case 65: //A-Key
@@ -203,10 +211,8 @@ function RubikGame($gl, $shaderProgram) {
                     //switch Back To Selection-Mode
                     this.controlMode = 0;
                     break;
-
             }
         }
-
     };
 
     this.moveLeftRight = function(direction) {
@@ -294,6 +300,39 @@ function RubikGame($gl, $shaderProgram) {
         }
         this.controlMode = 0;
     };
+
+//--
+    this.rotateFreeLeftRight = function(dir) {
+		var tmp = FreeAxis[1];
+		if(dir == -1){
+			FreeAxis[1] = FreeAxis[4];
+			FreeAxis[4] = FreeAxis[3];
+			FreeAxis[3] = FreeAxis[2];
+			FreeAxis[2] = tmp;
+		} else	{
+			FreeAxis[1] = FreeAxis[2];
+			FreeAxis[2] = FreeAxis[3];
+			FreeAxis[3] = FreeAxis[4];
+			FreeAxis[4] = tmp;			
+		}
+    };
+
+    this.rotateFreeUpDown = function(dir) {
+	    var tmp = FreeAxis[1];
+		if(dir == -1){
+			FreeAxis[1] = FreeAxis[5];
+			FreeAxis[5] = FreeAxis[3];
+			FreeAxis[3] = FreeAxis[0];
+			FreeAxis[0] = tmp;
+		} else {
+			FreeAxis[1] = FreeAxis[0];
+			FreeAxis[0] = FreeAxis[3];
+			FreeAxis[3] = FreeAxis[5];
+			FreeAxis[5] = tmp;		
+		}
+    };
+//--
+	
     //rotates random Layer in random direction
     this.randomize = function() {
         var tempAxis = ['x', 'y', 'z'];
