@@ -15,6 +15,7 @@ var yIncValue = 0.5;
 var zIncValue = 0.5;
 var mvMatrix = Matrix.I(4);
 var $SlotMachine;
+var money = 500;
 
 function SlotGame($gl, $shaderProgram) {
 	soundsSlot.playTheme();
@@ -69,20 +70,32 @@ function SlotGame($gl, $shaderProgram) {
         switch (key) {
             case 37: //Left-Key
 				soundsSlot.playArm();
-                if (rotationNr[0]==randomCircular[0])
+                if (rotationNr[0]==randomCircular[0]){
+					soundsSlot.playSpinning();
                     $SlotMachine.randomizeSingle(0);
+					money=money-100;
+					gameoptions.setCurrency(money);
+					}
                 break;
             case 38: //Up-Key
                 break;
             case 39: //Right-Key
 				soundsSlot.playArm();
-                if (rotationNr[2]==randomCircular[2])
+                if (rotationNr[2]==randomCircular[2]){
+					soundsSlot.playSpinning();
                     $SlotMachine.randomizeSingle(2);
+					money=money-100;
+					gameoptions.setCurrency(money);
+					}
                 break;
             case 40: //Down-Key
 				soundsSlot.playArm();
-                if (rotationNr[1]==randomCircular[1])
+                if (rotationNr[1]==randomCircular[1]){
+					soundsSlot.playSpinning();
                     $SlotMachine.randomizeSingle(1);
+					money=money-100;
+					gameoptions.setCurrency(money);
+					}
                 break;
             case 65: //A-Key
             	//soundsSlot.playCoin();
@@ -92,6 +105,8 @@ function SlotGame($gl, $shaderProgram) {
                         && rotationNr[2]==randomCircular[2]){
 					soundsSlot.playSpinning();
                     $SlotMachine.randomize();
+					money=money-50;
+					gameoptions.setCurrency(money);
 				}
                 break;
             case 66:

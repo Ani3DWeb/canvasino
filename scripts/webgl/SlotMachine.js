@@ -159,10 +159,14 @@ function SlotMachine($gl) {
 			&&randomFront[1]==randomFront[2]){
 				console.log("Winner " + randomFront[2]);
 				soundsSlot.playWin();
+				money=money+500;
+				gameoptions.setCurrency(money);
 				//TODO: Overlay gewonnen
 		} else {
 			soundsSlot.playLose();
-			console.log("Looser")
+			console.log("Looser");
+			if (money==0)
+				money=0;//Gameover
 		}
 		countReadyFirst=false;
 		
