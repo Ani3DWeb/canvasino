@@ -37,6 +37,8 @@ function RubikGame($gl, $shaderProgram) {
     this.selectedZ = 2;
     this.selectedFace = 'F';
     this.controlMode = -1; //-1: Startup, til Cube randomized, 0: Selection, 1: Rotate, 2: Free Rotation View
+	
+	this.lastKeyCode = 0;
 
     this.drawScene = function() {
         //Canvas leeren
@@ -118,21 +120,26 @@ function RubikGame($gl, $shaderProgram) {
     this.keyPressed = function(key) {
         PerspectivRotate(90, [0.0, 1.0, 0.0]);
         if (this.controlMode === 0) {
+			this.lastKeyCode = 0;
             switch (key) {
                 case 37: //Left-Key
                 	soundsRubik.playSwitch();
+					this.lastKeyCode = 37;
                     this.moveLeftRight(-1);
                     break;
                 case 38: //Up-Key
                 	soundsRubik.playSwitch();
+					this.lastKeyCode = 38;
                     this.moveUpDown(1);
                     break;
                 case 39: //Right-Key
                 	soundsRubik.playSwitch();
+					this.lastKeyCode = 39;
                     this.moveLeftRight(1);
                     break;
                 case 40: //Down-Key
                 	soundsRubik.playSwitch();
+					this.lastKeyCode = 40;
                     this.moveUpDown(-1);
                     break;
                 case 65: //A-Key
@@ -145,7 +152,6 @@ function RubikGame($gl, $shaderProgram) {
                     //switch to Free Rotation
 					this.controlMode = 2;
                     break;
-
             }
             this.checkSelection();
         }
@@ -169,7 +175,7 @@ function RubikGame($gl, $shaderProgram) {
                 case 40: //Down-Key
                 	soundsRubik.playTurn();
                 	gameoptions.countRotations('rotate');
-                    this.rotateUpDown(1);
+                    this.rotateUpDown(1);			
                     break;
                 case 65: //A-Key
                     //switch Back To Selection-Mode
@@ -179,7 +185,6 @@ function RubikGame($gl, $shaderProgram) {
                 case 89: //B-Key (or Y)
                     //switch
                     break;
-
             }
         }
         else if (this.controlMode === 2) {
@@ -187,30 +192,22 @@ function RubikGame($gl, $shaderProgram) {
             switch (key) {
                 case 37: //Left-Key
                     //free Rotation
-					FreeDirection = -1;
-					this.rotateFreeLeftRight(FreeDirection);
-					FreeIndex = 0;
+					this.rotateFreeLeftRight(1,0);
 					rotateFree = true;
                     break;
                 case 38: //Up-Key
                     //Free Rotation
-					FreeDirection = -1;
-					this.rotateFreeUpDown(FreeDirection);
-					FreeIndex = 4;
+					this.rotateFreeUpDown(1,4);
 					rotateFree = true;					
                     break;
                 case 39: //Right-Key
                     //Free Rotation
-					FreeDirection = 1;
-					this.rotateFreeLeftRight(FreeDirection);
-					FreeIndex = 0;
+					this.rotateFreeLeftRight(-1,0);
 					rotateFree = true;					
                     break;
                 case 40: //Down-Key
                     //Free Rotation
-					FreeDirection = 1;
-					this.rotateFreeUpDown(FreeDirection);
-					FreeIndex = 4;
+					this.rotateFreeUpDown(-1,4);
 					rotateFree = true;
                     break;
                 case 65: //A-Key
@@ -309,8 +306,9 @@ function RubikGame($gl, $shaderProgram) {
         this.controlMode = 0;
     };
 
-//--
-    this.rotateFreeLeftRight = function(dir) {
+    this.rotateFreeLeftRight = function(dir, index) {
+	    FreeDirection = dir;
+		FreeIndex = index;
 		var tmp = FreeAxis[1];
 		if(dir == -1){
 			FreeAxis[1] = FreeAxis[4];
@@ -325,7 +323,9 @@ function RubikGame($gl, $shaderProgram) {
 		}
     };
 
-    this.rotateFreeUpDown = function(dir) {
+    this.rotateFreeUpDown = function(dir, index) {
+	    FreeDirection = dir;
+		FreeIndex = index;
 	    var tmp = FreeAxis[1];
 		if(dir == -1){
 			FreeAxis[1] = FreeAxis[5];
@@ -339,7 +339,6 @@ function RubikGame($gl, $shaderProgram) {
 			FreeAxis[5] = tmp;		
 		}
     };
-//--
 	
     //rotates random Layer in random direction
     this.randomize = function() {
@@ -370,57 +369,62 @@ function RubikGame($gl, $shaderProgram) {
         if (this.selectedX === 3) {
             this.selectedX = 2;
             this.selectedFace = 'R';
+			this.RotateSelection(this.selectedFace);
         }
         if (this.selectedX === -1) {
             this.selectedX = 0;
             this.selectedFace = 'L';
+			this.RotateSelection(this.selectedFace);
         }
         if (this.selectedY === 3) {
             this.selectedY = 2;
             this.selectedFace = 'T';
+			this.RotateSelection(this.selectedFace);
         }
         if (this.selectedY === -1) {
             this.selectedY = 0;
             this.selectedFace = 'D';
+			this.RotateSelection(this.selectedFace);
         }
         if (this.selectedZ === 3) {
             this.selectedZ = 2;
             this.selectedFace = 'F';
+			this.RotateSelection(this.selectedFace);
         }
         if (this.selectedZ === -1) {
             this.selectedZ = 0;
             this.selectedFace = 'B';
+			this.RotateSelection(this.selectedFace);
         }
-        console.log("Darzustellende Seite: " + this.selectedFace);
-        this.RotateSelection(this.selectedFace);
+       // console.log("Darzustellende Seite: " + this.selectedFace);
     };
 
     this.RotateSelection = function(face) {
-        mvMatrix = Matrix.I(4);
-        if (face == 'F') {
-            ModelViewMatrixRotate(30, [1.0, 0.0, 0.0]);
-            ModelViewMatrixRotate(-30, [0.0, 1.0, 0.0]);
-        }
-        if (face == 'T') {
-            ModelViewMatrixRotate(120, [1.0, 0.0, 0.0]);
-            ModelViewMatrixRotate(30, [0.0, 0.0, 1.0]);
-        }
-        if (face == 'D') {
-            ModelViewMatrixRotate(-60, [1.0, 0.0, 0.0]);
-            ModelViewMatrixRotate(-30, [0.0, 0.0, 1.0]);
-        }
-        if (face == 'B') {
-            ModelViewMatrixRotate(30, [1.0, 0.0, 0.0]);
-            ModelViewMatrixRotate(150, [0.0, 1.0, 0.0]);
-        }
-        if (face == 'R') {
-            ModelViewMatrixRotate(30, [1.0, 0.0, 0.0]);
-            ModelViewMatrixRotate(-120, [0.0, 1.0, 0.0]);
-        }
-        if (face == 'L') {
-            ModelViewMatrixRotate(30, [1.0, 0.0, 0.0]);
-            ModelViewMatrixRotate(60, [0.0, 1.0, 0.0]);
-        }
+	//	console.log("Darzustellende Seite: " + this.selectedFace);
+		   if(rotateFree==true) { return;}
+            switch (this.lastKeyCode) {
+                case 37: //Left-Key
+                    //free Rotation
+					this.rotateFreeLeftRight(1,0);
+					rotateFree = true;
+                    break;
+                case 38: //Up-Key
+                    //Free Rotation
+					this.rotateFreeUpDown(1,4);
+					rotateFree = true;					
+                    break;
+                case 39: //Right-Key
+                    //Free Rotation
+					this.rotateFreeLeftRight(-1,0);
+					rotateFree = true;					
+                    break;
+                case 40: //Down-Key
+                    //Free Rotation
+					this.rotateFreeUpDown(-1,4);
+					rotateFree = true;
+                    break;
+            }
+				console.log(FreeAxis);
     };
 
 
