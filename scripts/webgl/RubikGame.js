@@ -20,8 +20,8 @@ var rot = 0.7;
 
 var rotateFree = false;
 var FreeDirection = 0;
-var FreeRotationAngle = 0;		
-var FreeAxis = ["y","z","x","z","x","y"];
+var FreeRotationAngle = 0;	
+var FreeAxis = ["y","z","x","z","x","y"];	
 var FreeIndex = 0;
 
 function RubikGame($gl, $shaderProgram) {
@@ -73,11 +73,18 @@ function RubikGame($gl, $shaderProgram) {
 			if (rotateFree) {
 				if(FreeRotationAngle < 90) {
 				FreeRotationAngle += rotationAngle;
-				if(FreeAxis==0){
-					ModelViewMatrixRotate(rotationAngle * FreeDirection, FreeAxis[0]);	
-				} else (FreeAxis==4){
-				    ModelViewMatrixRotate(rotationAngle * FreeDirection, FreeAxis[4]);	
-				}				
+				   switch(FreeAxis[FreeIndex]){
+				      case "x":
+					        
+							ModelViewMatrixRotate(rotationAngle * FreeDirection, [1.0,0.0,0.0]);		
+							break;
+				      case "y":
+							ModelViewMatrixRotate(rotationAngle * FreeDirection, [0.0,1.0,0.0]);		
+							break;
+				      case "z":
+							ModelViewMatrixRotate(rotationAngle * FreeDirection, [0.0,0.0,1.0]);		
+							break;
+				   }	
 			} else {
 				FreeRotationAngle = 0;
 				rotateFree = false;
@@ -179,28 +186,28 @@ function RubikGame($gl, $shaderProgram) {
             switch (key) {
                 case 37: //Left-Key
                     //free Rotation
-					FreeDirection = 1;
+					FreeDirection = -1;
 					this.rotateFreeLeftRight(FreeDirection);
 					FreeIndex = 0;
 					rotateFree = true;
                     break;
                 case 38: //Up-Key
                     //Free Rotation
-					FreeDirection = 1;
+					FreeDirection = -1;
 					this.rotateFreeUpDown(FreeDirection);
 					FreeIndex = 4;
 					rotateFree = true;					
                     break;
                 case 39: //Right-Key
                     //Free Rotation
-					FreeDirection = -1;
+					FreeDirection = 1;
 					this.rotateFreeLeftRight(FreeDirection);
 					FreeIndex = 0;
 					rotateFree = true;					
                     break;
                 case 40: //Down-Key
                     //Free Rotation
-					FreeDirection = -1;
+					FreeDirection = 1;
 					this.rotateFreeUpDown(FreeDirection);
 					FreeIndex = 4;
 					rotateFree = true;
