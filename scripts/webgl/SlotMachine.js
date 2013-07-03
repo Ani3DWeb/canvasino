@@ -54,6 +54,9 @@ function SlotMachine($gl) {
 			cubeRotation[w][c] = 0.0;
 			grad[w][c] = (360/8)*c;
 			circle[w][c] = (2*Math.PI/8)*(c-1)+4*Math.PI;
+			randomFront[0] = 1;
+			randomFront[1] = 1;
+			randomFront[2] = 1;
         }
     }
 	
@@ -159,14 +162,14 @@ function SlotMachine($gl) {
 			&&randomFront[1]==randomFront[2]){
 				console.log("Winner " + randomFront[2]);
 				soundsSlot.playWin();
-				money=money+500;
+				money=money+$SlotMachine.MoneyPayed(randomFront[2]);
 				gameoptions.setCurrency(money);
 				//TODO: Overlay gewonnen
 		} else {
 			soundsSlot.playLose();
 			console.log("Looser");
 			if (money==0)
-				money=0;//Gameover
+				money=0;//TODO: Gameover
 		}
 		countReadyFirst=false;
 		
@@ -193,7 +196,7 @@ function SlotMachine($gl) {
 		wheelState[wheelNumber]=true;
 		wheelStateAlt[wheelNumber]=true;
 		countReadyFirst=true;
-		var front=$SlotMachine.getFrontName(randomFront[i]);
+		var front=$SlotMachine.getFrontName(randomFront[wheelNumber]);
 		console.log("Wheel " + (wheelNumber+1) + ": Front:"+ front + " Umdrehungen: " + (randomCircular[wheelNumber]-preCircular));
     };
 
@@ -230,7 +233,38 @@ function SlotMachine($gl) {
 						break;
 				}
 		return front;
-	}
+	};
+	
+	this.MoneyPayed = function(frontNr){
+		var payed;
+		switch (frontNr){
+					case 0:
+						payed=1000;
+						break;
+					case 1:
+						payed=100;
+						break;
+					case 2:
+						payed=200;
+						break;
+					case 3:
+						payed=300;
+						break;
+					case 4:
+						payed=400;
+						break;
+					case 5:
+						payed=600;
+						break;
+					case 6:
+						payed=800;
+						break;
+					case 7:
+						payed=1000;
+						break;
+				}
+		return payed;
+	};
 
 }
 
