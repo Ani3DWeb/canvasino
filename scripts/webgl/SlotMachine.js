@@ -53,7 +53,7 @@ function SlotMachine($gl) {
 			cubeZOffset[w][c] = 0.0;
 			cubeRotation[w][c] = 0.0;
 			grad[w][c] = (360/8)*c;
-			circle[w][c] = (2*Math.PI/8)*(c-1);
+			circle[w][c] = (2*Math.PI/8)*(c-1)+4*Math.PI;
         }
     }
 	
@@ -75,7 +75,7 @@ function SlotMachine($gl) {
 			for (var c=0; c <= 8; c++) {
 					
 					
-					circle[wheelNumber][c] -= delta / 700.0*(wheelNumber+1*1.5);
+					circle[wheelNumber][c] -= delta / 800.0*(randomCircular[wheelNumber]+0.5);
 					grad[wheelNumber][c] = -(360/(2 * Math.PI))*circle[wheelNumber][c];					
 					cubeRotation[wheelNumber][c] = grad[wheelNumber][c];
 					cubeYOffset[wheelNumber][c] = yIncValue* Math.sin(circle[wheelNumber][c]);
@@ -175,11 +175,12 @@ function SlotMachine($gl) {
     this.randomize = function() {
 		for (var i = 0; i<3;i++){
 				var temp=randomCircular[i];
-				randomFront[i] = Math.round(Math.random()*8);
+				randomFront[i] = Math.floor(Math.random()*8);
 				randomCircular[i] = Math.round(Math.random()*1)+1;
 				wheelState[i]=true;
 				wheelStateAlt[i]=true;
-				console.log("Wheel " + (i+1) + ": Front:"+ randomFront[i] + " Umdrehungen: " + (randomCircular[i]-temp));
+				var front=$SlotMachine.getFrontName(randomFront[i]);
+				console.log("Wheel " + (i+1) + ": Front:"+randomFront[i]+" "+ front + " Umdrehungen: " + (randomCircular[i]-temp));
 				countReadyFirst=true;
 		}
 		
@@ -187,17 +188,49 @@ function SlotMachine($gl) {
 	
 	this.randomizeSingle = function(wheelNumber) {
 		var preCircular = randomCircular[wheelNumber];
-		randomFront[wheelNumber] = Math.round(Math.random()*8);
+		randomFront[wheelNumber] = Math.floor(Math.random()*8);
 		randomCircular[wheelNumber] = Math.round(Math.random()*1)+1;
 		wheelState[wheelNumber]=true;
 		wheelStateAlt[wheelNumber]=true;
 		countReadyFirst=true;
-		console.log("Wheel " + (wheelNumber+1) + ": Front:"+ randomFront[wheelNumber] + " Umdrehungen: " + (randomCircular[wheelNumber]-preCircular));
+		var front=$SlotMachine.getFrontName(randomFront[i]);
+		console.log("Wheel " + (wheelNumber+1) + ": Front:"+ front + " Umdrehungen: " + (randomCircular[wheelNumber]-preCircular));
     };
 
     this.control = function() {
 
     };
+	
+	this.getFrontName = function(frontNr){
+		var front;
+		switch (frontNr){
+					case 0:
+						front="Diamant";
+						break;
+					case 1:
+						front="Kirsche";
+						break;
+					case 2:
+						front="Pflaume";
+						break;
+					case 3:
+						front="Zitrone";
+						break;
+					case 4:
+						front="Orange";
+						break;
+					case 5:
+						front="Melone";
+						break;
+					case 6:
+						front="Kleeblatt";
+						break;
+					case 7:
+						front="7";
+						break;
+				}
+		return front;
+	}
 
 }
 
