@@ -32,7 +32,7 @@ function RubikColorModel($gl, $shaderProgram) {
 		return textureArray[6];
 		
 	};
-        	this.texturizeSelected = function(tex) {
+    this.texturizeSelected = function(tex) {
 	    var texture = tex;
 		if(texture=="weiss") {
 		   return textureArray[8];
@@ -52,7 +52,7 @@ function RubikColorModel($gl, $shaderProgram) {
 		return textureArray[6];
 		
 	};
-                	this.texturizeRotate = function(tex) {
+    this.texturizeRotate = function(tex) {
 	    var texture = tex;
 		if(texture=="weiss") {
 		   return textureArray[15];
@@ -74,7 +74,7 @@ function RubikColorModel($gl, $shaderProgram) {
 	};
 	this.getColors = function(x,y,z){
 	 var colorPositions = [];
-		for(var i=0; i<=14;i++) {
+		for(var i=0; i<=textureArray.length;i++) {
 			colorPositions[i] = textureArray[6];
 		}
 		if(z==0){

@@ -183,6 +183,7 @@ function RubikGame($gl, $shaderProgram) {
             }
         }
         else if (this.controlMode === 2) {
+		   if(rotateFree==true) { return;}
             switch (key) {
                 case 37: //Left-Key
                     //free Rotation
