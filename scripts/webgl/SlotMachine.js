@@ -6,14 +6,13 @@ var grad;
 var circle;
 var wheel;
 var lastCubeUpdateTime = 0;
-var randomFront;
-var randomCircular;
-var countReady=0;
-var countReadyFirst = true;
-var rotationNr=0;
-var winner = false;
-var wheelState;
-var wheelStateAlt;
+var randomFront;			//Front pro Rad für Drehung
+var randomCircular;			//Umdrehungen pro Rad für Drehung
+var countReady=0;			//Anzahl der stehenden Räder
+var countReadyFirst = true;	//erstes mal 3 Räder stopp nach Drehung
+var rotationNr=0;			//Anzahl der bereits ausgeführten Umdrehungen
+var winner = false;			//Gewinner ja, nein
+var start = true;			//erster Aufruf der Slotmachine
 
 function SlotMachine($gl) {
     //TODO:
@@ -27,8 +26,6 @@ function SlotMachine($gl) {
 	randomFront = new Array (3);
 	randomCircular = new Array (3);
 	rotationNr = new Array (3);
-	wheelState = new Array (3);
-	wheelStateAlt = new Array (3);
 	
     for (var w=0; w <= 3; w++) {
         wheel[w]=new Array (8);
@@ -41,8 +38,6 @@ function SlotMachine($gl) {
 		randomFront[w] = 0;
 		randomCircular[w] = 0;
 		rotationNr[w] = 0;
-		wheelState[w] = false;
-		wheelStateAlt[w] = true;
 		
         for (var c=0; c <= 8; c++) {
             wheel[w][c] = new Cube(gl, shaderProgram, 0.25);
@@ -69,11 +64,9 @@ function SlotMachine($gl) {
 		//console.log(randomCircular[wheelNumber] + " " + grad[wheelNumber][randomFront[wheelNumber]]);
 		if (rotationNr[wheelNumber]==randomCircular[wheelNumber])
 		{
-			wheelState[wheelNumber] = false;
 			$SlotMachine.stopRotation(wheelNumber);
 		}
 		else{
-			wheelState[wheelNumber] = true;
 			//console.log(circle[wheelNumber][randomFront[wheelNumber]]+ " "+rotationNr[wheelNumber] + " " +randomCircular[wheelNumber]);
 			for (var c=0; c <= 8; c++) {
 					
@@ -136,11 +129,11 @@ function SlotMachine($gl) {
 			   //buhlscher randomGen
 			}
 		if (countReady==3&&countReadyFirst==true){
+			console.log("stop spinning");
 			soundsSlot.stopSpinning();
 			$SlotMachine.checkState();
 			}
 		
-			wheelState[wheelNumber]= wheelStateAlt[wheelNumber];
 	};
 	
 	this.start = function(){
@@ -157,15 +150,29 @@ function SlotMachine($gl) {
 		};
 	
     this.checkState = function() {
-		
-		if (randomFront[0]==randomFront[1]
+		if (start ==true){
+			start=false;
+			money=1000;
+			gameoptions.setCurrency(money);
+			}
+		else if (randomFront[0]==randomFront[1]
 			&&randomFront[1]==randomFront[2]){
 				console.log("Winner " + randomFront[2]);
 				soundsSlot.playWin();
 				money=money+$SlotMachine.MoneyPayed(randomFront[2]);
 				gameoptions.setCurrency(money);
-				//TODO: Overlay gewonnen
-		} else {
+				gameoptions.won();
+		}
+		/*else if (randomFront[0]==randomFront[1]
+			||randomFront[1]==randomFront[2]
+			||randomFront[0]==randomFront[2]){
+				console.log("Winner");
+				soundsSlot.playWin();
+				money=money+$SlotMachine.MoneyPayed(randomFront[2])/2;
+				gameoptions.setCurrency(money);
+				gameoptions.won();
+		}*/
+		else{
 			soundsSlot.playLose();
 			console.log("Looser");
 			if (money==0)
@@ -180,8 +187,6 @@ function SlotMachine($gl) {
 				var temp=randomCircular[i];
 				randomFront[i] = Math.floor(Math.random()*8);
 				randomCircular[i] = Math.round(Math.random()*1)+1;
-				wheelState[i]=true;
-				wheelStateAlt[i]=true;
 				var front=$SlotMachine.getFrontName(randomFront[i]);
 				console.log("Wheel " + (i+1) + ": Front:"+randomFront[i]+" "+ front + " Umdrehungen: " + (randomCircular[i]-temp));
 				countReadyFirst=true;
@@ -193,15 +198,13 @@ function SlotMachine($gl) {
 		var preCircular = randomCircular[wheelNumber];
 		randomFront[wheelNumber] = Math.floor(Math.random()*8);
 		randomCircular[wheelNumber] = Math.round(Math.random()*1)+1;
-		wheelState[wheelNumber]=true;
-		wheelStateAlt[wheelNumber]=true;
 		countReadyFirst=true;
 		var front=$SlotMachine.getFrontName(randomFront[wheelNumber]);
 		console.log("Wheel " + (wheelNumber+1) + ": Front:"+ front + " Umdrehungen: " + (randomCircular[wheelNumber]-preCircular));
     };
 
     this.control = function() {
-
+			console.log("Ich warte");
     };
 	
 	this.getFrontName = function(frontNr){
@@ -242,16 +245,16 @@ function SlotMachine($gl) {
 						payed=1000;
 						break;
 					case 1:
-						payed=100;
-						break;
-					case 2:
 						payed=200;
 						break;
-					case 3:
+					case 2:
 						payed=300;
 						break;
-					case 4:
+					case 3:
 						payed=400;
+						break;
+					case 4:
+						payed=500;
 						break;
 					case 5:
 						payed=600;
@@ -260,7 +263,7 @@ function SlotMachine($gl) {
 						payed=800;
 						break;
 					case 7:
-						payed=1000;
+						payed=900;
 						break;
 				}
 		return payed;

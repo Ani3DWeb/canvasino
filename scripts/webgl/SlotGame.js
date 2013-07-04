@@ -17,6 +17,7 @@ var mvMatrix = Matrix.I(4);
 var $SlotMachine;
 var money = 500;
 
+
 function SlotGame($gl, $shaderProgram) {
 	soundsSlot.playTheme();
     console.log("Starte SlotMachineGame...");
@@ -36,7 +37,7 @@ function SlotGame($gl, $shaderProgram) {
         //TODO: Perspektive einstellen
         perspectiveMatrix = makePerspective(45, canvasWidth / canvasHeight, 0.1, 100.0);
 
-        PerspectivTranslate([0.0, 0.0, -1.7])
+        PerspectivTranslate([0.0+0.05, 0.0, -1.7])
         //PerspectivRotate(120,[1.0,0.0,0.0]);
 
         //var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
@@ -52,11 +53,7 @@ function SlotGame($gl, $shaderProgram) {
         //Zeichne Rubik
         var currentTime = (new Date).getTime();
         var delta = currentTime - lastCubeUpdateTime;
-		
-		//if (wheelStateAlt[0]!=wheelState[0]||wheelStateAlt[1]!=wheelState[1]||wheelStateAlt[2]!=wheelState[2]){
-		//		soundsSlot.playSpinning();
-		//	}
-		
+
         $SlotMachine.rotateWheel(1, delta);
         $SlotMachine.rotateWheel(0, delta);
         $SlotMachine.rotateWheel(2, delta);
@@ -67,53 +64,79 @@ function SlotGame($gl, $shaderProgram) {
 
     this.keyPressed = function(key) {
 
-        switch (key) {
-            case 37: //Left-Key
-				soundsSlot.playArm();//TODO: ArmSingle
-                if (rotationNr[0]==randomCircular[0]){
-					soundsSlot.playSpinning();
-                    $SlotMachine.randomizeSingle(0);
-					money=money-100;
-					gameoptions.setCurrency(money);
+		
+		startGame=false;
+		if (money != 0){
+			switch (key) {
+				case 37: //Left-Key
+					soundsSlot.playArmSingle();//TODO: ArmSingle
+					if (rotationNr[0]==randomCircular[0]&&money>=100){
+						soundsSlot.playSpinning();
+						$SlotMachine.randomizeSingle(0);
+						money=money-100;
+						gameoptions.setCurrency(money);
+						}
+					break;
+				case 38: //Up-Key
+					break;
+				case 39: //Right-Key
+					soundsSlot.playArmSingle();//TODO: ArmSingle
+					if (rotationNr[2]==randomCircular[2]&&money>=100){
+						soundsSlot.playSpinning();
+						$SlotMachine.randomizeSingle(2);
+						money=money-100;
+						gameoptions.setCurrency(money);
+						}
+					break;
+				case 40: //Down-Key
+					soundsSlot.playArmSingle();//TODO: ArmSingle
+					if (rotationNr[1]==randomCircular[1]&&money>=100){
+						soundsSlot.playSpinning();
+						$SlotMachine.randomizeSingle(1);
+						money=money-100;
+						gameoptions.setCurrency(money);
+						}
+					break;
+				case 65: //A-Key
+					//
+					soundsSlot.playArm();
+					if (rotationNr[0]==randomCircular[0]
+							&& rotationNr[1]==randomCircular[1]
+							&& rotationNr[2]==randomCircular[2]
+							&&money>=50){
+						soundsSlot.playSpinning();
+						$SlotMachine.randomize();
+						money=money-50;
+						gameoptions.setCurrency(money);
 					}
-                break;
-            case 38: //Up-Key
-                break;
-            case 39: //Right-Key
-				soundsSlot.playArm();//TODO: ArmSingle
-                if (rotationNr[2]==randomCircular[2]){
-					soundsSlot.playSpinning();
-                    $SlotMachine.randomizeSingle(2);
-					money=money-100;
-					gameoptions.setCurrency(money);
-					}
-                break;
-            case 40: //Down-Key
-				soundsSlot.playArm();//TODO: ArmSingle
-                if (rotationNr[1]==randomCircular[1]){
-					soundsSlot.playSpinning();
-                    $SlotMachine.randomizeSingle(1);
-					money=money-100;
-					gameoptions.setCurrency(money);
-					}
-                break;
-            case 65: //A-Key
-            	//soundsSlot.playCoin();
-            	soundsSlot.playArm();
-                if (rotationNr[0]==randomCircular[0]
-                        && rotationNr[1]==randomCircular[1]
-                        && rotationNr[2]==randomCircular[2]){
-					soundsSlot.playSpinning();
-                    $SlotMachine.randomize();
-					money=money-50;
-					gameoptions.setCurrency(money);
-				}
-                break;
-            case 66:
-            case 89: //B-Key 
-                break;
+					break;
+				case 66:
+				case 89: //B-Key 
+					break;
 
-        }
+			}
+		}
+		else{
+			switch (key) {
+				case 37: //Left-Key
+					break;
+				case 38: //Up-Key
+					break;
+				case 39: //Right-Key
+					break;
+				case 40: //Down-Key
+					break;
+				case 65: //A-Key
+					money=1000;
+					gameoptions.setCurrency(money);
+					break;
+				case 66:
+					break;
+				case 89: //B-Key 
+					
+					break;
+			}
+		}
     };
 
     this.setupLight = function()

@@ -105,7 +105,7 @@ $(document).ready( function() {
 			wheelArm = audio.loadFile(config.audio.wheelDirectory + 'WheelArm');
 			wheelArmSingle = audio.loadFile(config.audio.wheelDirectory + 'WheelArmSingle');
 			wheelLose = audio.loadFile(config.audio.wheelDirectory + 'WheelLose'); 
-			wheelSpinning = audio.loadFile(config.audio.wheelDirectory + 'WheelSpinning');
+			wheelSpinning = audio.loadFile(config.audio.wheelDirectory + 'WheelSpinning2');
 			wheelStop = [
 				audio.loadFile(config.audio.wheelDirectory + 'WheelStop1'),
 				audio.loadFile(config.audio.wheelDirectory + 'WheelStop2'),

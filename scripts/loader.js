@@ -22,14 +22,29 @@ var gameoptions = {
 	test: function() {
 		console.log('geht');
 	},
-	
-	showAlert: function() {
-		alert('test');
-	},
-	
+		
 	setCurrency: function(currency) {
 		$('#currency_value').html(currency);	
-		}	
+		if (currency <= 0)
+		{
+			gameoptions.loose();
+		}
+		},
+	
+	hideWinImage: function()
+	{
+	$('#win_image').hide();
+	},
+	
+	loose: function() {
+		$('#game_over_image').show();
+		$('#game_over_image img').css("animation","flow2 2s").css("-webkit-animation","flow2 2s").css("-moz-animation","flow2 2s");
+	},
+	
+	hideLooseImage: function()
+	{
+	$('#game_over_image').hide();
+	}
 }
 	
 $(document).ready( function() {
@@ -198,6 +213,7 @@ $(document).ready( function() {
 			});
 			
 			$('#win_image').hide();
+			$('#game_over_image').hide();
 
 		} 
 	}
