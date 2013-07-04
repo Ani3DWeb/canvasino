@@ -71,6 +71,7 @@ function SlotGame($gl, $shaderProgram) {
 				case 37: //Left-Key
 					soundsSlot.playArmSingle();//TODO: ArmSingle
 					if (rotationNr[0]==randomCircular[0]&&money>=100){
+						gameoptions.hideWinImage();
 						soundsSlot.playSpinning();
 						$SlotMachine.randomizeSingle(0);
 						money=money-100;
@@ -82,6 +83,7 @@ function SlotGame($gl, $shaderProgram) {
 				case 39: //Right-Key
 					soundsSlot.playArmSingle();//TODO: ArmSingle
 					if (rotationNr[2]==randomCircular[2]&&money>=100){
+						gameoptions.hideWinImage();
 						soundsSlot.playSpinning();
 						$SlotMachine.randomizeSingle(2);
 						money=money-100;
@@ -91,6 +93,7 @@ function SlotGame($gl, $shaderProgram) {
 				case 40: //Down-Key
 					soundsSlot.playArmSingle();//TODO: ArmSingle
 					if (rotationNr[1]==randomCircular[1]&&money>=100){
+						gameoptions.hideWinImage();
 						soundsSlot.playSpinning();
 						$SlotMachine.randomizeSingle(1);
 						money=money-100;
@@ -104,10 +107,12 @@ function SlotGame($gl, $shaderProgram) {
 							&& rotationNr[1]==randomCircular[1]
 							&& rotationNr[2]==randomCircular[2]
 							&&money>=50){
+						gameoptions.hideWinImage();
 						soundsSlot.playSpinning();
 						$SlotMachine.randomize();
 						money=money-50;
 						gameoptions.setCurrency(money);
+						
 					}
 					break;
 				case 66:
@@ -127,6 +132,7 @@ function SlotGame($gl, $shaderProgram) {
 				case 40: //Down-Key
 					break;
 				case 65: //A-Key
+					gameoptions.hideLooseImage();
 					money=1000;
 					gameoptions.setCurrency(money);
 					break;

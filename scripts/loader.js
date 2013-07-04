@@ -25,10 +25,6 @@ var gameoptions = {
 		
 	setCurrency: function(currency) {
 		$('#currency_value').html(currency);	
-		if (currency <= 0)
-		{
-			gameoptions.loose();
-		}
 		},
 	
 	hideWinImage: function()

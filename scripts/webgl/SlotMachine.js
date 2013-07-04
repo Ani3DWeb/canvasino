@@ -126,7 +126,6 @@ function SlotMachine($gl) {
 
 					//console.log(cubeXOffset[wheelNumber][c] + " " +cubeYOffset[wheelNumber][c] +" " + cubeZOffset[wheelNumber][c]);
 				}
-			   //buhlscher randomGen
 			}
 		if (countReady==3&&countReadyFirst==true){
 			console.log("stop spinning");
@@ -176,7 +175,7 @@ function SlotMachine($gl) {
 			soundsSlot.playLose();
 			console.log("Looser");
 			if (money==0)
-				money=0;//TODO: Gameover
+				gameoptions.loose();
 		}
 		countReadyFirst=false;
 		
