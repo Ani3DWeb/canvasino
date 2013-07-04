@@ -1,6 +1,6 @@
 $(document).ready( function() {
 	var allSounds;
-	var volume = 0.5;
+	var volume = 1;
 	var config = {}
 	config.audio = {directory: 'audio/', cubeDirectory: 'audio/Cube/', wheelDirectory: 'audio/Wheel/'}
 
@@ -104,12 +104,6 @@ $(document).ready( function() {
 			wheelTheme = audio.loadFile(config.audio.wheelDirectory + 'WheelTheme');
 			wheelArm = audio.loadFile(config.audio.wheelDirectory + 'WheelArm');
 			wheelArmSingle = audio.loadFile(config.audio.wheelDirectory + 'WheelArmSingle');
-			wheelCoin = [
-				audio.loadFile(config.audio.wheelDirectory + 'WheelCoin1'),
-				audio.loadFile(config.audio.wheelDirectory + 'WheelCoin2'),
-				audio.loadFile(config.audio.wheelDirectory + 'WheelCoin3'),
-				audio.loadFile(config.audio.wheelDirectory + 'WheelCoin4')
-				];
 			wheelLose = audio.loadFile(config.audio.wheelDirectory + 'WheelLose'); 
 			wheelSpinning = audio.loadFile(config.audio.wheelDirectory + 'WheelSpinning');
 			wheelStop = [
@@ -137,10 +131,6 @@ $(document).ready( function() {
 		playArmSingle: function() {
 			audio.playFile(wheelArm, false);	
 		},
-		playCoin: function() {
-			file=audio.getRandom(WheelCoin);
-			audio.playFile(file, false);	
-		},
 		playLose: function() {
 			audio.playFile(wheelLose, false);	
 		},
@@ -162,38 +152,37 @@ $(document).ready( function() {
 	var controls = {
 	
 		init: function( ) {
-			
-			//$('.start').show();
-				// pause
-				$('.sound').click(function() {
-					if($(this).hasClass('mute'))
-					{
-						audio.on();
-						$(this).removeClass('mute');
-					} else {
-						$(this).addClass('mute');
-						audio.off();
-					}					
-					return false;
-				});
-			
-				// volume
-				$( ".volume" ).slider({
-					range: "min",
-					value:  volume*100,
-					min: 0,
-					max: 100,
-					slide: function(event, ui) {
-						$.each( allSounds, function( key, file ) {
-							volume = ui.value/100;
-							console.log(volume);
-							file.volume = volume;
-						});
-						$( ".volume-value" ).text( ui.value );
-					}
-			    });
-			    $( ".volume-value" ).text( $( ".volume" ).slider( "value" ) );
-			//});
+
+			// pause
+			$('.sound').click(function() {
+				if($(this).hasClass('mute'))
+				{
+					audio.on();
+					$(this).removeClass('mute');
+				} else {
+					$(this).addClass('mute');
+					audio.off();
+				}					
+				return false;
+			});
+		
+			// volume
+			$( ".volume" ).slider({
+				range: "min",
+				value:  volume*100,
+				min: 0,
+				max: 100,
+				slide: function(event, ui) {
+					$.each( allSounds, function( key, file ) {
+						$('.sound').removeClass('mute');
+						volume = ui.value/100;
+						file.volume = volume;
+					});
+					$( ".volume-value" ).text( ui.value );
+				}
+		    });
+		    $( ".volume-value" ).text( $( ".volume" ).slider( "value" ) );
+		
 		} 
 	}
 	
