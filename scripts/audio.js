@@ -113,8 +113,7 @@ $(document).ready( function() {
 				];	
 			wheelWin = audio.loadFile(config.audio.wheelDirectory + 'WheelWin');
 			allSounds = [
-				wheelTheme, wheelArm, wheelArmSingle, wheelCoin[0], 
-				wheelCoin[1], wheelCoin[2], wheelCoin[3], 
+				wheelTheme, wheelArm, wheelArmSingle,
 				wheelLose, wheelSpinning, wheelStop[0], wheelStop[1], 
 				wheelStop[2], wheelWin
 				];
