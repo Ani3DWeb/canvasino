@@ -103,6 +103,7 @@ $(document).ready( function() {
 		loadFiles: function() {
 			wheelTheme = audio.loadFile(config.audio.wheelDirectory + 'WheelTheme');
 			wheelArm = audio.loadFile(config.audio.wheelDirectory + 'WheelArm');
+			wheelArmSingle = audio.loadFile(config.audio.wheelDirectory + 'WheelArmSingle');
 			wheelCoin = [
 				audio.loadFile(config.audio.wheelDirectory + 'WheelCoin1'),
 				audio.loadFile(config.audio.wheelDirectory + 'WheelCoin2'),
@@ -118,7 +119,7 @@ $(document).ready( function() {
 				];	
 			wheelWin = audio.loadFile(config.audio.wheelDirectory + 'WheelWin');
 			allSounds = [
-				wheelTheme, wheelArm, wheelCoin[0], 
+				wheelTheme, wheelArm, wheelArmSingle, wheelCoin[0], 
 				wheelCoin[1], wheelCoin[2], wheelCoin[3], 
 				wheelLose, wheelSpinning, wheelStop[0], wheelStop[1], 
 				wheelStop[2], wheelWin
@@ -131,6 +132,9 @@ $(document).ready( function() {
 			wheelTheme.load();
 		},*/
 		playArm: function() {
+			audio.playFile(wheelArm, false);	
+		},
+		playArmSingle: function() {
 			audio.playFile(wheelArm, false);	
 		},
 		playCoin: function() {
