@@ -136,6 +136,7 @@ function RubikCube($gl, $shaderProgram,$game) {
 		if(num_solved_faces==6) { 
 			soundsRubik.playWin();
 			gameoptions.won();
+                        gameoptions.stopTime();
 			console.log("*** gewonnen ***"); 
                         $game.controlMode=3;
 		}

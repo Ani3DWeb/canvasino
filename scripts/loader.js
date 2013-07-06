@@ -6,7 +6,6 @@ var gameoptions = {
 	won: function() {
 		$('#win_image').show();
 		$('#win_image img').css("animation","flow 2s").css("-webkit-animation","flow 2s").css("-moz-animation","flow 2s");
-		this.countRotations("win");
 		this.stopTime();
 	},
 	resetRotations: function() {
