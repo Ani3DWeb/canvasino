@@ -1,11 +1,13 @@
 var gamenumber;
 var counter = 0;
+var time;
 var gameoptions = {
 		
 	won: function() {
 		$('#win_image').show();
 		$('#win_image img').css("animation","flow 2s").css("-webkit-animation","flow 2s").css("-moz-animation","flow 2s");
 		this.countRotations("win");
+		clearInterval(time);
 	},
 	
 	countRotations: function(status) {		
@@ -44,7 +46,7 @@ var gameoptions = {
 }
 	
 $(document).ready( function() {
-	var time;
+	
 	var timer = {
 	
 		second:1,
