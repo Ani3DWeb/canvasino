@@ -7,9 +7,12 @@ var gameoptions = {
 		$('#win_image').show();
 		$('#win_image img').css("animation","flow 2s").css("-webkit-animation","flow 2s").css("-moz-animation","flow 2s");
 		this.countRotations("win");
-		clearInterval(time);
+		this.stopTime();
 	},
-	
+	resetRotations: function() {
+		counter = 0;
+		$('#count_rotations').html(counter);
+	},
 	countRotations: function(status) {		
 		if (status == "rotate")
 		{	
@@ -21,17 +24,22 @@ var gameoptions = {
 		}
 		$('#count_rotations').html(counter);
 	},
-	test: function() {
-		console.log('geht');
+	stopTime: function() {
+		clearInterval(time);
 	},
-		
+	resetTime: function() {
+		timer.reset();
+	},
+	startTime: function() {
+		time = setInterval(timer.start, 1000);
+	},		
 	setCurrency: function(currency) {
 		$('#currency_value').html(currency);	
 		},
 	
 	hideWinImage: function()
 	{
-	$('#win_image').hide();
+		$('#win_image').hide();
 	},
 	
 	loose: function() {
@@ -41,60 +49,66 @@ var gameoptions = {
 	
 	hideLooseImage: function()
 	{
-	$('#game_over_image').hide();
+		$('#game_over_image').hide();
 	}
 }
+var timer = {
 	
-$(document).ready( function() {
+	second:1,
+	minute: 0,
+	hour: 0,
+	reset: function() {
+		timer.second = 1;
+		timer.minute = 0;
+		timer.hour = 0;
+	},
+	start: function() {
+		$('#timer').show();
+		//bei einer Ziffer 0 davor anzeigen
+		if (timer.second < 10)
+		{
+			$('#second').html('0' + timer.second);
+		}
+		else
+		{
+			$('#second').html(timer.second);
+		}
+		
+		// bei der 60. Sekunde Minute hochz�hlen und Sekunde zur�cksetzen
+		if ((timer.second % 60) == 0)
+		{
+			timer.second = 0;
+			timer.minute++;
 	
-	var timer = {
-	
-		second:1,
-		minute: 0,
-		hour: 0,
-		start: function() {
-			$('#timer').show();
-			//bei einer Ziffer 0 davor anzeigen
-			if (timer.second < 10)
+		if (timer.second < 10)
 			{
 				$('#second').html('0' + timer.second);
 			}
-			else
+		else
 			{
 				$('#second').html(timer.second);
 			}
-			
-			// bei der 60. Sekunde Minute hochz�hlen und Sekunde zur�cksetzen
-			if ((timer.second % 60) == 0)
+	
+		if (timer.minute < 10)
 			{
-				timer.second = 0;
-				timer.minute++;
-		
-			if (timer.second < 10)
-				{
-					$('#second').html('0' + timer.second);
-				}
-			else
-				{
-					$('#second').html(timer.second);
-				}
-		
-			if (timer.minute < 10)
-				{
-					$('#minute').html('0' + timer.minute);
-				}
-			else
-				{
-					$('#minute').html(timer.minute);
-				}
+				$('#minute').html('0' + timer.minute);
 			}
-			if (timer.minute == 59)
+		else
 			{
-				timer.minute = 0;
+				$('#minute').html(timer.minute);
 			}
-			timer.second = timer.second + 1;
 		}
+		if (timer.minute == 59)
+		{
+			timer.minute = 0;
+		}
+		timer.second = timer.second + 1;
 	}
+}	
+
+$(document).ready( function() {
+	
+	
 	
 	var gameCanvas = {	
 		animation: function(direction) {
@@ -137,7 +151,6 @@ $(document).ready( function() {
 						$('#footer').show();
 						if(gamenumber == 2) {
 							$('#currency').hide();
-							time = setInterval(timer.start, 1000);
 						} else if (gamenumber == 1) {
 							gameoptions.setCurrency('500');
 							$('#currency').show();
