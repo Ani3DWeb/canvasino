@@ -28,6 +28,7 @@ var gameoptions = {
 		clearInterval(time);
 	},
 	resetTime: function() {
+		clearInterval(time);
 		timer.reset();
 	},
 	startTime: function() {
@@ -61,6 +62,9 @@ var timer = {
 		timer.second = 1;
 		timer.minute = 0;
 		timer.hour = 0;
+		$('#second').html('00');
+		$('#minute').html('00');
+		
 	},
 	start: function() {
 		$('#timer').show();
