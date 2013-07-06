@@ -17,7 +17,7 @@ var axis, layer, direction;
 var rotate = false;
 var rotatePers = false;
 var rot = 0.7;
-
+var reSelect=false;
 var rotateFree = false;
 var FreeDirection = 0;
 var FreeRotationAngle = 0;
@@ -27,15 +27,16 @@ function RubikGame($gl, $shaderProgram) {
     soundsRubik.playTheme();
     initTextures(getCubeTextureNames());
     this.initialized = 0;
-    this.randomDifficulty = 0;
-    this.rubik = new RubikCube($gl, $shaderProgram);
+    this.randomDifficulty = 2;
+    this.rubik = new RubikCube($gl, $shaderProgram,this);
 
     this.selectedX = 1;
     this.selectedY = 1;
     this.selectedZ = 2;
     var vecX = Vector.create([1, 0, 0]);
     var vecY = Vector.create([0, 1, 0]);
-    this.controlMode = -1; //-1: Startup, til Cube randomized, 0: Selection, 1: Rotate, 2: Free Rotation View
+    var vecZ = Vector.create([0, 0, 1]);
+    this.controlMode = -1; //-1: Startup, til Cube randomized, 0: Selection, 1: Rotate, 2: Free Rotation View, 3: Won
 
 
     this.drawScene = function() {
@@ -76,11 +77,21 @@ function RubikGame($gl, $shaderProgram) {
                 FreeRotationAngle = 0;
                 vecX = vecX.rotate(FreeDirection*Math.PI / 2, Line.create([0, 0, 0], axisVec));
                 vecX = Vector.create([Math.round(vecX.elements[0]), Math.round(vecX.elements[1]), Math.round(vecX.elements[2])]);
-                console.log(vecX);
+               
                 vecY = vecY.rotate(FreeDirection*Math.PI / 2, Line.create([0, 0, 0], axisVec));
                 vecY = Vector.create([Math.round(vecY.elements[0]), Math.round(vecY.elements[1]), Math.round(vecY.elements[2])]);
-                console.log(vecY);
+         
+                vecZ = vecZ.rotate(FreeDirection*Math.PI / 2, Line.create([0, 0, 0], axisVec));
+                vecZ = Vector.create([Math.round(vecZ.elements[0]), Math.round(vecZ.elements[1]), Math.round(vecZ.elements[2])]);
                 rotateFree = false;
+                if(reSelect){
+                    console.log(vecZ);
+                    self.selectedX=1-vecZ.elements[0];
+                    self.selectedY=1-vecZ.elements[1];
+                    self.selectedZ=1+vecZ.elements[2];
+                    console.log("new Selection:" + self.selectedX+" "+self.selectedY+" "+self.selectedZ);
+                    reSelect=false;
+                }
             }
         }
 
@@ -98,7 +109,7 @@ function RubikGame($gl, $shaderProgram) {
             self.rubik.selectCubeForRotation(self.selectedX, self.selectedY, self.selectedZ);
 
         }
-        else if (self.controlMode === 2) {
+        else if (self.controlMode > 1) {
             self.rubik.hideSelection();
 
         }
@@ -139,6 +150,7 @@ function RubikGame($gl, $shaderProgram) {
             //drehung abwarten
         }
         else if (this.controlMode === 0) {
+        console.log("checked:" + this.selectedX+" "+this.selectedY+" "+this.selectedZ);
             switch (key) {
                 case 37: //Left-Key
                     soundsRubik.playSwitch();
@@ -231,23 +243,52 @@ function RubikGame($gl, $shaderProgram) {
                     break;
             }
         }
+        else if (this.controlMode === 3) {
+            switch (key) {
+                case 65: //A-Key
+                case 66:
+                case 89: //B-Key (or Y)
+                    //reset Timer & # of Rotations
+                    gameoptions.hideWinImage();
+                    //set mode =-1
+                    this.controlMode = -1;
+                    //set initialized =0;
+                    this.initialized=0; 
+                    break;
+            }
+        }
     };
 
-    this.moveLeftRight = function(direction) {
-        this.selectedX += vecX.elements[0] * direction;
-        this.selectedY += vecX.elements[1] * direction;
-        this.selectedZ -= vecX.elements[2] * direction;
+    this.moveLeftRight = function(direct) {
+        this.selectedX += vecX.elements[0] * direct;
+        this.selectedY += vecX.elements[1] * direct;
+        this.selectedZ -= vecX.elements[2] * direct;
         axisVec=vecY;
-        FreeDirection = -direction;
+        console.log("drehachse:");
+        console.log(axisVec);
+       if(axisVec.elements[2]===0){
+        FreeDirection = -direct;
+       }
+       else{
+           FreeDirection = direct;
+       }
         console.log("dir: "+ FreeDirection);
     };
-    this.moveUpDown = function(direction) {
-        this.selectedX += vecY.elements[0] * direction;
-        this.selectedY += vecY.elements[1] * direction;
-        this.selectedZ -= vecY.elements[2] * direction;
+    this.moveUpDown = function(direct) {
+        this.selectedX += vecY.elements[0] * direct;
+        this.selectedY += vecY.elements[1] * direct;
+        this.selectedZ -= vecY.elements[2] * direct;
         axisVec=vecX;
-        FreeDirection = -direction;
+        console.log("drehachse:");
+        console.log(axisVec);
+        if(axisVec.elements[2]===0){
+        FreeDirection = direct;
+        }
+        else{
+             FreeDirection = -direct;
+        }
         console.log("dir: "+ FreeDirection);
+       
     };
 
     this.rotateLeftRight = function(dir) {
@@ -260,7 +301,6 @@ function RubikGame($gl, $shaderProgram) {
         }
         else {
             axis = 'z';
-                        direction*=-1;
         }
         layer = Math.abs(this.selectedX * vecY.elements[0] + this.selectedY * vecY.elements[1] + this.selectedZ * vecY.elements[2]);
         rotate = true;
@@ -285,62 +325,70 @@ function RubikGame($gl, $shaderProgram) {
     };
 
     this.rotateFreeLeftRight = function(dir) {
-        FreeDirection = dir * (vecX.elements[0] + vecX.elements[1] + vecX.elements[2]);
+        var tempDirY = vecY.elements[0] + vecY.elements[1] + vecY.elements[2];
+        var tempDirX = vecX.elements[0] + vecX.elements[1] + vecX.elements[2];
+        if(tempDirX===-1 && tempDirY===-1){
+            FreeDirection = dir* tempDirY;
+        }
+        else{
+            FreeDirection = dir * tempDirY;
+        }
+        
         axisVec = vecY;
+        reSelect=true;
     };
 
     this.rotateFreeUpDown = function(dir) {
-        FreeDirection = dir * (vecY.elements[0] + vecY.elements[1] + vecY.elements[2]);
+                var tempDirY = vecY.elements[0] + vecY.elements[1] + vecY.elements[2];
+        var tempDirX = vecX.elements[0] + vecX.elements[1] + vecX.elements[2];
+        if(tempDirX===-1 && tempDirY===-1){
+            FreeDirection = dir *tempDirX;
+        }
+        else{
+            FreeDirection = dir * tempDirX;
+        }
         axisVec = vecX;
+        reSelect=true;
     };
-
-
     
     
     this.checkForNescRotation= function(){
-         console.log("checked:" + this.selectedX+" "+this.selectedY+" "+this.selectedZ);
         if (this.selectedX < 0 || this.selectedX > 2) {
             switch (this.selectedX) {
                 case -1:
                     this.selectedX = 0;
-                    //FreeDirection *= 1;
                     break;
                 case 3:
                     this.selectedX = 2;
-                    //FreeDirection *= -1;
                     break;
             }
             rotateFree = true;
+            soundsRubik.playSpin();
         }
         else if(this.selectedY < 0 || this.selectedY > 2) {
-            FreeDirection*=-1;
             switch (this.selectedY) {
                 case -1:
-                    this.selectedY = 0;
-                    
+                    this.selectedY = 0;         
                     break;
                 case 3:
                     this.selectedY = 2;
-       
                     break;
             }
             rotateFree = true;
+            soundsRubik.playSpin();
         }
         else if(this.selectedZ < 0 || this.selectedZ > 2) {
             switch (this.selectedZ) {
                 case -1:
                     this.selectedZ = 0;
-
                     break;
                 case 3:
                     this.selectedZ = 2;
-
                     break;
             }
             rotateFree = true;
+            soundsRubik.playSpin();
         }
-        
-        
     };
 
 

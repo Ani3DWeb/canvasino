@@ -4,7 +4,7 @@
  * 
  */
 
-function RubikCube($gl, $shaderProgram) {
+function RubikCube($gl, $shaderProgram,$game) {
     this.cubeNumber = 0;
     var self=this;
 	self.cubeXYZ = [];	
@@ -137,17 +137,10 @@ function RubikCube($gl, $shaderProgram) {
 			soundsRubik.playWin();
 			gameoptions.won();
 			console.log("*** gewonnen ***"); 
+                        $game.controlMode=3;
 		}
     };
-
-    this.randomize = function() {
-
-    };
-
-    this.control = function() {
-
-    }
-
+    
     this.draw = function() {
         for (var x = 0; x < 3; x++) {
             for (var y = 0; y < 3; y++) {
