@@ -196,6 +196,7 @@ function keyPressed(event) {
         keyCode = event.keyCode;
     }
     game.keyPressed(keyCode);
+    event.preventDefault();
 }
 
 //
