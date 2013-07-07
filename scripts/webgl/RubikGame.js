@@ -30,7 +30,7 @@ function RubikGame($gl, $shaderProgram) {
     initTextures(getCubeTextureNames());
     this.initialized = 0;
     this.randomDifficulty = 5;
-    this.rubik = new RubikCube($gl, $shaderProgram);
+    this.rubik = new RubikCube($gl, $shaderProgram, this);
 
     this.selectedX = 1;
     this.selectedY = 1;
@@ -53,8 +53,8 @@ function RubikGame($gl, $shaderProgram) {
 
         if (initState) {
             initState = false;
-            ModelViewMatrixRotate(30, [1.0, 0.0, 0.0]);
-            ModelViewMatrixRotate(-30, [0.0, 1.0, 0.0]);
+            ModelViewMatrixRotate(30, $V([1.0, 0.0, 0.0]));
+            ModelViewMatrixRotate(-30, $V([0.0, 1.0, 0.0]));
         }
 
         var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
@@ -73,23 +73,26 @@ function RubikGame($gl, $shaderProgram) {
         }
 
         if (rotateFree) {
-            if (FreeRotationAngle < 90) {
-                FreeRotationAngle += rotationAngle;
+                var axisVec=null;
                 switch (FreeAxis[FreeIndex]) {
                     case "x":
 
-                        ModelViewMatrixRotate(rotationAngle * FreeDirection, [1.0, 0.0, 0.0]);
+                        axisVec=$V([1.0, 0.0, 0.0]);
                         break;
                     case "y":
-                        ModelViewMatrixRotate(rotationAngle * FreeDirection, [0.0, 1.0, 0.0]);
+                        axisVec=$V([0.0, 1.0, 0.0]);
                         break;
                     case "z":
-                        ModelViewMatrixRotate(rotationAngle * FreeDirection, [0.0, 0.0, 1.0]);
+                        axisVec=$V([0.0,0.0,-1.0]);
                         break;
                 }
+            if (FreeRotationAngle < 90) {
+                FreeRotationAngle += rotationAngle;
+
+                ModelViewMatrixRotate(rotationAngle * FreeDirection, axisVec);
             } else {
                 FreeRotationAngle = 0;
-                vecX = vecX.rotate(FreeDirection * Math.PI / 2, Line.create([axisVec.elements[0] * 10, axisVec.elements[1] * 10, axisVec.elements[2] * 10], axisVec));
+                vecX = vecX.rotate(FreeDirection * Math.PI / 2, Line.create([0,0,0], axisVec));
                 vecX = Vector.create([Math.round(vecX.elements[0]), Math.round(vecX.elements[1]), Math.round(vecX.elements[2])]);
                 console.log(vecX);
                 vecY = vecY.rotate(FreeDirection * Math.PI / 2, Line.create([0, 0, 0], axisVec));
@@ -135,6 +138,7 @@ function RubikGame($gl, $shaderProgram) {
 
 
     this.keyPressed = function(key) {
+        console.log("checked:" + this.selectedX + " " + this.selectedY + " " + this.selectedZ);
         PerspectivRotate(90, [0.0, 1.0, 0.0]);
          if (rotate || rotateFree) {
             //drehung abwarten
@@ -262,13 +266,11 @@ function RubikGame($gl, $shaderProgram) {
         this.selectedX += vecX.elements[0] * direction;
         this.selectedY += vecX.elements[1] * direction;
         this.selectedZ -= vecX.elements[2] * direction;
-        axisVec = vecY;
     };
     this.moveUpDown = function(direction) {
         this.selectedX += vecY.elements[0] * direction;
         this.selectedY += vecY.elements[1] * direction;
         this.selectedZ -= vecY.elements[2] * direction;
-         axisVec = vecX;
     };
 
     this.rotateLeftRight = function(dir) {
@@ -319,6 +321,14 @@ function RubikGame($gl, $shaderProgram) {
     };
 
     this.rotateFreeLeftRight = function(dir, index) {
+        soundsRubik.playSpin();
+         if(vecY.elements[0]< +0){
+             FreeDirection = -1*dir;
+             console.log("hier");
+        }
+        else{
+             FreeDirection = dir;
+        }
         FreeDirection = dir;
         FreeIndex = index;
         var tmp = FreeAxis[1];
@@ -337,7 +347,15 @@ function RubikGame($gl, $shaderProgram) {
     };
 
     this.rotateFreeUpDown = function(dir, index) {
-        FreeDirection = dir;
+        soundsRubik.playSpin();
+        if(vecX.elements[2]<+0){
+             FreeDirection = -1*dir;
+             console.log("hier");
+        }
+        else{
+             FreeDirection = dir;
+        }
+       
         FreeIndex = index;
         var tmp = FreeAxis[1];
         if (dir == -1) {
@@ -489,7 +507,7 @@ function getCubeTextureNames() {
 
 function ModelViewMatrixRotate(angle, v) {
     var inRadians = angle * Math.PI / 180.0;
-    mvMatrix = mvMatrix.x(Matrix.Rotation(inRadians, $V([v[0], v[1], v[2]])).ensure4x4());
+    mvMatrix = mvMatrix.x(Matrix.Rotation(inRadians, v).ensure4x4());
 }
 
 function PerspectivTranslate(v) {
