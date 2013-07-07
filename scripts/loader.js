@@ -50,6 +50,12 @@ var gameoptions = {
 	hideLooseImage: function()
 	{
 		$('#game_over_image').hide();
+	},
+	showBoxRestart: function() {
+	 $('#restart_cube').fadeIn(750);
+	},	
+	hideBoxRestart: function() {
+	 $('#restart_cube').fadeOut(500);
 	}
 }
 var timer = {
@@ -228,7 +234,7 @@ $(document).ready( function() {
 			
 			$('#win_image').hide();
 			$('#game_over_image').hide();
-
+			$('#restart_cube').hide();
 		} 
 	}
 	//game.hideIt();

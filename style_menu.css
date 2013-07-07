@@ -7,7 +7,7 @@
 }
 
 .back {
-background-color: transparent;
+	background-color: transparent;
 	width: 150px;
 	height: 71px;
 	position: absolute;
@@ -25,7 +25,8 @@ background-color: transparent;
 .back:hover {
 	background-image:url('images/hover/hover_back2.png');
 	cursor: pointer;	
-	}
+}
+
 .back:active {
 	background-image:url('images/hover/hover_back2.png');
 	cursor: pointer;
@@ -42,7 +43,6 @@ background-color: transparent;
 }
 
 #main {
-	/*height: 540px;*/
 	position: relative;
 }
 
@@ -99,12 +99,14 @@ div#game01:hover, div#game02:hover {
 	box-shadow: 3px 3px 3px black;
 	display: none;
 }
+
 #player {
 	margin: 0 auto;
 	width: 350px;
 	height: 35px;
 	padding-top: 10px;
 }
+
 #slider {
 	text-align: center;
 	opacity: 1.0;
@@ -134,6 +136,7 @@ div#game01:hover, div#game02:hover {
 	opacity: 1.0;
 	filter: alpha(opacity = 100);
 }
+
 .sound {
 	width: 20px;
 	height: 20px;
@@ -142,9 +145,11 @@ div#game01:hover, div#game02:hover {
 	float: left;
 	cursor: pointer;
 }
+
 .mute{
 	background-position: 0px 0px;
 }
+
 .volume { 
 	width: 250px; 
 }
@@ -155,6 +160,7 @@ div#game01:hover, div#game02:hover {
 	padding-top: 4px;
 	float: left;
 }	
+
 .ui-slider-range {	
 	border: 4px solid #6B6A4F;
 	-moz-border-radius-topleft: 4px;
@@ -174,6 +180,7 @@ div#game01:hover, div#game02:hover {
 	-khtml-border-bottom-right-radius: 4px;
 	border-bottom-right-radius: 4px;
 }
+
 .ui-slider-handle {
 	position: absolute;
 	z-index: 2;
@@ -188,32 +195,6 @@ div#game01:hover, div#game02:hover {
 	margin-left: -12px;
 }
 	
-/*.start {
-	height: 40px;
-	width: 40px;
-	background-image:url('images/play_klein.png');
-	opacity: 1.0;
-	filter: alpha(opacity = 100);
-}  
-.play {
-	height: 40px;
-	width: 40px;
-	background-image:url('images/play_klein.png');
-	opacity: 1.0;
-	filter: alpha(opacity = 100);
-
-
-}
-
-.pause {
-	height: 40px;
-	width: 40px;
-	background-image:url('images/pause_klein.png');
-	opacity: 1.0;
-	filter: alpha(opacity = 100);	
-}*/
-
-
 	
 #main .screen .gameboy {
 	height: 660px;
@@ -318,19 +299,12 @@ div#game01:hover, div#game02:hover {
 	cursor: pointer;
 }
 #backimage {
-//	background-image:url('images/Start_look_Css.jpg');
 	position:absolute;
 	left: 180px;
 	top: 150px;
     z-index: -1;	
 }
 canvas {
-//	background-color: white;
-//	filter:alpha(opacity=20); /* for IE*/
-//	opacity: 0.2;
-	
-//	width:600px;
-//	height:450px;
 	position:absolute;
 	left: 180px;
 	top: 150px;
@@ -410,21 +384,6 @@ canvas {
 	z-index: 3000;
 }
 
-/*#message_win {
-	position: absolute;
-	width:50px;
-	height: 50px;
-	left: 0px;
-	top: 150px;
-	background-color: white;
-	z-index: 4000;
-	filter:alpha(opacity=100);
-	opacity: 1.0;
-	cursor: pointer;
-
-}
-*/
-
 .gameboy {
 	position: absolute;
 }
@@ -450,9 +409,9 @@ canvas {
 }
 
 #win_image {
-position: absolute;
-left: 100px;
-top: 80px;	
+	position: absolute;
+	left: 100px;
+	top: 80px;	
 }
 
 
@@ -478,9 +437,44 @@ top: 80px;
 
 
 #game_over_image {
-position: absolute;
-left: 100px;
-top: 80px;	
+	position: absolute;
+	left: 100px;
+	top: 80px;	
+}
+
+
+#restart_cube {
+	width: 250px;
+	height: 150px;
+	background-color: white;
+	position: absolute;	
+	left: 175px;
+	top: 100px;
+	background-color: #EEE9E9;
+	-moz-box-shadow: 4px 4px 4px black;
+	-webkit-box-shadow: 4px 4px 4px black;
+	box-shadow: 4px 4px 4px black;
+	border: 1px #696969 solid;
+}
+
+#restart_cube h2, #restart_cube p {
+	text-align:center;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#restart_cube h2 {
+	font-size: 20px;
+	background-color: #CDC9C9;
+	padding: 5px;
+	padding-top: 10px; 
+	padding-bottom: 10px;
+}
+
+#restart_cube p {
+	font-size: 18px;
+	padding-top: 30px;
+	padding-left: 10px;
+	padding-right: 10px;	
 }
 
 
