@@ -52,7 +52,7 @@ var gameoptions = {
 		$('#game_over_image').hide();
 	},
 	showBoxRestart: function() {
-	 $('#restart_cube').fadeIn(750);
+	 $('#restart_cube').fadeIn(3000);
 	},	
 	hideBoxRestart: function() {
 	 $('#restart_cube').fadeOut(500);
