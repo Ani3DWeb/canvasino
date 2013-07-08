@@ -1,8 +1,8 @@
 /*
-* Eigentliches Spiel:
-* Logik für RubikCube:
-* keyPressed-> rotateLayer
-* highlightedColumn/Row
+* RubikGame.js
+* Rotation and Selection Logic behind Rubik'Cube
+* 
+* Controller
 *
 */
 var perspectiveMatrix;
@@ -17,7 +17,6 @@ var axis, layer, direction;
 var rotate = false;
 var rotatePers = false;
 var rot = 0.7;
-var reSelect = false;
 var rotateFree = false;
 var FreeDirection = 0;
 var FreeRotationAngle = 0;
@@ -27,27 +26,36 @@ function RubikGame($gl, $shaderProgram) {
     soundsRubik.playTheme();
     initTextures(getCubeTextureNames());
     this.initialized = 0;
+    //Number of initial Random Turns:
     this.randomDifficulty = 5;
+    //Model:
     this.rubik = new RubikCube($gl, $shaderProgram,this);
 
+    //initial Selection
     this.selectedX = 1;
     this.selectedY = 1;
     this.selectedZ = 2;
+    
+    //rotation axis
     var vecX = Vector.create([1, 0, 0]);
     var vecY = Vector.create([0, 1, 0]);
+    //needed for reselect in controlMode==2
     var vecZ = Vector.create([0, 0, 1]);
-    this.controlMode = -1; //-1: Startup, til Cube randomized, 0: Selection, 1: Rotate, 2: Free Rotation View
+    //-1: Startup, til Cube randomized, 0: Selection, 1: Rotate, 2: Free Rotation View, 3: Win
+    this.controlMode = -1; 
 
 
     this.drawScene = function() {
-        //Canvas leeren
+        //empty canvas
         $gl.clear($gl.COLOR_BUFFER_BIT | $gl.DEPTH_BUFFER_BIT);
         $gl.enable($gl.DEPTH_TEST);
         $gl.depthFunc($gl.LEQUAL);
         self.setupLight();
+        //adjust perspective
         perspectiveMatrix = makePerspective(45, canvasWidth / canvasHeight, 0.1, 100.0);
         PerspectivTranslate([0.0, 0.0, -8.0]);
 
+        //cubes initial view:
         if (initState) {
             initState = false;
             ModelViewMatrixRotate(30, Vector.create([1.0, 0.0, 0.0]));
@@ -56,8 +64,8 @@ function RubikGame($gl, $shaderProgram) {
 
         var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
-        //Zeichne Rubik
-
+        
+        //Rotate Layer if needed:
         if (rotate) {
             if (angle < 90) {
                 angle += rotationAngle;
@@ -68,35 +76,23 @@ function RubikGame($gl, $shaderProgram) {
                 rotate = false;
             }
         }
-
-        /*if (rotateFree) {
-            if (FreeRotationAngle < 90) {
-                FreeRotationAngle += rotationAngle;
-                ModelViewMatrixRotate(rotationAngle * FreeDirection, axisVec);
-            } else {
-                FreeRotationAngle = 0;
-                vecX = vecX.rotate(FreeDirection*Math.PI / 2, Line.create([0, 0, 0], axisVec));
-                vecX = Vector.create([Math.round(vecX.elements[0]), Math.round(vecX.elements[1]), Math.round(vecX.elements[2])]);
-                console.log(vecX);
-                vecY = vecY.rotate(FreeDirection*Math.PI / 2, Line.create([0, 0, 0], axisVec));
-                vecY = Vector.create([Math.round(vecY.elements[0]), Math.round(vecY.elements[1]), Math.round(vecY.elements[2])]);
-                console.log(vecY);
-                rotateFree = false;
-            }
-        }*/
+        //Rotate whole Cube:
         if (rotateFree) {
             if (FreeRotationAngle === 0) {
+                //Rotation arround z-axis causes bug:
                 if (Math.abs(axisVec.elements[2]) === 1) {
-                    console.log("Falsche drehung. verbieten");
+                    console.log("Wrong Move! Forbidden!!!");
                    rotateFree=false;
                    return false;
                 }
+                soundsRubik.playSpin();
             }
             if (FreeRotationAngle < 90) {
                 FreeRotationAngle += rotationAngle;
                 ModelViewMatrixRotate(rotationAngle * FreeDirection, axisVec);
             } else {
                 FreeRotationAngle = 0;
+                //Recalculate direction vectors
                 vecX = vecX.rotate(FreeDirection * Math.PI / 2, Line.create([0, 0, 0], axisVec));
                 vecX = Vector.create([Math.round(vecX.elements[0]), Math.round(vecX.elements[1]), Math.round(vecX.elements[2])]);
                 console.log(vecX);
@@ -106,41 +102,45 @@ function RubikGame($gl, $shaderProgram) {
                 vecZ = vecZ.rotate(FreeDirection * Math.PI / 2, Line.create([0, 0, 0], axisVec));
                 vecZ = Vector.create([Math.round(vecZ.elements[0]), Math.round(vecZ.elements[1]), Math.round(vecZ.elements[2])]);
                 rotateFree = false;
-                if (reSelect) {
+                //reselect sub-cube if in free
+                if (self.controlMode === 2) {
                     console.log(vecZ);
                     self.selectedX = 1 - vecZ.elements[0];
-                    self.selectedY = 1 + vecZ.elements[1];
+                    self.selectedY = 1 - vecZ.elements[1];
                     self.selectedZ = 1 + vecZ.elements[2];
                     console.log("new Selection:" + self.selectedX + " " + self.selectedY + " " + self.selectedZ);
-                    reSelect = false;
                 }
             }
         }
-
+        //random if not finished initial rotations
         if (self.initialized < self.randomDifficulty && !rotate) {
             self.randomize();
             self.initialized++;
         }
+        //allow moving after initialized
         else if (self.initialized === self.randomDifficulty && self.controlMode === -1) {
             self.controlMode = 0;
         }
+        //shows cube selection 
         if (self.controlMode === 0) {
             self.rubik.selectCube(self.selectedX, self.selectedY, self.selectedZ);
         }
+        //shows cube rotate selection texture
         else if (self.controlMode === 1) {
             self.rubik.selectCubeForRotation(self.selectedX, self.selectedY, self.selectedZ);
 
         }
+        //no selection in FreeRotation mode
         else if (self.controlMode === 2) {
             self.rubik.hideSelection();
 
         }
-
+        //draw cube:
         self.rubik.draw();
 
     };
     
-        //rotates random Layer in random direction
+    //rotates random Layer in random direction
     this.randomize = function() {
         var tempAxis = ['x', 'y', 'z'];
         var tAxis = axis;
@@ -165,11 +165,11 @@ function RubikGame($gl, $shaderProgram) {
         soundsRubik.playTurn();
     };
 
-
+    //check for key interactions
     this.keyPressed = function(key) {
         PerspectivRotate(90, [0.0, 1.0, 0.0]);
         if (rotate || rotateFree) {
-            //drehung abwarten
+            //wait until rotation is finished
         }
         else if (this.controlMode === 0) {
             switch (key) {
@@ -225,12 +225,13 @@ function RubikGame($gl, $shaderProgram) {
                     this.rotateUpDown(1);
                     break;
                 case 65: //A-Key
-                    //switch Back To Selection-Mode
-                    this.controlMode = 0;
+                    //no function
                     break;
                 case 66:
                 case 89: //B-Key (or Y)
-                    //switch
+                    //switch back To Selection-Mode
+                    this.controlMode = 0;
+                    break;
                     break;
             }
         }
@@ -257,15 +258,34 @@ function RubikGame($gl, $shaderProgram) {
                     rotateFree = true;
                     break;
                 case 65: //A-Key
+                //switch Back To Selection-Mode
+                    this.controlMode = 0;
+                    break;
                 case 66:
                 case 89: //B-Key (or Y)
-                    //switch Back To Selection-Mode
-                    this.controlMode = 0;
+                    //no function
+                    break;
+            }
+        }
+        else if (this.controlMode === 3) {
+            switch (key) {
+                case 65: //A-Key
+                case 66:
+                case 89: //B-Key (or Y)
+                    //reset Timer & # of Rotations
+                    gameoptions.hideWinImage();
+                    gameoptions.hideBoxRestart();
+                    gameoptions.resetTime();
+                    gameoptions.resetRotations();
+                    //set mode =-1
+                    this.controlMode = -1;
+                    //set initialized =0;
+                    this.initialized = 0;
                     break;
             }
         }
     };
-
+    //move cursor on vecX
     this.moveLeftRight = function(direction) {
         this.selectedX += vecX.elements[0] * direction;
         this.selectedY += vecX.elements[1] * direction;
@@ -274,6 +294,7 @@ function RubikGame($gl, $shaderProgram) {
         FreeDirection = -direction;
         console.log("dir: "+ FreeDirection);
     };
+    //moves cursor on vecY
     this.moveUpDown = function(direction) {
         this.selectedX += vecY.elements[0] * direction;
         this.selectedY += vecY.elements[1] * direction;
@@ -282,7 +303,7 @@ function RubikGame($gl, $shaderProgram) {
         FreeDirection = direction;
         console.log("dir: "+ FreeDirection);
     };
-
+    //rotate layer around vecY
     this.rotateLeftRight = function(dir) {
         direction = dir * (vecY.elements[0] + vecY.elements[1] + vecY.elements[2]);
         if (Math.abs(vecY.elements[0]) === 1) {
@@ -293,13 +314,13 @@ function RubikGame($gl, $shaderProgram) {
         }
         else {
             axis = 'z';
-                        direction*=-1;
+            direction*=-1;
         }
         layer = Math.abs(this.selectedX * vecY.elements[0] + this.selectedY * vecY.elements[1] + this.selectedZ * vecY.elements[2]);
         rotate = true;
         this.controlMode = 0;
     };
-
+    //rotate layer around vecX
     this.rotateUpDown = function(dir) {
         direction = dir * (vecX.elements[0] + vecX.elements[1] + vecX.elements[2]);
         if (Math.abs(vecX.elements[0]) === 1) {
@@ -316,20 +337,20 @@ function RubikGame($gl, $shaderProgram) {
         rotate = true;
         this.controlMode = 0;
     };
-
+    //rotate cube around vecY
     this.rotateFreeLeftRight = function(dir) {
-        //FreeDirection = dir * (vecX.elements[0] + vecX.elements[1] + vecX.elements[2]);
+        FreeDirection = dir;
         axisVec = vecY;
     };
-
+    //rotate cube around vecX
     this.rotateFreeUpDown = function(dir) {
-        FreeDirection = dir * (vecY.elements[0] + vecY.elements[1] + vecY.elements[2]);
+        FreeDirection = dir;
         axisVec = vecX;
     };
 
 
     
-    
+    //checks cursor position, resets pos and initiates rotation
     this.checkForNescRotation= function(){
          console.log("checked:" + this.selectedX+" "+this.selectedY+" "+this.selectedZ);
         if (this.selectedX < 0 || this.selectedX > 2) {
@@ -367,7 +388,7 @@ function RubikGame($gl, $shaderProgram) {
         }
     };
 
-
+    //light vars
     this.setupLight = function()
     {
         gl.uniform1f(shaderProgram.materialShininessUniform, 10.0);
@@ -385,7 +406,7 @@ function RubikGame($gl, $shaderProgram) {
     };
     var self = this;
 }
-
+//needed textures
 function getCubeTextureNames() {
     return new Array("images/webgl/rubik/Flaeche_pink.png",
             "images/webgl/rubik/Flaeche_gruen.png",
@@ -410,12 +431,11 @@ function getCubeTextureNames() {
             "images/webgl/rubik/gelb_pfeil.png",
             "images/webgl/rubik/pink_pfeil.png");
 }
-
+//rotates mvMatrix (Cube Rotation)
 function ModelViewMatrixRotate(angle, v) {
     var inRadians = angle * Math.PI / 180.0;
     mvMatrix = mvMatrix.x(Matrix.Rotation(inRadians, v).ensure4x4());
 }
-
 
 
 function PerspectivTranslate(v) {
