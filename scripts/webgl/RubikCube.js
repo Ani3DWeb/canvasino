@@ -137,6 +137,7 @@ function RubikCube($gl, $shaderProgram,$game) {
 			soundsRubik.playWin();
 			gameoptions.won();
                         gameoptions.stopTime();
+                        gameoptions.showBoxRestart(),
 			console.log("*** gewonnen ***"); 
                         $game.controlMode=3;
 		}

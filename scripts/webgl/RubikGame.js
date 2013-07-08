@@ -83,7 +83,7 @@ function RubikGame($gl, $shaderProgram) {
                         axisVec=$V([0.0, 1.0, 0.0]);
                         break;
                     case "z":
-                        axisVec=$V([0.0,0.0,-1.0]);
+                        axisVec=$V([0.0,0.0,1.0]);
                         break;
                 }
             if (FreeRotationAngle < 90) {
@@ -251,6 +251,7 @@ function RubikGame($gl, $shaderProgram) {
                 case 89: //B-Key (or Y)
                     //reset Timer & # of Rotations
                     gameoptions.hideWinImage();
+                    gameoptions.hideBoxRestart();
                     gameoptions.resetTime();
                     gameoptions.resetRotations();
                     //set mode =-1
@@ -322,13 +323,8 @@ function RubikGame($gl, $shaderProgram) {
 
     this.rotateFreeLeftRight = function(dir, index) {
         soundsRubik.playSpin();
-         if(vecY.elements[0]< +0){
-             FreeDirection = -1*dir;
-             console.log("hier");
-        }
-        else{
-             FreeDirection = dir;
-        }
+       
+        FreeDirection =dir*(vecY.elements[0]+vecY.elements[1]+vecY.elements[2]);
         FreeDirection = dir;
         FreeIndex = index;
         var tmp = FreeAxis[1];
@@ -343,18 +339,12 @@ function RubikGame($gl, $shaderProgram) {
             FreeAxis[3] = FreeAxis[4];
             FreeAxis[4] = tmp;
         }
-        this.controlMode===2;
+        reSelect = (this.controlMode===2);
     };
 
     this.rotateFreeUpDown = function(dir, index) {
         soundsRubik.playSpin();
-        if(vecX.elements[2]<+0){
-             FreeDirection = -1*dir;
-             console.log("hier");
-        }
-        else{
-             FreeDirection = dir;
-        }
+         FreeDirection =dir*(vecZ.elements[0]+vecZ.elements[1]+vecZ.elements[2]);
        
         FreeIndex = index;
         var tmp = FreeAxis[1];
@@ -369,7 +359,7 @@ function RubikGame($gl, $shaderProgram) {
             FreeAxis[3] = FreeAxis[5];
             FreeAxis[5] = tmp;
         }
-        reSelect = this.controlMode===2;
+        reSelect = (this.controlMode===2);
     };
 
     //rotates random Layer in random direction
