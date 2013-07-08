@@ -1,10 +1,10 @@
 /*
-* RubikGame.js
-* Rotation and Selection Logic behind Rubik'Cube
-* 
-* Controller
-*
-*/
+ * RubikGame.js
+ * Rotation and Selection Logic behind Rubik'Cube
+ * 
+ * Controller
+ *
+ */
 var perspectiveMatrix;
 var angle = 0;
 var mvMatrix = Matrix.I(4);
@@ -29,20 +29,20 @@ function RubikGame($gl, $shaderProgram) {
     //Number of initial Random Turns:
     this.randomDifficulty = 5;
     //Model:
-    this.rubik = new RubikCube($gl, $shaderProgram,this);
+    this.rubik = new RubikCube($gl, $shaderProgram, this);
 
     //initial Selection
     this.selectedX = 1;
     this.selectedY = 1;
     this.selectedZ = 2;
-    
+
     //rotation axis
     var vecX = Vector.create([1, 0, 0]);
     var vecY = Vector.create([0, 1, 0]);
     //needed for reselect in controlMode==2
     var vecZ = Vector.create([0, 0, 1]);
     //-1: Startup, til Cube randomized, 0: Selection, 1: Rotate, 2: Free Rotation View, 3: Win
-    this.controlMode = -1; 
+    this.controlMode = -1;
 
 
     this.drawScene = function() {
@@ -64,7 +64,7 @@ function RubikGame($gl, $shaderProgram) {
 
         var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
-        
+
         //Rotate Layer if needed:
         if (rotate) {
             if (angle < 90) {
@@ -78,18 +78,23 @@ function RubikGame($gl, $shaderProgram) {
         }
         //Rotate whole Cube:
         if (rotateFree) {
-            if (FreeRotationAngle === 0) {
-                //Rotation arround z-axis causes bug:
-                if (Math.abs(axisVec.elements[2]) === 1) {
-                    console.log("Wrong Move! Forbidden!!!");
-                   rotateFree=false;
-                   return false;
-                }
-                soundsRubik.playSpin();
-            }
             if (FreeRotationAngle < 90) {
-                FreeRotationAngle += rotationAngle;
-                ModelViewMatrixRotate(rotationAngle * FreeDirection, axisVec);
+                if (FreeRotationAngle === 0) {
+                    //Rotation arround z-axis causes bug:
+                    if (Math.abs(axisVec.elements[2]) === 1) {
+                        console.log("Wrong Move! Forbidden!!!");
+                        rotateFree = false;
+                    }
+                    else {
+                        soundsRubik.playSpin();
+                        FreeRotationAngle += rotationAngle;
+                        ModelViewMatrixRotate(rotationAngle * FreeDirection, axisVec);
+                    }
+                }
+                else {
+                    FreeRotationAngle += rotationAngle;
+                    ModelViewMatrixRotate(rotationAngle * FreeDirection, axisVec);
+                }
             } else {
                 FreeRotationAngle = 0;
                 //Recalculate direction vectors
@@ -120,6 +125,7 @@ function RubikGame($gl, $shaderProgram) {
         //allow moving after initialized
         else if (self.initialized === self.randomDifficulty && self.controlMode === -1) {
             self.controlMode = 0;
+            gameoptions.startTime();
         }
         //shows cube selection 
         if (self.controlMode === 0) {
@@ -138,8 +144,9 @@ function RubikGame($gl, $shaderProgram) {
         //draw cube:
         self.rubik.draw();
 
-    };
-    
+    }
+    ;
+
     //rotates random Layer in random direction
     this.randomize = function() {
         var tempAxis = ['x', 'y', 'z'];
@@ -258,7 +265,7 @@ function RubikGame($gl, $shaderProgram) {
                     rotateFree = true;
                     break;
                 case 65: //A-Key
-                //switch Back To Selection-Mode
+                    //switch Back To Selection-Mode
                     this.controlMode = 0;
                     break;
                 case 66:
@@ -269,7 +276,7 @@ function RubikGame($gl, $shaderProgram) {
         }
         else if (this.controlMode === 3) {
             switch (key) {
-                case 65: //A-Key
+                
                 case 66:
                 case 89: //B-Key (or Y)
                     //reset Timer & # of Rotations
@@ -290,18 +297,18 @@ function RubikGame($gl, $shaderProgram) {
         this.selectedX += vecX.elements[0] * direction;
         this.selectedY += vecX.elements[1] * direction;
         this.selectedZ -= vecX.elements[2] * direction;
-        axisVec=vecY;
+        axisVec = vecY;
         FreeDirection = -direction;
-        console.log("dir: "+ FreeDirection);
+        console.log("dir: " + FreeDirection);
     };
     //moves cursor on vecY
     this.moveUpDown = function(direction) {
         this.selectedX += vecY.elements[0] * direction;
         this.selectedY += vecY.elements[1] * direction;
         this.selectedZ -= vecY.elements[2] * direction;
-        axisVec=vecX;
+        axisVec = vecX;
         FreeDirection = direction;
-        console.log("dir: "+ FreeDirection);
+        console.log("dir: " + FreeDirection);
     };
     //rotate layer around vecY
     this.rotateLeftRight = function(dir) {
@@ -314,7 +321,7 @@ function RubikGame($gl, $shaderProgram) {
         }
         else {
             axis = 'z';
-            direction*=-1;
+            direction *= -1;
         }
         layer = Math.abs(this.selectedX * vecY.elements[0] + this.selectedY * vecY.elements[1] + this.selectedZ * vecY.elements[2]);
         rotate = true;
@@ -331,7 +338,7 @@ function RubikGame($gl, $shaderProgram) {
         }
         else {
             axis = 'z';
-            direction*=-1;
+            direction *= -1;
         }
         layer = Math.abs(this.selectedX * vecX.elements[0] + this.selectedY * vecX.elements[1] + this.selectedZ * vecX.elements[2]);
         rotate = true;
@@ -349,10 +356,10 @@ function RubikGame($gl, $shaderProgram) {
     };
 
 
-    
+
     //checks cursor position, resets pos and initiates rotation
-    this.checkForNescRotation= function(){
-         console.log("checked:" + this.selectedX+" "+this.selectedY+" "+this.selectedZ);
+    this.checkForNescRotation = function() {
+        console.log("checked:" + this.selectedX + " " + this.selectedY + " " + this.selectedZ);
         if (this.selectedX < 0 || this.selectedX > 2) {
             switch (this.selectedX) {
                 case -1:
@@ -364,7 +371,7 @@ function RubikGame($gl, $shaderProgram) {
             }
             rotateFree = true;
         }
-        else if(this.selectedY < 0 || this.selectedY > 2) {
+        else if (this.selectedY < 0 || this.selectedY > 2) {
             switch (this.selectedY) {
                 case -1:
                     this.selectedY = 0;
@@ -375,7 +382,7 @@ function RubikGame($gl, $shaderProgram) {
             }
             rotateFree = true;
         }
-        else if(this.selectedZ < 0 || this.selectedZ > 2) {
+        else if (this.selectedZ < 0 || this.selectedZ > 2) {
             switch (this.selectedZ) {
                 case -1:
                     this.selectedZ = 0;
